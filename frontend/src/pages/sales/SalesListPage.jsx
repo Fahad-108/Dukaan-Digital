@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { getSales, deleteSale } from "../../services/saleService";
-import { Eye, PlusSquare, ShoppingCart, Trash2 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Eye, PlusSquare, ShoppingBag, ShoppingCart, Trash2 } from "lucide-react";
+import { useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { getPurchases } from "../../services/purchaseService";
 
 const SalesListPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [sales, setSales] = useState([]);
   const [purchases, setPurchases] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -19,31 +21,24 @@ const SalesListPage = () => {
 
   const [type, setType] = useState("sale");
 
-  const fetchData = async () => {
+  const fetchSales = async () => {
     try {
       setLoading(true);
       const body = {
-        type,
         startDate,
         endDate,
       };
       const res = await getSales(body);
       if (!res.data || res.data.length === 0) {
         setSales([]);
-        setPurchases([]);
         return;
       }
 
-      const saleData = res.data.filter((item) => item.type === "sale");
-      const purchaseData = res.data.filter((item) => item.type === "purchase");
-
-      setSales(saleData);
-      setPurchases(purchaseData);
+      setSales(res.data);
       toast.success("Data refreshed")
     } catch (err) {
       if (err.response?.status === 404) {
         setSales([]);
-        setPurchases([]);
       } else {
         toast.error(err.response?.data?.msg || "Error fetching data")
       }
@@ -52,9 +47,42 @@ const SalesListPage = () => {
     }
   };
 
+  const fetchPurchases = async () => {
+    try {
+      setLoading(true);
+      const body = {
+        startDate,
+        endDate,
+      }
+      const res = await getPurchases(body);
+      if (!res.data || res.data.length === 0) {
+        setPurchases([]);
+        return;
+      }
+      setPurchases(res.data);
+      toast.success("Data refreshed")
+    }
+    catch (err) {
+      if (err.response?.status === 404) {
+        setPurchases([]);
+      } else {
+        toast.error(err.response?.data?.msg || "Error fetching data")
+      }
+    } finally {
+      setLoading(false);
+    }
+  }
+
   useEffect(() => {
-    fetchData();
-  }, [type, startDate, endDate]);
+    if (location.pathname === '/sales') {
+      setType('sale');
+      fetchSales();
+    }
+    else {
+      setType('purchase');
+      fetchPurchases();
+    }
+  }, [startDate, endDate, location.pathname]);
 
   const handleViewDetails = (sale) => {
     setSelectedSale(sale);
@@ -73,7 +101,11 @@ const SalesListPage = () => {
         if (res.status == 200 || res.status == 201) {
           toast.success("deleted successfully")
         }
-        fetchData();
+        if (type === "sale") {
+          fetchSales();
+        } else {
+          fetchPurchases();
+        }
         setShowDetails(false);
       }
     } catch (err) {
@@ -83,62 +115,63 @@ const SalesListPage = () => {
   }
 
   const RenderTable = ({ title, data }) => (
-  <div className="relative bg-white shadow-md rounded-lg p-4 border border-blue-200">
-    <h2 className="text-xl font-semibold text-blue-700 mb-4">{title}</h2>
-    <div className="overflow-x-auto">
-      <table className="w-full text-sm text-left text-gray-700">
-        <thead className="bg-blue-600 text-white uppercase text-xs">
-          <tr>
-            <th className="px-4 py-3">{type === "sale" ? "Customer" : "Supplier"}</th>
-            <th className="px-4 py-3">Total Amount</th>
-            <th className="px-4 py-3">Date</th>
-            <th className="px-4 py-3 text-center">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.length === 0 ? (
+    <div className="relative bg-white shadow-md rounded-lg p-4 border border-blue-200">
+      <h2 className="text-xl font-semibold text-blue-700 mb-4">{title}</h2>
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm text-left text-gray-700">
+          <thead className="bg-blue-600 text-white uppercase text-xs">
             <tr>
-              <td colSpan={4} className="text-center text-blue-500 py-4">
-                No records found
-              </td>
+              <th className="px-4 py-3">{type === "sale" ? "Customer" : "Supplier"}</th>
+              <th className="px-4 py-3">Total Amount</th>
+              <th className="px-4 py-3">Date</th>
+              <th className="px-4 py-3 text-center">Action</th>
             </tr>
-          ) : (
-            data.map((item) => (
-              <tr
-                key={item._id}
-                className="border-b hover:bg-blue-50 transition"
-              >
-                <td className="px-4 py-3 font-medium text-blue-800">
-                  {item.customerName}
-                </td>
-                <td className="px-4 py-3 font-semibold text-green-600">
-                  ₨ {item.totalAmount}
-                </td>
-                <td className="px-4 py-3 text-blue-700">
-                  {new Date(item.createdAt).toLocaleDateString()}
-                </td>
-                <td className="py-2 flex justify-center items-center gap-2">
-                  <button
-                    onClick={() => handleViewDetails(item)}
-                    className="p-2 text-blue-600 rounded-lg hover:bg-blue-100 hover:shadow-sm transition cursor-pointer"
-                  >
-                    <Eye size={18} />
-                  </button>
-                  <button
-                    onClick={() => handleDelete(item)}
-                    className="p-2 text-red-500 rounded-lg hover:bg-red-100 hover:shadow-sm transition cursor-pointer"
-                  >
-                    <Trash2 size={18} />
-                  </button>
+          </thead>
+          <tbody>
+            {data.length === 0 ? (
+              <tr>
+                <td colSpan={4} className="text-center text-blue-500 py-4">
+                  No records found
                 </td>
               </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+            ) : (
+              data.map((item) => (
+                <tr
+                  key={item._id}
+                  className="border-b hover:bg-blue-50 transition"
+                >
+                  <td className="px-4 py-3 font-medium text-blue-800">
+                    {type === "sale" ? item.customerName : item.suppliername}
+                  </td>
+                  <td className="px-4 py-3 font-semibold text-green-600">
+                    ₨ {type === "sale" ? item.totalAmount : item.total}
+                  </td>
+
+                  <td className="px-4 py-3 text-blue-700">
+                    {new Date(item.createdAt).toLocaleDateString()}
+                  </td>
+                  <td className="py-2 flex justify-center items-center gap-2">
+                    <button
+                      onClick={() => handleViewDetails(item)}
+                      className="p-2 text-blue-600 rounded-lg hover:bg-blue-100 hover:shadow-sm transition cursor-pointer"
+                    >
+                      <Eye size={18} />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(item)}
+                      className="p-2 text-red-500 rounded-lg hover:bg-red-100 hover:shadow-sm transition cursor-pointer"
+                    >
+                      <Trash2 size={18} />
+                    </button>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
-  </div>
-);
+  );
 
 
   return (
@@ -146,15 +179,6 @@ const SalesListPage = () => {
       {/* Filter controls */}
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-4">
-          <label className="font-semibold text-blue-700">Type:</label>
-          <select
-            value={type}
-            onChange={(e) => setType(e.target.value)}
-            className="border border-blue-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-400"
-          >
-            <option value="sale">Sale</option>
-            <option value="purchase">Purchase</option>
-          </select>
 
           <label className="font-semibold text-blue-700">Start Date:</label>
           <input
@@ -173,22 +197,26 @@ const SalesListPage = () => {
           />
         </div>
         <div className="flex gap-1">
-          <button
+          { type === 'sale' ? (
+            <button
             className="px-4 py-1 bg-blue-600 hover:bg-blue-700 transition text-white rounded flex items-center gap-2"
             onClick={() => {
               navigate("/sales/new");
             }}
           >
-            <ShoppingCart size={16} /> sale
+            <ShoppingCart size={16} /> Sale
           </button>
-          <button
+          ) : (
+            <button
             className="px-4 py-1 bg-blue-600 hover:bg-blue-700 transition text-white rounded flex items-center gap-2"
             onClick={() => {
-              navigate("/sales/purchase");
+              navigate("/purchase/new");
             }}
           >
-            <PlusSquare size={16} /> Purchase
+            <ShoppingBag size={16} /> Purchase
           </button>
+          )}
+
         </div>
       </div>
 
@@ -227,9 +255,12 @@ const SalesListPage = () => {
 
             <div className="mb-6">
               <p className="text-sm font-semibold">
-                {selectedSale.type === "sale" ? "Customer:" : "Supplier:"}
-                <span className="font-normal ml-2">{selectedSale.customerName || "Walk-in"}</span>
+                {type === "sale" ? "Customer:" : "Supplier:"}
+                <span className="font-normal ml-2">
+                  {type === "sale" ? (selectedSale.customerName || "Walk-in") : selectedSale.suppliername}
+                </span>
               </p>
+
               <p className="text-sm font-semibold mt-1">
                 Date:
                 <span className="font-normal ml-2">{new Date(selectedSale.createdAt).toLocaleDateString()}</span>
@@ -246,12 +277,17 @@ const SalesListPage = () => {
 
               {selectedSale.items.map((it) => (
                 <div key={it._id} className="flex justify-between text-sm py-2 border-b border-dashed border-gray-200 print:border-solid">
-                  <span className="flex-1 text-blue-800 font-medium">{it.productName}</span>
-                  <span className="w-16 text-right">{it.quantity} {it.unit || ""}</span>
-                  <span className="w-20 text-right">₨ {it.price.toLocaleString()}</span>
-                  <span className="w-20 text-right font-semibold">
-                    ₨ {(it.quantity * it.price).toLocaleString()}
+                  <span className="flex-1 text-blue-800 font-medium">
+                    {type === "sale" ? it.productName : it.itemname}
                   </span>
+                  <span className="w-16 text-right">{it.quantity} {it.unit || ""}</span>
+                  <span className="w-20 text-right">
+                    ₨ {type === "sale" ? it.price : it.purchasePrice}
+                  </span>
+                  <span className="w-20 text-right font-semibold">
+                    ₨ {it.quantity * (type === "sale" ? it.price : it.purchasePrice)}
+                  </span>
+
                 </div>
               ))}
             </div>

@@ -212,7 +212,7 @@ const PurchaseFormPage = () => {
 
         {/* Product Section */}
         <div className="mb-6 border-t pt-4 border-gray-200">
-          <h2 className="text-xl font-semibold mb-4 text-gray-800">Add Product</h2>
+          <h2 className="text-2xl font-bold text-blue-700 mb-4 text-center">Add Product</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             
             {/* Item Name */}

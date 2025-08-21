@@ -94,7 +94,8 @@ export default function AppRouter() {
           </Route>
 
           <Route path="purchase">
-            <Route index element={<PurchaseFormPage />} />
+            <Route index element={<SalesListPage />} />
+            <Route path="new" element={<PurchaseFormPage />} />
           </Route>
 
           

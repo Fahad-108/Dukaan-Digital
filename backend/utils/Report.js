@@ -1,26 +1,23 @@
 import Product from "../models/Product.js";
 
-const FindReport = async (sales, expenses, udhaar) => {
+const FindReport = async (sales, purchase, expenses, udhaar) => {
     let totalSale = 0;
     let totalPurchase = 0;
     let totalProfit = 0;
     let totalQuantitySold = 0;
 
     // Count number of sales & purchases + sum amounts
-    const numberOfSales = sales.filter(s => s.type === "sale").length;
-    const numberOfPurchase = sales.filter(s => s.type === "purchase").length;
+    const numberOfSales = sales.length;
+    const numberOfPurchase = purchase.length;
 
     totalSale = sales
-        .filter(s => s.type === "sale")
         .reduce((sum, s) => sum + (s.totalAmount || 0), 0);
 
-    totalPurchase = sales
-        .filter(s => s.type === "purchase")
-        .reduce((sum, s) => sum + (s.totalAmount || 0), 0);
+    totalPurchase = purchase
+        .reduce((sum, p) => sum + (p.total || 0), 0);
 
     // Quantity sold & profit calculation (only for sales items)
     const allSaleItems = sales
-        .filter(s => s.type === "sale")
         .flatMap(s => s.items || []);
 
     const productIds = [...new Set(allSaleItems.map(item => item.productId))];

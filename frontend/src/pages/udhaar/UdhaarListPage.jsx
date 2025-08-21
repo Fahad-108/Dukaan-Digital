@@ -70,12 +70,12 @@ const UdhaarListPage = () => {
             placeholder="Search by name or contact..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="px-3 py-2 border border-blue-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-400"
+            className="px-2 py-1 border border-blue-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-400"
           />
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-3 py-2 border border-blue-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-400"
+            className="px-2 py-1 border border-blue-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-400"
           >
             <option value="all">All Status</option>
             <option value="pending">Pending</option>
@@ -87,7 +87,7 @@ const UdhaarListPage = () => {
         <div>
           <button
             onClick={() => navigate("/udhaar/new")}
-            className="bg-blue-600 flex gap-2 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+            className="bg-blue-600 flex gap-2 text-white px-4 py-1 rounded hover:bg-blue-700 transition"
           >
             <HandCoins size={23} />
             Add Credit

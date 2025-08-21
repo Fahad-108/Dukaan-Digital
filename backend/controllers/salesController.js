@@ -3,43 +3,38 @@ import Sale from "../models/Sale.js";
 
 const createSale = async (req, res) => {
     try {
-        const { items, type, customerName } = req.body;
+        const { items, customerName } = req.body;
         const userId = req.user;
         if (!items || items.length === 0) {
             return res.status(400).json({ msg: "Items are required" });
         }
         let totalAmount = 0;
-        for (const item of items) { 
+        for (const item of items) {
             const product = await Product.findById(item.productId);
             if (!product) {
                 return res.status(404).json({ msg: `Product not found with ID: ${item.productId}` });
             }
             item.productName = product.itemname;
             item.unit = product.unit;
-            if (type === 'sale') {
-                if (product.quantity < item.quantity) {
-                    return res.status(400).json({ msg: `Not enough stock for ${product.itemname}` });
-                }
-                item.price = product.sellingPrice;
-                product.quantity -= item.quantity;
-            } else if (type === 'purchase') {
-                product.purchasePrice = item.price;
-                product.quantity += item.quantity;
+            console.log(item.unit)
+            if (product.quantity < item.quantity) {
+                return res.status(400).json({ msg: `Not enough stock for ${product.itemname}` });
             }
+            item.price = product.sellingPrice;
+            product.quantity -= item.quantity;
             await product.save();
             totalAmount += (item.quantity * item.price);
         }
         const sale = new Sale({
             userId,
             items,
-            type,
             customerName,
             totalAmount
         });
         await sale.save();
         res.status(201).json({ msg: "Sale recorded successfully", sale });
     } catch (err) {
-        console.log("Error in addSale:", err);
+        console.log("Error :", err);
         res.status(500).json({ msg: "Internal server error" });
     }
 };
@@ -47,15 +42,12 @@ const createSale = async (req, res) => {
 
 const getSales = async (req, res) => {
     try {
-        const { type, startDate, endDate } = req.body;
+        const { startDate, endDate } = req.body;
         const userId = req.user;
 
         const filter = { userId };
-        if (type) {
-            filter.type = type;
-        }
         if (startDate && endDate) {
-            filter.createdAt = {
+            filter.createdAt = { 
                 $gte: new Date(startDate),
                 $lte: new Date(new Date(endDate).setHours(23, 59, 59, 999))
             };

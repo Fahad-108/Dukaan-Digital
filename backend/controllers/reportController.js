@@ -1,5 +1,6 @@
 import Expense from "../models/Expense.js";
 import Sale from "../models/Sale.js";
+import Purchase from "../models/Purchase.js";
 import Udhaar from "../models/Udhaar.js";
 import Report from "../models/Report.js";
 import { FindReport } from "../utils/Report.js";
@@ -43,6 +44,7 @@ const getReport = async (req, res) => {
 
         // Fetch data
         const sale = await Sale.find({ userId, createdAt });
+        const purchase = await Purchase.find({ userId, createdAt });
         const expense = await Expense.find({ userId, createdAt });
         const udhaar = await Udhaar.find({
             userId,
@@ -52,12 +54,12 @@ const getReport = async (req, res) => {
             ]
         });
 
-        if (!sale.length && !expense.length && !udhaar.length) {
+        if (!sale.length && !purchase.length && !expense.length && !udhaar.length) {
             return res.status(404).json({ msg: "No data found for this selection" });
         }
 
         // Generate fresh report every time
-        const report = await FindReport(sale, expense, udhaar);
+        const report = await FindReport(sale, purchase, expense, udhaar);
 
         // Update if exists else create (upsert)
         const updatedReport = await Report.findOneAndUpdate(

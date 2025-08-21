@@ -69,7 +69,7 @@ const getProductById = async (req,res) => {
 
 const updateProduct = async (req, res) => {
     try {
-        const { itemname, category, unit } = req.body;
+        const { itemname, category, unit, purchasePrice, sellingPrice, quantity } = req.body;
         const id = req.params.id;
 
         const product = await Product.findById(id);
@@ -80,7 +80,7 @@ const updateProduct = async (req, res) => {
         if (product.userId === req.user) {
             await Product.findByIdAndUpdate( id,
             {
-                itemname, category, unit
+                itemname, category, unit, purchasePrice, sellingPrice, quantity
             },
             { new: true}
             )

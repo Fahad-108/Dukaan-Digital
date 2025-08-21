@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import authRoutes from './routes/authRoutes.js';
+import dashboardRoutes from './routes/dashboardRoutes.js'
 import profileRoutes from './routes/profileRoutes.js';
 import expenseRoutes from './routes/expenseRoutes.js';
 import productRoutes from './routes/productRoutes.js';

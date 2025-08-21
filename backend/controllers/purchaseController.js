@@ -35,13 +35,38 @@ const addPurchase = async (req, res) => {
             total
         })
         await newPurchase.save();
-        res.status(200).json({ msg: `${items.length} products purchased seccessfully`})
+        res.status(200).json({ msg: `${items.length} products purchased successfully`})
     } catch (err) {
         console.log("Error:", err);
         res.status(500).json({ msg: "Internal server error" });
     }
 }
 
+const getPurchases = async (req,res) => {
+    try {
+        const { startDate, endDate } = req.body;
+        const userId = req.user;
+
+        const filter = { userId };
+        if (startDate && endDate) {
+            filter.createdAt = {
+                $gte: new Date(startDate),
+                $lte: new Date(new Date(endDate).setHours(23, 59, 59, 999))
+            };
+        }
+        const purchases = await Purchase.find(filter);
+        if (!purchases || purchases.length === 0) {
+            return res.status(404).json({ msg: "No record found" });
+        }
+        res.status(200).json(purchases);
+    }
+    catch(err) {
+        console.log("Error:", err);
+        res.status(500).json({ msg: "Internal server error" });
+    }
+}
+
 export {
-    addPurchase
+    addPurchase,
+    getPurchases,
 };

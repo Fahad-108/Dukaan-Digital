@@ -8,10 +8,12 @@ const ReportReceipt = ({ report, period }) => {
     // Helper function to format numbers with commas
     const formatNumber = (num) => num?.toLocaleString() || '0';
 
+    const totalPurch = [
+        { key: "totalPurchase", label: "Total Purchase", color: "text-green-700" },
+    ]
     // Define the sections of the report to display
     const mainFinancials = [
         { key: "totalSale", label: "Total Sales", color: "text-green-700" },
-        { key: "totalPurchase", label: "Total Purchase", color: "text-green-700" },
         { key: "totalProfit", label: "Total Profit", color: "text-green-700" },
     ];
 
@@ -46,6 +48,16 @@ const ReportReceipt = ({ report, period }) => {
                 </div>
 
                 {/* Main Financials Section */}
+                    {totalPurch.map(item => (
+                        <div key={item.key} className="flex justify-between items-baseline py-1">
+                            <span className="text-sm font-medium text-gray-700">{item.label}:</span>
+                            <span className={`text-lg font-semibold ${item.color}`}>
+                                Rs. {formatNumber(report[item.key])}
+                            </span>
+                        </div>
+                    ))}
+                <div className="border-t border-dashed border-gray-400 py-2 print:border-solid"></div>
+
                 <div className="mb-4">
                     {mainFinancials.map(item => (
                         <div key={item.key} className="flex justify-between items-baseline py-1">
@@ -56,6 +68,7 @@ const ReportReceipt = ({ report, period }) => {
                         </div>
                     ))}
                 </div>
+                
 
                 {/* Separator */}
                 <div className="border-t border-dashed border-gray-400 py-2 print:border-solid"></div>
