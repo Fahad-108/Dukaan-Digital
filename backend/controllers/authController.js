@@ -4,7 +4,7 @@ import User from '../models/User.js';
 
 const register =  async (req,res) => {
     try {
-        const { name, email, password, role, phone, shopname, city } = req.body;
+        const { name, email, password, role, phone, shopname, address } = req.body;
 
         const isExist = await User.findOne({ email });
         if (isExist) {
@@ -13,7 +13,7 @@ const register =  async (req,res) => {
 
         const hashed = await bcrypt.hash(password, 10);
 
-        const newUser = new User({ name, email, password: hashed, role, phone, shopname, city });
+        const newUser = new User({ name, email, password: hashed, role, phone, shopname, address });
         await newUser.save();
 
         const token = jwt.sign({ id: newUser._id}, process.env.JWT_SECRET, { expiresIn: '1h'});
@@ -49,7 +49,8 @@ const login = async (req,res) => {
                 phone: user.phone,
                 email: user.email,
                 role: user.role,
-                shopname: user.shopname
+                address: user.address,
+                shopname: user.shopname,
             }
         })
     }

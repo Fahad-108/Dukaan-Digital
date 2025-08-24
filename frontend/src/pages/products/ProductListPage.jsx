@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { getProducts, deleteProduct } from "../../services/productService.js";
 import { createSale } from "../../services/saleService.js";
-import { Edit2, Trash2, ShoppingCart, Eye } from "lucide-react";
+import { Edit2, Trash2, ShoppingCart, Eye, Package } from "lucide-react";
 import toast from "react-hot-toast";
 
 const ProductListPage = () => {
@@ -210,10 +210,10 @@ const ProductListPage = () => {
                       ₨ {(item.price * item.quantity).toLocaleString()}
                     </span>
                     <span className="w-10 text-red-500 hover:text-red-600 cursor-pointer"
-                    onClick={() => handleCartDelete(item.id)}>
+                      onClick={() => handleCartDelete(item.id)}>
                       <Trash2 className="float-end" size={18} />
                     </span>
-                    
+
                   </div>
                 ))}
               </div>
@@ -253,6 +253,13 @@ const ProductListPage = () => {
           onChange={(e) => setSearchTerm(e.target.value)}
           className="flex-1 px-2 py-1 border border-blue-300 rounded focus:outline-none"
         />
+        {!isSale && <button
+          className="px-4 py-1 bg-blue-600 hover:bg-blue-700 transition text-white rounded flex items-center gap-2"
+          onClick={() => {
+            navigate("/products/new");
+          }}>
+          <Package size={16} />
+          Add Product</button>}
         {cart.length > 0 && (
           <button
             onClick={ShowCart}
@@ -273,100 +280,100 @@ const ProductListPage = () => {
           </div>
         </div>
 
-          <table className="w-full text-sm text-left text-gray-700">
-            <thead className="sticky top-0 bg-blue-600 text-white uppercase text-xs">
+        <table className="w-full text-sm text-left text-gray-700">
+          <thead className="sticky top-0 bg-blue-600 text-white uppercase text-xs">
+            <tr>
+              {[
+                "Item Name",
+                "Category",
+                "Purchase Price",
+                "Selling Price",
+                "Quantity",
+                "Unit",
+                ...(isSale ? ["Sale"] : []),
+                ...(isSale ? [] : ["Created At"]),
+                // "Created At",
+                ...(isSale ? [] : ["Actions"]),
+              ].map((header, i) => (
+                <th key={i} className="px-4 py-3">
+                  {header.toLowerCase() === "purchase price" ? (
+                    <div className="flex gap-1 items-center">
+                      {header}
+                      <Eye
+                        className="text-white cursor-pointer"
+                        onClick={() => setprprice(!prprice)}
+                        size={16}
+                      />
+                    </div>
+                  ) : (
+                    header
+                  )}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {filteredProduct.length === 0 ? (
               <tr>
-                {[
-                  "Item Name",
-                  "Category",
-                  "Purchase Price",
-                  "Selling Price",
-                  "Quantity",
-                  "Unit",
-                  ...(isSale ? ["Sale"] : []),
-                  ...(isSale ? [] : ["Created At"]),
-                  // "Created At",
-                  ...(isSale ? [] : ["Actions"]),
-                ].map((header, i) => (
-                  <th key={i} className="px-4 py-3">
-                    {header.toLowerCase() === "purchase price" ? (
-                      <div className="flex gap-1 items-center">
-                        {header}
-                        <Eye
-                          className="text-white cursor-pointer"
-                          onClick={() => setprprice(!prprice)}
-                          size={16}
-                        />
-                      </div>
-                    ) : (
-                      header
-                    )}
-                  </th>
-                ))}
+                <td colSpan={9} className="text-center text-blue-500 py-4">
+                  No records found
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {filteredProduct.length === 0 ? (
-                <tr>
-                  <td colSpan={9} className="text-center text-blue-500 py-4">
-                    No records found
+            ) : (
+              filteredProduct.map((p) => (
+                <tr key={p._id} className="border-b hover:bg-blue-50 transition">
+                  <td className="px-4 py-3 font-medium text-blue-800">{p.itemname}</td>
+                  <td className="px-4 py-3">{p.category}</td>
+                  <td className="px-4 py-3 text-green-600 font-semibold">
+                    {prprice ? `₨ ${p.purchasePrice}` : "•••"}
                   </td>
-                </tr>
-              ) : (
-                filteredProduct.map((p) => (
-                  <tr key={p._id} className="border-b hover:bg-blue-50 transition">
-                    <td className="px-4 py-3 font-medium text-blue-800">{p.itemname}</td>
-                    <td className="px-4 py-3">{p.category}</td>
-                    <td className="px-4 py-3 text-green-600 font-semibold">
-                      {prprice ? `₨ ${p.purchasePrice}` : "•••"}
+                  <td className="px-4 py-3 text-green-600 font-semibold">₨ {p.sellingPrice}</td>
+                  <td className="px-4 py-3 text-gray-700 font-semibold">{p.quantity}</td>
+                  <td className="px-4 py-3 text-gray-700 font-semibold">{p.unit}</td>
+                  {isSale && (
+                    <td className="px-6 py-4 text-sm flex items-center gap-1">
+                      <input
+                        type="number"
+                        min="1"
+                        value={saleQuantities[p._id] || ""}
+                        onChange={(e) => handleSaleChange(p, e.target.value)}
+                        className="w-16 px-2 py-1 border border-blue-300 rounded focus:ring-2 focus:ring-blue-400 outline-none"
+                      />
+                      <ShoppingCart
+                        onClick={() => handleCartAdd(p)}
+                        className="text-blue-600 cursor-pointer hover:scale-110 transition-transform"
+                        size={18}
+                      />
                     </td>
-                    <td className="px-4 py-3 text-green-600 font-semibold">₨ {p.sellingPrice}</td>
-                    <td className="px-4 py-3 text-gray-700 font-semibold">{p.quantity}</td>
-                    <td className="px-4 py-3 text-gray-700 font-semibold">{p.unit}</td>
-                    {isSale && (
-                      <td className="px-6 py-4 text-sm flex items-center gap-1">
-                        <input
-                          type="number"
-                          min="1"
-                          value={saleQuantities[p._id] || ""}
-                          onChange={(e) => handleSaleChange(p, e.target.value)}
-                          className="w-16 px-2 py-1 border border-blue-300 rounded focus:ring-2 focus:ring-blue-400 outline-none"
-                        />
-                        <ShoppingCart
-                          onClick={() => handleCartAdd(p)}
-                          className="text-blue-600 cursor-pointer hover:scale-110 transition-transform"
-                          size={18}
-                        />
-                      </td>
-                    )}
-                    {!isSale && (
+                  )}
+                  {!isSale && (
                     <td className="px-4 py-3 text-blue-700">
                       {new Date(p.createdAt).toLocaleDateString()}
                     </td>
-                    )}
-                    {!isSale && (
-                      <td className="py-2 flex justify-center items-center gap-2">
-                        <button
-                          onClick={() => navigate("/products/edit/" + p._id)}
-                          className="p-2 text-blue-600 rounded-lg hover:bg-blue-100"
-                        >
-                          <Edit2 size={16} />
-                        </button>
-                        <button
-                          onClick={() => handleDelete(p)}
-                          className="p-2 text-red-500 rounded-lg hover:bg-red-100"
-                        >
-                          <Trash2 size={16} />
-                        </button>
-                      </td>
-                    )}
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
+                  )}
+                  {!isSale && (
+                    <td className="py-2 flex justify-center items-center gap-2">
+                      <button
+                        onClick={() => navigate("/products/edit/" + p._id)}
+                        className="p-2 text-blue-600 rounded-lg hover:bg-blue-100"
+                      >
+                        <Edit2 size={16} />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(p)}
+                        className="p-2 text-red-500 rounded-lg hover:bg-red-100"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </td>
+                  )}
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
       </div>
+    </div>
   );
 };
 

@@ -36,7 +36,7 @@ const ExpenseFormPage = () => {
         });
         setTimeout(() => {
           navigate('/expenses')
-        }, 2000);
+        }, 200);
       } else {
         toast.error('Failed to add expense!');
       }

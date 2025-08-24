@@ -73,6 +73,7 @@ const getReport = async (req, res) => {
                 totalProfit: report.totalProfit,
                 totalExpense: report.totalExpense,
                 totalUdhaar: report.totalUdhaar,
+                totalPaidUdhaar: report.totalPaidUdhaar,
                 netAmount: report.netAmount,
                 totalQuantitySold: report.totalQuantitySold,
                 numberOfSales: report.numberOfSales,

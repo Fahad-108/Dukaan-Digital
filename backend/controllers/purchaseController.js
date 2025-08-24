@@ -56,6 +56,7 @@ const getPurchases = async (req,res) => {
         }
         const purchases = await Purchase.find(filter);
         if (!purchases || purchases.length === 0) {
+            
             return res.status(404).json({ msg: "No record found" });
         }
         res.status(200).json(purchases);

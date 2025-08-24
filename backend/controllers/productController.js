@@ -2,7 +2,7 @@ import Product from "../models/Product.js";
 
 const addProduct = async (req, res) => {
     try {
-        const { itemname, category, unit } = req.body;
+        const { itemname, category, unit, purchasePrice, sellingPrice, quantity } = req.body;
         const userId = req.user;
         const existing = await Product.findOne({ itemname, category, userId })
         if (existing) {
@@ -27,9 +27,9 @@ const addProduct = async (req, res) => {
             userId,
             itemname,
             category,
-            purchasePrice : 0,
-            sellingPrice : 0,
-            quantity : 0,
+            purchasePrice,
+            sellingPrice,
+            quantity,
             unit
         });
         await newProduct.save();

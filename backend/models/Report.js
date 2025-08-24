@@ -34,6 +34,10 @@ const reportSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    totalPaidUdhaar: {
+        type: Number,
+        default: 0
+    },
     netAmount: {
         type: Number,
         default: 0
