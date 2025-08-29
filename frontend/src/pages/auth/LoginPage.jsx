@@ -46,14 +46,14 @@ const LoginPage = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-linear-60 from-purple-400 via-purple-100 to-purple-400 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-linear-60 from-blue-400 via-blue-100 to-blue-400 px-4">
       <div className="bg-white shadow-lg rounded-2xl p-8 w-full max-w-md border border-gray-200">
 
         <div className="flex justify-center mb-6">
           <img src={DukaanDigital} alt="Dukaan Digital" className="h-14" />
         </div>
 
-        <h2 className="text-2xl font-extrabold text-center text-purple-500 mb-2">
+        <h2 className="text-2xl font-extrabold text-center text-blue-500 mb-2">
           Welcome Back
         </h2>
         <p className="text-gray-500 text-center text-sm mb-6">
@@ -70,7 +70,7 @@ const LoginPage = () => {
               value={form.email}
               onChange={handleChange}
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
             />
           </div>
           <div>
@@ -82,21 +82,21 @@ const LoginPage = () => {
               value={form.password}
               onChange={handleChange}
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
             />
           </div>
           {error && <div className="text-red-500 text-sm text-center py-2 rounded-lg bg-red-100">{error}</div>}
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-purple-600 text-white py-2 rounded-lg font-semibold hover:bg-purple-700 transition text-sm"
+            className="w-full bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition text-sm"
           >
             {loading ? 'Logging in...' : 'Login'}
           </button>
           <p className="text-center text-gray-600 text-sm mt-4">
             Don't have an account?{" "}
             <span
-              className="text-purple-600 font-medium cursor-pointer hover:underline"
+              className="text-blue-600 font-medium cursor-pointer hover:underline"
               onClick={() => navigate('/register')}
             >
               Register
