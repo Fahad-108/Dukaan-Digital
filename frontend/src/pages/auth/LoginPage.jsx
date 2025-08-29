@@ -53,7 +53,7 @@ const LoginPage = () => {
           <img src={DukaanDigital} alt="Dukaan Digital" className="h-14" />
         </div>
 
-        <h2 className="text-2xl font-extrabold text-center text-blue-500 mb-2">
+        <h2 className="text-2xl font-bold text-center text-blue-500 mb-2">
           Welcome Back
         </h2>
         <p className="text-gray-500 text-center text-sm mb-6">
