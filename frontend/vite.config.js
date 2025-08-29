@@ -38,5 +38,5 @@ export default defineConfig({
       }
     })
   ],
-  base: '/Dukaan-Digital/',
+  base: "/Dukaan-Digital/",
 });

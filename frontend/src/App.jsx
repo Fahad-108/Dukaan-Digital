@@ -9,7 +9,7 @@ function App() {
   return (
     <>
     <Toaster position="top-right" />
-      <BrowserRouter>
+      <BrowserRouter basename="/Dukaan-Digital">
         <UserProvider>
           <AppRouter />
         </UserProvider>
