@@ -1,9 +1,6 @@
-import Product from "../models/Product.js";
-
 const FindReport = async (sales, purchase, expenses, udhaar) => {
     let totalSale = 0;
     let totalPurchase = 0;
-    let totalProfit = 0;
     let totalQuantitySold = 0;
 
     // Count number of sales & purchases + sum amounts
@@ -14,27 +11,17 @@ const FindReport = async (sales, purchase, expenses, udhaar) => {
         .reduce((sum, s) => sum + (s.totalAmount || 0), 0);
 
     totalPurchase = purchase
-        .reduce((sum, p) => sum + (p.total || 0), 0);
+        .reduce((sum, s) => sum + (s.total || 0), 0);
 
     // Quantity sold & profit calculation (only for sales items)
+    const totalProfit = sales.reduce((sum, s) => sum + (s.saleProfit || 0), 0);
+
     const allSaleItems = sales
         .flatMap(s => s.items || []);
 
-    const productIds = [...new Set(allSaleItems.map(item => item.productId))];
-    const products = await Product.find({ _id: { $in: productIds } }).lean();
-    const productMap = new Map(products.map(p => [p._id.toString(), p]));
-
     for (const item of allSaleItems) {
         if (!item.price || !item.quantity) continue;
-
         totalQuantitySold += item.quantity;
-
-        const product = productMap.get(item.productId.toString());
-        if (product && product.purchasePrice != null) {
-            const saleTotal = item.price * item.quantity;
-            const purchaseCost = product.purchasePrice * item.quantity;
-            totalProfit += saleTotal - purchaseCost;
-        }
     }
 
     // Expenses total
@@ -51,17 +38,17 @@ const FindReport = async (sales, purchase, expenses, udhaar) => {
         return sum;
     }, 0);
 
-    const adjustedProfit = totalProfit + totalPaidUdhaar;
 
     // Net amount
-    const netAmount = adjustedProfit - totalExpense - totalUdhaar;
+    const netAmount = totalProfit - totalExpense - totalUdhaar + totalPaidUdhaar;
 
     return {
         totalSale,
         totalPurchase,
-        totalProfit: adjustedProfit,
+        totalProfit,
         totalExpense,
         totalUdhaar,
+        totalPaidUdhaar,
         netAmount,
         totalQuantitySold,
         numberOfSales,

@@ -57,7 +57,7 @@ const UdhaarFormPage = () => {
         toast.success(isEdit ? "Udhaar updated successfully!" : "Udhaar added successfully!");
         setTimeout(() => {
           navigate('/udhaar');
-        }, 1500);
+        }, 200);
       } else {
         toast.error('Failed');
       }

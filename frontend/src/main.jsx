@@ -7,3 +7,13 @@ createRoot(document.getElementById('root')).render(
 
     <App />
 )
+
+import { registerSW } from "virtual:pwa-register";
+
+registerSW({
+  onNeedRefresh() {},
+  onOfflineReady() {
+    console.log("App ready to work offline!");
+  },
+});
+

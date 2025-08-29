@@ -1,5 +1,6 @@
 import Expense from "../models/Expense.js";
 import Product from "../models/Product.js";
+import Purchase from "../models/Purchase.js";
 import Report from "../models/Report.js";
 import Sale from "../models/Sale.js";
 import Udhaar from "../models/Udhaar.js";
@@ -22,6 +23,7 @@ const getProfile = async (req,res) => {
                 role: user.role,
                 shopname: user.shopname,
                 phone : user.phone,
+                address: user.address,
                 createdAt : user.createdAt
             }
         })
@@ -92,6 +94,7 @@ const deleteUser = async (req, res) => {
     }
     await Product.deleteMany({ userId });
     await Sale.deleteMany({ userId });
+    await Purchase.deleteMany({ userId });
     await Udhaar.deleteMany({ userId });
     await Expense.deleteMany({ userId });
     await Report.deleteMany({ userId });

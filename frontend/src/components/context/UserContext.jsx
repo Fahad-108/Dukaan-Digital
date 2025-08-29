@@ -11,6 +11,8 @@ export const UserProvider = ({ children }) => {
             name: "",
             email: "",
             role: "",
+            phone: "",
+            address: "",
         };
     });
 

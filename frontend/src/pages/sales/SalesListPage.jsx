@@ -296,7 +296,7 @@ const SalesListPage = () => {
               <div className="flex justify-between items-baseline font-bold text-xl">
                 <span>TOTAL:</span>
                 <span className="text-green-600">
-                  ₨ {selectedSale.totalAmount.toLocaleString()}
+                  ₨ {(type === "sale" ? selectedSale?.totalAmount : selectedSale?.total)?.toLocaleString() || 0}
                 </span>
               </div>
             </div>

@@ -17,11 +17,12 @@ dotenv.config();
 
 app.use(express.json());
 app.use(cors({
-  origin: 'http://localhost:5173', // Allow requests from your frontend origin
+  origin: 'http://localhost:4173', // Allow requests from your frontend origin
   credentials: true // Allow sending and receiving cookies/authentication headers
 }));
 
 app.use('/api/auth', authRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/profile', profileRoutes);
 app.use('/api/product', productRoutes);
 app.use('/api/sales', salesRoutes);

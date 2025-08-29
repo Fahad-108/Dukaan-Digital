@@ -19,7 +19,8 @@ const ReportReceipt = ({ report, period }) => {
 
     const otherMetrics = [
         { key: "totalExpense", label: "Total Expenses", color: "text-red-600" },
-        { key: "totalUdhaar", label: "Total Pending Credit", color: "text-orange-600" },
+        { key: "totalUdhaar", label: "Total Credit", color: "text-orange-600" },
+        { key: "totalPaidUdhaar", label: "Total Paid Credit", color: "text-orange-600" },
         { key: "totalQuantitySold", label: "Total Quantity Sold", color: "text-gray-700" },
         { key: "numberOfSales", label: "Number of Sales", color: "text-gray-700" },
         { key: "numberOfPurchase", label: "Number of Purchases", color: "text-gray-700" },
@@ -99,28 +100,32 @@ const ReportReceipt = ({ report, period }) => {
 
                 <div className="text-center text-xs urdu-font leading-8 text-gray-800 mt-6 pt-4 border-t border-dashed border-gray-400 print:border-solid">
                     {period.length == 7 ? " اس مہینے " : " آج "}
-                    <span className="underline text-blue-700 mx-1">{report.totalSale}</span>
+                    <span className="underline text-blue-700 mx-1">{formatNumber(report.totalSale)}</span>
                     کی فروخت ہوئی،
-                    <span className="underline text-orange-600 mx-1">{report.totalExpense}</span>
+                    <span className="underline text-orange-600 mx-1">{formatNumber(report.totalExpense)}</span>
                     خرچ ہوا اور
                     {report.netAmount >= 0 ? (
-                        <span className="underline text-green-600 mx-1">
-                            {report.netAmount} منافع
-                        </span>
+                        <><span className="underline text-green-600 mx-1">
+                            {formatNumber(report.netAmount)}
+                        </span><span>منافع</span></>
                     ) : (
-                        <span className="underline text-red-600 mx-1">
-                            {Math.abs(report.netAmount)} نقصان
-                        </span>
+                        <><span className="underline text-red-600 mx-1">
+                                {formatNumber(Math.abs(report.netAmount))}
+                            </span><span>نقصان</span></>
                     )}
                     {report.netAmount >= 0 ? " بچا۔" : " ہوا۔"}
                 </div>
 
 
                 {/* Footer */}
-                <div className="text-center text-xs text-gray-500 mt-6 pt-4 border-t border-dashed border-gray-400 print:border-solid">
+                <div className='flex flex-col items-start justify-center mt-4 pt-2 border-y border-dashed border-gray-400 print:border-solid'>
+                    <h4 className="text-gray-600 text-sm mb-2">Contact: {JSON.parse(sessionStorage.getItem("user")).phone}</h4>
+                    <h4 className="text-gray-600 text-sm mb-2">Address: {JSON.parse(sessionStorage.getItem("user")).address}</h4>
+                </div>
+                <div className="text-center text-xs text-gray-500 mt-6">
                     Generated at : {new Date().toLocaleDateString()}
                 </div>
-                <div className="text-center text-xs text-gray-500 mt-6 pt-4">
+                <div className="text-center text-xs text-gray-500 pt-4">
                     Thank you!
                 </div>
 

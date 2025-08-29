@@ -13,7 +13,7 @@ const RegisterPage = () => {
     role: 'manager',
     phone: '',
     shopname: '',
-    city: ''
+    address: ''
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -128,13 +128,13 @@ const RegisterPage = () => {
                 />
               </div>
               <div>
-                <label htmlFor="city" className="block text-sm font-medium text-gray-700">
-                  City
+                <label htmlFor="address" className="block text-sm font-medium text-gray-700">
+                  Address
                 </label>
                 <input
                   type="text"
-                  name="city"
-                  id="city"
+                  name="address"
+                  id="address"
                   required
                   className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
                   onChange={handleChange}

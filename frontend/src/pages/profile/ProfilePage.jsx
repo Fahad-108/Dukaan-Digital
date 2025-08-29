@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getProfile, deleteProfile } from '../../services/profileService';
-import { User, Mail, Phone, Briefcase, Store, Calendar, Edit2, Trash2 } from "lucide-react";
+import { User, Mail, Phone, Briefcase, Store, Calendar, Edit2, Trash2, MapPin } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
@@ -66,6 +66,7 @@ const ProfilePage = () => {
           <ProfileDetail icon={<Phone size={18} />} label="Phone" value={profile.phone} />
           <ProfileDetail icon={<Store size={18} />} label="Shop Name" value={profile.shopname} />
           <ProfileDetail icon={<Briefcase size={18} />} label="Role" value={profile.role} />
+          <ProfileDetail icon={<MapPin size={18} />} label="Address" value={profile.address} />
           <ProfileDetail
             icon={<Calendar size={18} />}
             label="Joined On"
