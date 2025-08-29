@@ -2,22 +2,22 @@
   "short_name": "Dukaan",
   "name": "Dukaan Digital",
   "icons": [
-    {
-      "src": "/Dukaan-Digital/icons/icon-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "/Dukaan-Digital/icons/icon-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
-  ],
-  "start_url": "/Dukaan-Digital/",
+  {
+    "src": "./icons/icon-192x192.png",
+    "sizes": "192x192",
+    "type": "image/png"
+  },
+  {
+    "src": "./icons/icon-512x512.png",
+    "sizes": "512x512",
+    "type": "image/png"
+  }
+    ],
+  "start_url": "./",
   "display": "standalone",
-  "description": "Dukaan Digital helps shopkeepers manage inventory, sales, and udhaar easily.",
-  "scope": "/Dukaan-Digital/",
+  "scope": "./",
   "orientation": "portrait",
   "theme_color": "#ffffff",
-  "background_color": "#ffffff"
+  "background_color": "#ffffff",
+  "description": "Dukaan Digital helps shopkeepers manage inventory, sales, and udhaar easily."
 }
