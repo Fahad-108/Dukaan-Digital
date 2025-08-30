@@ -280,14 +280,15 @@ const ProductListPage = () => {
   </div>
 
   {/* ---- Loader OR Table ---- */}
-  {loading ? (
-    <Loader />
-  ) : (
+  
     <div className="bg-white shadow-md rounded-lg p-4 border border-blue-200">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-xl font-semibold text-blue-700">Products</h1>
       </div>
-      <div className="overflow-x-auto shadow-lg rounded-lg">
+      {loading ? (
+    <Loader />
+  ) : (
+      <div className="overflow-x-auto shadow-lg">
         {/* --- Table --- */}
         <table className="w-full text-sm text-left text-gray-700">
           <thead className="sticky top-0 bg-blue-600 text-white uppercase text-xs">
@@ -392,8 +393,8 @@ const ProductListPage = () => {
           </tbody>
         </table>
       </div>
-    </div>
   )}
+  </div>
 
 
     </div>

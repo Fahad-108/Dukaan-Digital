@@ -281,7 +281,7 @@ const SalesListPage = () => {
             </div>
 
             <div className="max-h-[30vh] overflow-y-auto">
-              <div className="flex justify-between font-bold text-xs border-b border-dashed border-gray-400 p-2 sticky top-0 bg-blue-600 text-white rounded-t print:border-solid">
+              <div className="flex justify-between font-bold text-xs border-b border-dashed border-gray-400 p-2 sticky top-0 bg-blue-600 text-white print:border-solid">
                 <span className="flex-1">Item</span>
                 <span className="w-16 text-right">Qty</span>
                 <span className="w-20 text-right">Price</span>

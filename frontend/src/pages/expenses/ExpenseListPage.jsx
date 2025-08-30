@@ -60,12 +60,13 @@ const ExpenseListPage = () => {
     </div>
 
     {/* Show loader or data */}
-    {loading ? (
-      <Loader />
-    ) : (
+    
       <div className="bg-white shadow-md rounded-lg border border-blue-200 p-6 space-y-4">
         {/* Header inside card */}
         <h1 className="text-xl font-semibold text-blue-700 mb-4">Expense Records</h1>
+        {loading ? (
+          <Loader />
+        ) : (
         <div className="overflow-x-auto">
           <table className="w-full text-sm text-left text-gray-700">
             <thead className="bg-blue-600 text-white uppercase text-xs">
@@ -109,8 +110,8 @@ const ExpenseListPage = () => {
             </tbody>
           </table>
         </div>
-      </div>
     )}
+    </div>
   </div>
   );
 };

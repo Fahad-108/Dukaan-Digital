@@ -88,15 +88,15 @@ const UdhaarListPage = () => {
       </div>
 
       {/* Loader (only visible while loading) */}
-      {loading ? (
-        <Loader />
-      ) : (
+      
         /* Table (visible only after loading is done) */
         <div className="bg-white shadow-md rounded-lg border border-blue-200 p-6 space-y-4">
           <h1 className="text-xl font-semibold text-blue-700 mb-4">
             Credit Records
           </h1>
-
+          {loading ? (
+        <Loader />
+      ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm text-left text-gray-700">
               <thead className="bg-blue-600 text-white uppercase text-xs">
@@ -168,8 +168,8 @@ const UdhaarListPage = () => {
               </tbody>
             </table>
           </div>
-        </div>
       )}
+      </div>
     </div>
   );
 };
