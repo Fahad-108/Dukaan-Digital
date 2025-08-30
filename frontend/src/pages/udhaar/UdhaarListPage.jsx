@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getUdhaarList, deleteUdhaar } from "../../services/udhaarService";
-import { Edit2, Trash2, FileText } from "lucide-react";
+import { Edit2, Trash2, FileText, HandCoins } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
@@ -78,8 +78,8 @@ const CreditListPage = () => {
             className="px-2 py-1 border border-blue-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-400"
           />
           <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
+            value={filterStatus}
+            onChange={(e) => setFilterStatus(e.target.value)}
             className="px-2 py-1 border border-blue-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-400"
           >
             <option value="all">All Status</option>
