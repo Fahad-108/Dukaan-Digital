@@ -1,13 +1,13 @@
 import express from 'express';
-import Auth from '../middlewares/auth.js';
+import auth from '../middlewares/auth.js';
 import { addUdhaar, deleteUdhaar, getUdhaarById, getUdhaarList, updateUdhaar } from '../controllers/udhaarRoutes.js';
 
 const router = express.Router();
 
-router.post('/', Auth, addUdhaar);
-router.get('/', Auth, getUdhaarList);
-router.get('/:id', Auth, getUdhaarById);
-router.put('/:id', Auth, updateUdhaar);
-router.delete('/:id', Auth, deleteUdhaar);
+router.post('/', auth, addUdhaar);
+router.get('/', auth, getUdhaarList);
+router.get('/:id', auth, getUdhaarById);
+router.put('/:id', auth, updateUdhaar);
+router.delete('/:id', auth, deleteUdhaar);
 
 export default router;

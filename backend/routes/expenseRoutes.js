@@ -1,11 +1,11 @@
 import express from 'express';
-import Auth from '../middlewares/auth.js';
+import auth from '../middlewares/auth.js';
 import { addExpense, deleteExpense, getExpenses } from '../controllers/expenseController.js';
 
 const router = express.Router();
 
-router.post('/', Auth, addExpense);
-router.get('/', Auth, getExpenses);
-router.delete('/:id', Auth, deleteExpense);
+router.post('/', auth, addExpense);
+router.get('/', auth, getExpenses);
+router.delete('/:id', auth, deleteExpense);
 
 export default router;

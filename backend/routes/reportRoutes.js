@@ -1,9 +1,9 @@
 import express from 'express';
-import Auth from '../middlewares/auth.js';
+import auth from '../middlewares/auth.js';
 import { getReport } from '../controllers/reportController.js';
 
 const router = express.Router();
 
-router.post('/', Auth, getReport);
+router.post('/', auth, getReport);
 
 export default router;
