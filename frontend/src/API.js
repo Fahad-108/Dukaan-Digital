@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://dukaan-digital-topaz.vercel.app/",
+  baseURL: "https://dukaan-digital-topaz.vercel.app/api",
   headers: { "Content-Type": "application/json" },
 });
 
