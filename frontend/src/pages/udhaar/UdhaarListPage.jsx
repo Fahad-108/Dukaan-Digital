@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getUdhaarlist, deleteUdhaar } from "../../services/udhaarService";
+import { getUdhaarList, deleteUdhaar } from "../../services/udhaarService";
 import { Trash2, Edit2, HandCoins } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -9,25 +9,24 @@ const UdhaarListPage = () => {
   const [udhaarList, setUdhaarList] = useState([]);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
-  const [loading, setloading] = useState(true);
+  const [loading, setLoading] = useState(false)
 
   const getUdhaar = async () => {
     try {
-      setloading(true);
-      const res = await getUdhaarlist();
+      setLoading(true);
+      const res = await getUdhaarList();
       if (res.data && res.data.length > 0) {
-        setUdhaarList(res.data.reverse());
-        toast.success("Data Refreshed")
-        setloading(false);
+        setUdhaarList(res.data);
+        toast.success("Data Refreshed");
       } else {
-        toast.error("Failed to refresh Credit record");
         setUdhaarList([]);
-        setloading(false);
       }
     } catch (err) {
       toast.error("Failed to refresh Credit record");
-      console.error("Error fetching udhaar list", err);
-      setloading(false);
+      console.error(err);
+    }
+    finally {
+      setLoading(false);
     }
   };
 
@@ -35,24 +34,24 @@ const UdhaarListPage = () => {
     getUdhaar();
   }, []);
 
-  const handleDelete = async (e) => {
+  const handleDelete = async (item) => {
     try {
-      if (confirm("Are you really want to delete this credit record?")) {
-        const res = await deleteUdhaar(e._id);
-        if (res.status == 200 || res.status == 201) {
+      if (confirm("Are you sure you want to delete this credit record?")) {
+        const res = await deleteUdhaar(item._id);
+        if (res.status === 200 || res.status === 201) {
           toast.success("Deleted successfully");
         }
         getUdhaar();
       }
     } catch (err) {
       toast.error("Failed to delete Credit record");
-      console.error("Error deleting: ", err);
+      console.error(err);
     }
-  }
+  };
 
-  const handleEdit = (e) => {
-    navigate(`/udhaar/edit/${e._id}`)
-  }
+  const handleEdit = (item) => {
+    navigate(`/udhaar/edit/${item._id}`);
+  };
 
   const filteredData = udhaarList.filter((item) => {
     const matchSearch =
