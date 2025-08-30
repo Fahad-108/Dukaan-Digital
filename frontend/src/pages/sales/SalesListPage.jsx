@@ -135,58 +135,66 @@ const SalesListPage = () => {
   // }
 
   const RenderTable = ({ title, data }) => (
-    <div className="relative bg-white shadow-md rounded-lg p-4 border border-blue-200">
-      <h2 className="text-xl font-semibold text-blue-700 mb-4">{title}</h2>
-      {data.length === 0 ? (
-        <p className="text-blue-500">No records found</p>
-      ) : (
-        <div className="overflow-x-auto shadow-lg rounded-lg">
-          <table className="w-full text-sm text-left text-gray-700">
-            <thead className="bg-blue-600 text-white uppercase text-xs">
-              <tr>
-                <th className="px-4 py-3">{type == "sale" ? "Customer" : "Supplier"}</th>
-                <th className="px-4 py-3">Date</th>
-                <th className="px-4 py-3">Total Amount</th>
-                <th className="px-4 py-3 text-center">Action</th>
+  <div className="relative bg-white shadow-md rounded-lg p-4 border border-blue-200">
+    <h2 className="text-xl font-semibold text-blue-700 mb-4">{title}</h2>
+
+    {loading ? (
+      <div className="flex justify-center items-center gap-4 py-6">
+        <Loader />
+        <Loader />
+        <Loader />
+      </div>
+    ) : data.length === 0 ? (
+      <p className="text-blue-500">No records found</p>
+    ) : (
+      <div className="overflow-x-auto shadow-lg">
+        <table className="w-full text-sm text-left text-gray-700">
+          <thead className="bg-blue-600 text-white uppercase text-xs">
+            <tr>
+              <th className="px-4 py-3">{type == "sale" ? "Customer" : "Supplier"}</th>
+              <th className="px-4 py-3">Date</th>
+              <th className="px-4 py-3">Total Amount</th>
+              <th className="px-4 py-3 text-center">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.map((item) => (
+              <tr
+                key={item._id}
+                className="border-b hover:bg-blue-50 transition"
+              >
+                <td className="px-4 py-3 font-medium text-blue-800">
+                  {item.customerName ? item.customerName : item.suppliername}
+                </td>
+                <td className="px-4 py-3 text-blue-700">
+                  {new Date(item.createdAt).toLocaleDateString()}
+                </td>
+                <td className="px-4 py-3 font-semibold text-green-600">
+                  Rs {item.totalAmount ? item.totalAmount : item.total}
+                </td>
+                <td className="px-4 py-3 flex justify-around">
+                  <button
+                    onClick={() => handleViewDetails(item)}
+                    className="flex items-center gap-1 text-blue-600 hover:text-blue-800 transition"
+                  >
+                    <Eye size={18} />
+                  </button>
+                  <button
+                    onClick={() => handleDelete(item)}
+                    className="flex items-center gap-1 text-red-500 hover:text-red-600 transition"
+                  >
+                    <Trash2 size={18} />
+                  </button>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {data.map((item) => (
-                <tr
-                  key={item._id}
-                  className="border-b hover:bg-blue-50 transition"
-                >
-                  <td className="px-4 py-3 font-medium text-blue-800">
-                    {item.customerName ? item.customerName : item.suppliername}
-                  </td>
-                  <td className="px-4 py-3 text-blue-700">
-                    {new Date(item.createdAt).toLocaleDateString()}
-                  </td>
-                  <td className="px-4 py-3 font-semibold text-green-600">
-                    Rs {item.totalAmount ? item.totalAmount : item.total}
-                  </td>
-                  <td className="px-4 py-3 flex justify-around">
-                    <button
-                      onClick={() => handleViewDetails(item)}
-                      className="flex items-center gap-1 text-blue-600 hover:text-blue-800 transition"
-                    >
-                      <Eye size={18} />
-                    </button>
-                    <button
-                      onClick={() => handleDelete(item)}
-                      className="flex items-center gap-1 text-red-500 hover:text-red-600 transition"
-                    >
-                      <Trash2 size={18} />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-    </div>
-  );
+            ))}
+          </tbody>
+        </table>
+      </div>
+    )}
+  </div>
+);
+
 
   return (
     <div className="relative p-6 space-y-6 min-h-screen bg-white">

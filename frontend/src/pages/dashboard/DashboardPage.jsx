@@ -45,9 +45,7 @@ const Dashboard = () => {
     return (
         <div>
             {loading ? (
-                <Loader />,
-                <Loader />,
-                <Loader />
+                <><Loader /><Loader /><Loader /></>
               ) :
                 <div className="p-6 bg-gray-50 min-h-screen">
                     <div className="flex justify-between items-center gap-2">
