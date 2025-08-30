@@ -88,8 +88,6 @@ const UdhaarListPage = () => {
       </div>
 
       {/* Loader (only visible while loading) */}
-      
-        /* Table (visible only after loading is done) */
         <div className="bg-white shadow-md rounded-lg border border-blue-200 p-6 space-y-4">
           <h1 className="text-xl font-semibold text-blue-700 mb-4">
             Credit Records
