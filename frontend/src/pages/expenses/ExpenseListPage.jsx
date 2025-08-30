@@ -46,72 +46,73 @@ const ExpenseListPage = () => {
   };
 
   return (
-    <div className="relative p-6 space-y-6 min-h-screen">
+  <div className="relative p-6 space-y-6 min-h-screen">
 
-    {loading &&
-        <div className="flex justify-center items-center py-6">
-          <div className="w-12 h-12 border-4 border-t-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
-        </div>
-      }
-      {/* Add Expense button outside card */}
-      <div className="flex justify-end mb-4">
-        <button 
-          onClick={() => navigate('/expenses/new')}
-          className='px-4 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded flex items-center gap-2 transition'
-        >
-          <FileText size={16}/> Add Expense
-        </button>
+    {/* Add Expense button always visible */}
+    <div className="flex justify-end mb-4">
+      <button 
+        onClick={() => navigate('/expenses/new')}
+        className='px-4 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded flex items-center gap-2 transition'
+      >
+        <FileText size={16}/> Add Expense
+      </button>
+    </div>
+
+    {/* Show loader or data */}
+    {loading ? (
+      <div className="flex justify-center items-center py-12">
+        <div className="w-12 h-12 border-4 border-t-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
       </div>
-
-      {/* Card with heading inside */}
+    ) : (
       <div className="bg-white shadow-md rounded-lg border border-blue-200 p-6 space-y-4">
-        
         {/* Header inside card */}
         <h1 className="text-xl font-semibold text-blue-700 mb-4">Expense Records</h1>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm text-left text-gray-700">
-              <thead className="bg-blue-600 text-white uppercase text-xs">
-                <tr>
-                  <th className="px-4 py-3">Title</th>
-                  <th className="px-4 py-3">Amount</th>
-                  <th className="px-4 py-3">Description</th>
-                  <th className="px-4 py-3">Created At</th>
-                  <th className="px-4 py-3 text-center">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {expenseList.length > 0 ? (
-                  expenseList.map((expense, index) => (
-                    <tr key={expense._id} className="border-b hover:bg-blue-50 transition">
-                      <td className="px-4 py-3 font-medium text-blue-700">{expense.title}</td>
-                      <td className="px-4 py-3 text-green-600 font-semibold">
-                        ₨ {expense.amount.toLocaleString()}
-                      </td>
-                      <td className="px-4 py-3">{expense.description}</td>
-                      <td className="px-4 py-3 text-blue-700">{new Date(expense.createdAt).toLocaleDateString()}</td>
-                      <td className="px-4 py-3 flex justify-center gap-2">
-                        <button 
-                          onClick={() => handleDelete(expense)}
-                          className="p-2 text-red-500 rounded-lg hover:bg-red-100 hover:shadow-sm transition cursor-pointer"
-                        >
-                          <Trash2 size={18}/>
-                        </button>
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="6" className="px-4 py-6 text-center text-blue-500">
-                      No expense records found
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm text-left text-gray-700">
+            <thead className="bg-blue-600 text-white uppercase text-xs">
+              <tr>
+                <th className="px-4 py-3">Title</th>
+                <th className="px-4 py-3">Amount</th>
+                <th className="px-4 py-3">Description</th>
+                <th className="px-4 py-3">Created At</th>
+                <th className="px-4 py-3 text-center">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {expenseList.length > 0 ? (
+                expenseList.map((expense) => (
+                  <tr key={expense._id} className="border-b hover:bg-blue-50 transition">
+                    <td className="px-4 py-3 font-medium text-blue-700">{expense.title}</td>
+                    <td className="px-4 py-3 text-green-600 font-semibold">
+                      ₨ {expense.amount.toLocaleString()}
+                    </td>
+                    <td className="px-4 py-3">{expense.description}</td>
+                    <td className="px-4 py-3 text-blue-700">
+                      {new Date(expense.createdAt).toLocaleDateString()}
+                    </td>
+                    <td className="px-4 py-3 flex justify-center gap-2">
+                      <button 
+                        onClick={() => handleDelete(expense)}
+                        className="p-2 text-red-500 rounded-lg hover:bg-red-100 hover:shadow-sm transition cursor-pointer"
+                      >
+                        <Trash2 size={18}/>
+                      </button>
                     </td>
                   </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
-
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="6" className="px-4 py-6 text-center text-blue-500">
+                    No expense records found
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
+    )}
+  </div>
   );
 };
 
