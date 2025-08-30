@@ -9,9 +9,11 @@ const UdhaarListPage = () => {
   const [udhaarList, setUdhaarList] = useState([]);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [loading, setLoading] = useState(false)
 
   const getUdhaar = async () => {
     try {
+      setLoading(true);
       const res = await getUdhaarList();
       if (res.data && res.data.length > 0) {
         setUdhaarList(res.data);
@@ -22,6 +24,9 @@ const UdhaarListPage = () => {
     } catch (err) {
       toast.error("Failed to refresh Credit record");
       console.error(err);
+    }
+    finally {
+      setLoading(false);
     }
   };
 
@@ -94,6 +99,12 @@ const UdhaarListPage = () => {
           </button>
         </div>
       </div>
+
+      {loading &&
+        <div className="flex justify-center items-center py-6">
+          <div className="w-12 h-12 border-4 border-t-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
+        </div>
+      }
 
       {/* Card containing heading and table */}
       <div className="bg-white shadow-md rounded-lg border border-blue-200 p-6 space-y-4">
