@@ -241,7 +241,7 @@ const SalesListPage = () => {
       
 
       <div className="relative bg-white shadow-md rounded-lg p-4 border border-blue-200">
-        <h2 className="text-xl font-semibold text-blue-700 mb-4">{type === "sale" ? sales.title : purchases.title}</h2>
+        <h2 className="text-xl font-semibold text-blue-700 mb-4">{type === "sale" ? "Sales Record" : "Purchase Record"}</h2>
 
         {loading &&
           <Loader />
@@ -249,10 +249,10 @@ const SalesListPage = () => {
         {!loading && (
           <>
             {type === "sale" && (
-              <RenderTable title="Sales Records" data={sales} />
+              <RenderTable data={sales} />
             )}
             {type === "purchase" && (
-              <RenderTable title="Purchase Records" data={purchases} />
+              <RenderTable data={purchases} />
             )}
           </>
         )}
