@@ -11,6 +11,7 @@ const ExpenseListPage = () => {
 
   const fetchExpenses = async () => {
     try {
+      setLoading(true);
       const res = await getExpense();
       if (res.data && res.data.length > 0) {
         setExpenseList(res.data.reverse());
@@ -65,9 +66,9 @@ const ExpenseListPage = () => {
 
         {/* Loading Spinner */}
         {loading ? (
-          <div className="flex justify-center items-center py-6">
-            <div className="w-12 h-12 border-4 border-t-4 border-gray-200 border-t-blue-500 rounded animate-spin"></div>
-          </div>
+        <div className="flex justify-center items-center py-6">
+          <div className="w-12 h-12 border-4 border-t-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
+        </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm text-left text-gray-700">

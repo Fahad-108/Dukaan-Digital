@@ -50,7 +50,7 @@ const Dashboard = () => {
                 </div>) :
                 <div className="p-6 bg-gray-50 min-h-screen">
                     <div className="flex justify-between items-center gap-2">
-                        <h1 className="text-3xl font-bold text-gray-800">
+                        <h1 className="text-3xl p-2 px-4 mb-4 font-bold text-gray-800">
           {JSON.parse(sessionStorage.getItem("user")).shopname}
         </h1>
                         <div className={`p-2 rounded-full border-2 border-dashed border-gray-400 flex items-center justify-center  transition-colors ${ishide ? "bg-red-100 border-red-600" : "bg-green-100 border-green-600"}`} title={ishide ? "Show Values" : "Hide Values"}>
