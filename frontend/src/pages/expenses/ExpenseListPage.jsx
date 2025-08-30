@@ -48,6 +48,11 @@ const ExpenseListPage = () => {
   return (
     <div className="relative p-6 space-y-6 min-h-screen">
 
+    {loading &&
+        <div className="flex justify-center items-center py-6">
+          <div className="w-12 h-12 border-4 border-t-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
+        </div>
+      }
       {/* Add Expense button outside card */}
       <div className="flex justify-end mb-4">
         <button 
@@ -63,13 +68,6 @@ const ExpenseListPage = () => {
         
         {/* Header inside card */}
         <h1 className="text-xl font-semibold text-blue-700 mb-4">Expense Records</h1>
-
-        {/* Loading Spinner */}
-        {loading ? (
-        <div className="flex justify-center items-center py-6">
-          <div className="w-12 h-12 border-4 border-t-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
-        </div>
-        ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm text-left text-gray-700">
               <thead className="bg-blue-600 text-white uppercase text-xs">
@@ -111,7 +109,6 @@ const ExpenseListPage = () => {
               </tbody>
             </table>
           </div>
-        )}
 
       </div>
     </div>

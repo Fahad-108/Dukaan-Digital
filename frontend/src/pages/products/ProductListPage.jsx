@@ -17,7 +17,6 @@ const ProductListPage = () => {
   const [TotalBill, setTotalBill] = useState(0);
   const [prprice, setprprice] = useState(false);
   const [isSale, setisSale] = useState(false);
-  const [loading, setLoading] = useState(false)
 
   const filteredProduct = products.filter((item) =>
     item.itemname.toLowerCase().includes(searchTerm.toLowerCase())
@@ -111,15 +110,12 @@ const ProductListPage = () => {
 
   const loadProducts = async () => {
     try {
-      setLoading(true);
       const res = await getProducts();
       setProducts(res.data);
       toast.success("Products refreshed!")
     } catch (err) {
       toast.error("Failed to refresh products")
       console.error("Error fetching products:", err);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -378,11 +374,6 @@ const ProductListPage = () => {
             </tbody>
           </table>
         </div>
-        {loading &&
-        <div className="flex justify-center items-center py-6">
-          <div className="w-12 h-12 border-4 border-t-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
-        </div>
-      }
       </div>
     </div>
   );
