@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getCredits, deleteCredit } from "../../services/creditService";
+import { getUdhaarList, deleteUdhaar } from "../../services/udhaarService";
 import { Edit2, Trash2, FileText } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -14,7 +14,7 @@ const CreditListPage = () => {
   const fetchCredits = async () => {
     try {
       setLoading(true);
-      const res = await getCredits();
+      const res = await getUdhaarList();
       if (res.data && res.data.length > 0) {
         setCreditList(res.data.reverse());
         toast.success("Data refreshed!");
@@ -35,7 +35,7 @@ const CreditListPage = () => {
   const handleDelete = async (credit) => {
     try {
       if (confirm("Are you sure you want to delete this?")) {
-        const res = await deleteCredit(credit._id);
+        const res = await deleteUdhaar(credit._id);
         if (res.status === 200 || res.status === 201) {
           toast.success("Credit deleted successfully!");
         }
