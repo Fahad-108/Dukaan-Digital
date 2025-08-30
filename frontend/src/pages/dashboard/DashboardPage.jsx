@@ -9,6 +9,7 @@ import {
 } from "recharts";
 import { ShoppingCart, HandCoins, DollarSign, Receipt, MessageCircleWarning, Eye, EyeOff, Sparkles, PartyPopper, CheckCircle2, TrendingUp } from "lucide-react";
 import { getdashboardReport } from "../../services/dashboardService";
+import Loader from "../../components/parts/Loader";
 
 const Card = ({ children, className = "" }) => (
     <div className={`rounded-2xl shadow-md ${className}`}>{children}</div>
@@ -44,10 +45,8 @@ const Dashboard = () => {
     return (
         <div>
             {loading ? (
-                <div className="flex flex-col items-center justify-center bg-gray-50 min-h-screen">
-                    <span class="loader"></span>
-                    <span className="text-blue-600 font-bold text-xl mt-2">Loading...</span>
-                </div>) :
+                <Loader />
+              ) :
                 <div className="p-6 bg-gray-50 min-h-screen">
                     <div className="flex justify-between items-center gap-2">
                         <h1 className="text-3xl p-2 px-4 mb-4 font-bold text-gray-800">

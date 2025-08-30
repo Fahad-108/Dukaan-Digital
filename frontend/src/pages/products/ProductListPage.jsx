@@ -4,6 +4,7 @@ import { getProducts, deleteProduct } from "../../services/productService.js";
 import { createSale } from "../../services/saleService.js";
 import { Edit2, Trash2, ShoppingCart, Eye, Package } from "lucide-react";
 import toast from "react-hot-toast";
+import Loader from "../../components/parts/Loader";
 
 const ProductListPage = () => {
   const navigate = useNavigate();
@@ -280,9 +281,7 @@ const ProductListPage = () => {
 
   {/* ---- Loader OR Table ---- */}
   {loading ? (
-    <div className="flex justify-center items-center py-6">
-      <div className="w-12 h-12 border-4 border-t-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
-    </div>
+    <Loader />
   ) : (
     <div className="bg-white shadow-md rounded-lg p-4 border border-blue-200">
       <div className="flex justify-between items-center mb-4">

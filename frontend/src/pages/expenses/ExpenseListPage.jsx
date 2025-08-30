@@ -3,6 +3,7 @@ import { getExpense, deleteExpense } from '../../services/expenseService';
 import { Trash2, FileText } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import Loader from "../../components/parts/Loader";
 
 const ExpenseListPage = () => {
   const navigate = useNavigate();
@@ -60,9 +61,7 @@ const ExpenseListPage = () => {
 
     {/* Show loader or data */}
     {loading ? (
-      <div className="flex justify-center items-center py-12">
-        <div className="w-12 h-12 border-4 border-t-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
-      </div>
+      <Loader />
     ) : (
       <div className="bg-white shadow-md rounded-lg border border-blue-200 p-6 space-y-4">
         {/* Header inside card */}

@@ -3,6 +3,7 @@ import { getUdhaarList, deleteUdhaar } from "../../services/udhaarService";
 import { Trash2, Edit2, HandCoins } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import Loader from "../../components/parts/Loader";
 
 const UdhaarListPage = () => {
   const navigate = useNavigate();
@@ -88,9 +89,7 @@ const UdhaarListPage = () => {
 
       {/* Loader (only visible while loading) */}
       {loading ? (
-        <div className="flex justify-center items-center py-6">
-          <div className="w-12 h-12 border-4 border-t-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
-        </div>
+        <Loader />
       ) : (
         /* Table (visible only after loading is done) */
         <div className="bg-white shadow-md rounded-lg border border-blue-200 p-6 space-y-4">

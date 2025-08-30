@@ -4,6 +4,7 @@ import { getPurchases, deletePurchase } from "../../services/purchaseService.js"
 import { Eye, ShoppingCart, Trash2, ShoppingBag } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
+import Loader from "../../components/parts/Loader";
 
 const SalesListPage = () => {
   const navigate = useNavigate();
@@ -238,9 +239,7 @@ const SalesListPage = () => {
       </div>
 
       {loading &&
-        <div className="flex justify-center items-center py-6">
-          <div className="w-12 h-12 border-4 border-t-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
-        </div>
+        <Loader />
       }
 
       {!loading && (
