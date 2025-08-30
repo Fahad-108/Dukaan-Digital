@@ -4,7 +4,7 @@ import { getPurchases, deletePurchase } from "../../services/purchaseService.js"
 import { Eye, ShoppingCart, Trash2, ShoppingBag } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
-import Loader from "../../components/parts/Loader.jsx";
+import Loader from "../../components/parts/Loader";
 
 const SalesListPage = () => {
   const navigate = useNavigate();
@@ -134,9 +134,8 @@ const SalesListPage = () => {
   //   fetchSales(newFilterType);
   // }
 
-  const RenderTable = ({ title, data }) => (
-    <div className="relative bg-white shadow-md rounded-lg p-4 border border-blue-200">
-      <h2 className="text-xl font-semibold text-blue-700 mb-4">{title}</h2>
+  const RenderTable = ({ data }) => (
+    <div>
       {data.length === 0 ? (
         <p className="text-blue-500">No records found</p>
       ) : (
@@ -165,7 +164,7 @@ const SalesListPage = () => {
                   <td className="px-4 py-3 font-semibold text-green-600">
                     Rs {item.totalAmount ? item.totalAmount : item.total}
                   </td>
-                  <td className="px-4 py-3 flex justify-around">
+                  <td className="px-4 py-3 flex justify-start gap-2">
                     <button
                       onClick={() => handleViewDetails(item)}
                       className="flex items-center gap-1 text-blue-600 hover:text-blue-800 transition"
@@ -187,6 +186,7 @@ const SalesListPage = () => {
       )}
     </div>
   );
+
 
   return (
     <div className="relative p-6 space-y-6 min-h-screen bg-white">
@@ -238,23 +238,25 @@ const SalesListPage = () => {
         </button>
       </div>
 
-      {loading &&
-        // <div className="flex justify-center items-center py-6">
-        //   <div className="w-12 h-12 border-4 border-t-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
-        // </div>
-        <Loader />
-      }
+      
 
-      {!loading && (
-        <>
-          {type === "sale" && (
-            <RenderTable title="Sales Records" data={sales} />
-          )}
-          {type === "purchase" && (
-            <RenderTable title="Purchase Records" data={purchases} />
-          )}
-        </>
-      )}
+      <div className="relative bg-white shadow-md rounded-lg p-4 border border-blue-200">
+        <h2 className="text-xl font-semibold text-blue-700 mb-4">{type === "sale" ? "Sales Record" : "Purchase Record"}</h2>
+
+        {loading &&
+          <Loader />
+        }
+        {!loading && (
+          <>
+            {type === "sale" && (
+              <RenderTable data={sales} />
+            )}
+            {type === "purchase" && (
+              <RenderTable data={purchases} />
+            )}
+          </>
+        )}
+      </div>
 
       {showDetails && selectedSale && (
         <div className="absolute top-0 inset-0 flex items-center justify-center bg-black/70 z-50 backdrop-blur-sm p-4 font-mono print:p-0">
@@ -284,7 +286,7 @@ const SalesListPage = () => {
             </div>
 
             <div className="max-h-[30vh] overflow-y-auto">
-              <div className="flex justify-between font-bold text-xs border-b border-dashed border-gray-400 p-2 sticky top-0 bg-blue-600 text-white rounded-t print:border-solid">
+              <div className="flex justify-between font-bold text-xs border-b border-dashed border-gray-400 p-2 sticky top-0 bg-blue-600 text-white print:border-solid">
                 <span className="flex-1">Item</span>
                 <span className="w-16 text-right">Qty</span>
                 <span className="w-20 text-right">Price</span>
