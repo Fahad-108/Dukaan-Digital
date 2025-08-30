@@ -47,7 +47,7 @@ const RegisterPage = () => {
   return (
     <div className="min-h-screen bg-linear-60 from-blue-400 via-blue-100 to-blue-400 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-4xl">
-        <div className="bg-white py-8 px-6 shadow-lg rounded-3xl sm:px-10">
+        <div className="bg-white py-8 px-6 shadow-lg rounded-2xl sm:px-10">
           <div className="sm:mx-auto sm:w-full sm:max-w-4xl">
             <div className="flex justify-center mb-4">
               <img className='h-14' src={DukaanDigital} alt="DukaanDigital" />
