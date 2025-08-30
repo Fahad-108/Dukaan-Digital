@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { getProducts, deleteProduct } from "../../services/productService.js";
+import { getProducts, deleteProduct } from "../../services/productServices.js";
 import { createSale } from "../../services/saleService.js";
 import { Edit2, Trash2, ShoppingCart, Eye, Package } from "lucide-react";
 import toast from "react-hot-toast";
@@ -149,8 +149,6 @@ const ProductListPage = () => {
     }
   };
 
-
-
   useEffect(() => {
     if (location.pathname === "/products") {
       setisSale(false);
@@ -158,7 +156,7 @@ const ProductListPage = () => {
       setisSale(true);
     }
     loadProducts();
-  }, []);
+  }, [location]);
 
   return (
     <div className="relative p-6 bg-white min-h-screen">
@@ -201,13 +199,13 @@ const ProductListPage = () => {
                 </div>
                 {cart.map((item) => (
                   <div key={item.id} className="flex justify-between text-sm py-2 border-b border-dashed border-gray-200 print:border-solid">
-                    <span className="flex-1 text-blue-800 font-medium truncate">
+                    <span className="flex-1 text-blue-800 font-medium text-wrap">
                       {item.productname}
                     </span>
                     <span className="w-16 text-right">{item.quantity} {item.unit}</span>
-                    <span className="w-20 text-right">₨ {item.price.toLocaleString()}</span>
+                    <span className="w-20 text-right">Rs {item.price.toLocaleString()}</span>
                     <span className="w-20 text-right font-semibold">
-                      ₨ {(item.price * item.quantity).toLocaleString()}
+                      Rs {(item.price * item.quantity).toLocaleString()}
                     </span>
                     <span className="w-10 text-red-500 hover:text-red-600 cursor-pointer"
                       onClick={() => handleCartDelete(item.id)}>
@@ -222,7 +220,7 @@ const ProductListPage = () => {
             <div className="flex justify-between items-baseline font-bold text-xl">
               <span>TOTAL:</span>
               <span className="text-red-600">
-                ₨ {TotalBill.toLocaleString()}
+                Rs {TotalBill.toLocaleString()}
               </span>
             </div>
             <div className="text-center text-xs text-gray-500 mt-2 pt-2 border-t border-dashed border-gray-400 print:border-solid">
@@ -251,15 +249,18 @@ const ProductListPage = () => {
           placeholder="Search product..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="flex-1 px-2 py-1 border border-blue-300 rounded focus:outline-none"
+          className="flex-1 px-2 py-1 min-w-10 border border-blue-300 rounded focus:outline-none"
         />
-        {!isSale && <button
-          className="px-4 py-1 bg-blue-600 hover:bg-blue-700 transition text-white rounded flex items-center gap-2"
-          onClick={() => {
-            navigate("/products/new");
-          }}>
-          <Package size={16} />
-          Add Product</button>}
+        {!isSale &&
+          <button
+            className="px-4 py-1 bg-blue-600 hover:bg-blue-700 transition text-white rounded flex items-center gap-2"
+            onClick={() => {
+              navigate("/products/new");
+            }}>
+            <Package size={16} />
+            Add Product
+          </button>
+        }
         {cart.length > 0 && (
           <button
             onClick={ShowCart}
@@ -279,99 +280,100 @@ const ProductListPage = () => {
           <div className="flex gap-2">
           </div>
         </div>
-
-        <table className="w-full text-sm text-left text-gray-700">
-          <thead className="sticky top-0 bg-blue-600 text-white uppercase text-xs">
-            <tr>
-              {[
-                "Item Name",
-                "Category",
-                "Purchase Price",
-                "Selling Price",
-                "Quantity",
-                "Unit",
-                ...(isSale ? ["Sale"] : []),
-                ...(isSale ? [] : ["Created At"]),
-                // "Created At",
-                ...(isSale ? [] : ["Actions"]),
-              ].map((header, i) => (
-                <th key={i} className="px-4 py-3">
-                  {header.toLowerCase() === "purchase price" ? (
-                    <div className="flex gap-1 items-center">
-                      {header}
-                      <Eye
-                        className="text-white cursor-pointer"
-                        onClick={() => setprprice(!prprice)}
-                        size={16}
-                      />
-                    </div>
-                  ) : (
-                    header
-                  )}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {filteredProduct.length === 0 ? (
+        <div className="overflow-x-auto shadow-lg rounded-lg">
+          <table className="w-full text-sm text-left text-gray-700">
+            <thead className="sticky top-0 bg-blue-600 text-white uppercase text-xs">
               <tr>
-                <td colSpan={9} className="text-center text-blue-500 py-4">
-                  No records found
-                </td>
+                {[
+                  "Item Name",
+                  "Category",
+                  "Purchase Price",
+                  "Selling Price",
+                  "Quantity",
+                  "Unit",
+                  ...(isSale ? ["Sale"] : []),
+                  ...(isSale ? [] : ["Created At"]),
+                  // "Created At",
+                  ...(isSale ? [] : ["Actions"]),
+                ].map((header, i) => (
+                  <th key={i} className="px-4 py-3">
+                    {header.toLowerCase() === "purchase price" ? (
+                      <div className="flex gap-1 items-center">
+                        {header}
+                        <Eye
+                          className="text-white cursor-pointer"
+                          onClick={() => setprprice(!prprice)}
+                          size={16}
+                        />
+                      </div>
+                    ) : (
+                      header
+                    )}
+                  </th>
+                ))}
               </tr>
-            ) : (
-              filteredProduct.map((p) => (
-                <tr key={p._id} className="border-b hover:bg-blue-50 transition">
-                  <td className="px-4 py-3 font-medium text-blue-800">{p.itemname}</td>
-                  <td className="px-4 py-3">{p.category}</td>
-                  <td className="px-4 py-3 text-green-600 font-semibold">
-                    {prprice ? `₨ ${p.purchasePrice}` : "•••"}
+            </thead>
+            <tbody>
+              {filteredProduct.length === 0 ? (
+                <tr>
+                  <td colSpan={9} className="text-center text-blue-500 py-4">
+                    No records found
                   </td>
-                  <td className="px-4 py-3 text-green-600 font-semibold">₨ {p.sellingPrice}</td>
-                  <td className="px-4 py-3 text-gray-700 font-semibold">{p.quantity}</td>
-                  <td className="px-4 py-3 text-gray-700 font-semibold">{p.unit}</td>
-                  {isSale && (
-                    <td className="px-6 py-4 text-sm flex items-center gap-1">
-                      <input
-                        type="number"
-                        min="1"
-                        value={saleQuantities[p._id] || ""}
-                        onChange={(e) => handleSaleChange(p, e.target.value)}
-                        className="w-16 px-2 py-1 border border-blue-300 rounded focus:ring-2 focus:ring-blue-400 outline-none"
-                      />
-                      <ShoppingCart
-                        onClick={() => handleCartAdd(p)}
-                        className="text-blue-600 cursor-pointer hover:scale-110 transition-transform"
-                        size={18}
-                      />
-                    </td>
-                  )}
-                  {!isSale && (
-                    <td className="px-4 py-3 text-blue-700">
-                      {new Date(p.createdAt).toLocaleDateString()}
-                    </td>
-                  )}
-                  {!isSale && (
-                    <td className="py-2 flex justify-center items-center gap-2">
-                      <button
-                        onClick={() => navigate("/products/edit/" + p._id)}
-                        className="p-2 text-blue-600 rounded-lg hover:bg-blue-100"
-                      >
-                        <Edit2 size={16} />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(p)}
-                        className="p-2 text-red-500 rounded-lg hover:bg-red-100"
-                      >
-                        <Trash2 size={16} />
-                      </button>
-                    </td>
-                  )}
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              ) : (
+                filteredProduct.map((p) => (
+                  <tr key={p._id} className="border-b hover:bg-blue-50 transition">
+                    <td className="px-4 py-3 font-medium text-blue-800">{p.itemname}</td>
+                    <td className="px-4 py-3">{p.category}</td>
+                    <td className="px-4 py-3 text-green-600 font-semibold">
+                      {prprice ? `Rs ${p.purchasePrice}` : "•••"}
+                    </td>
+                    <td className="px-4 py-3 text-green-600 font-semibold">Rs {p.sellingPrice}</td>
+                    <td className="px-4 py-3 text-gray-700 font-semibold">{p.quantity}</td>
+                    <td className="px-4 py-3 text-gray-700 font-semibold">{p.unit}</td>
+                    {isSale && (
+                      <td className="px-6 py-4 text-sm flex items-center gap-1">
+                        <input
+                          type="number"
+                          min="1"
+                          value={saleQuantities[p._id] || ""}
+                          onChange={(e) => handleSaleChange(p, e.target.value)}
+                          className="w-16 px-2 py-1 border border-blue-300 rounded focus:ring-2 focus:ring-blue-400 outline-none"
+                        />
+                        <ShoppingCart
+                          onClick={() => handleCartAdd(p)}
+                          className="text-blue-600 cursor-pointer hover:scale-110 transition-transform"
+                          size={18}
+                        />
+                      </td>
+                    )}
+                    {!isSale && (
+                      <td className="px-4 py-3 text-blue-700">
+                        {new Date(p.createdAt).toLocaleDateString()}
+                      </td>
+                    )}
+                    {!isSale && (
+                      <td className="py-2 flex justify-center items-center gap-2">
+                        <button
+                          onClick={() => navigate("/products/edit/" + p._id)}
+                          className="p-2 text-blue-600 rounded-lg hover:bg-blue-100"
+                        >
+                          <Edit2 size={16} />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(p)}
+                          className="p-2 text-red-500 rounded-lg hover:bg-red-100"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </td>
+                    )}
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

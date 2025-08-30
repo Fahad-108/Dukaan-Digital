@@ -67,7 +67,23 @@ const getPurchases = async (req,res) => {
     }
 }
 
+const deletePurchase = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const purchase = await Purchase.findById(id);
+        if (!purchase) {
+            return res.status(404).json({ msg: "Purchase not found" });
+        }
+        await Purchase.findByIdAndDelete(id);
+        res.status(200).json({ msg: "Purchase deleted successfully!" })
+    } catch (err) {
+        console.log("Error:", err);
+        res.status(500).json({ msg: "Internal server error" });
+    }
+};
+
 export {
     addPurchase,
     getPurchases,
+    deletePurchase
 };

@@ -54,10 +54,9 @@ const Dashboard = () => {
   }, []);
 
   return loading ? (
-    <div className="flex flex-col items-center justify-center bg-gray-50 min-h-screen">
-      <span className="loader"></span>
-      <span className="text-blue-600 font-bold text-xl mt-2">Loading...</span>
-    </div>
+        <div className="flex justify-center items-center py-6">
+          <div className="w-12 h-12 border-4 border-t-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
+        </div>
   ) : (
     <div className="p-6 bg-gray-50 min-h-screen space-y-8">
       <div className="flex justify-between items-center">
