@@ -66,34 +66,38 @@ const CreditListPage = () => {
   return (
     <div className="relative p-6 space-y-6 min-h-screen">
       {/* Top Bar: Search + Filter + Add Credit */}
-      <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-4">
-        {/* Search Input */}
-        <input
-          type="text"
-          placeholder="Search by customer name or contact..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="px-4 py-2 border rounded-lg shadow-sm w-full md:w-1/3 focus:ring-2 focus:ring-blue-400 outline-none"
-        />
+      <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
+        
+        {/* Left: Search + Status */}
+        <div className="flex flex-wrap items-center gap-3 flex-1 min-w-[280px]">
+          <input
+            type="text"
+            placeholder="Search by name or contact..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="px-2 py-1 border border-blue-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-400"
+          />
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="px-2 py-1 border border-blue-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-400"
+          >
+            <option value="all">All Status</option>
+            <option value="pending">Pending</option>
+            <option value="paid">Paid</option>
+          </select>
+        </div>
 
-        {/* Filter */}
-        <select
-          value={filterStatus}
-          onChange={(e) => setFilterStatus(e.target.value)}
-          className="px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-400 outline-none"
-        >
-          <option value="all">All</option>
-          <option value="pending">Pending</option>
-          <option value="paid">Paid</option>
-        </select>
-
-        {/* Add Credit Button */}
-        <button
-          onClick={() => navigate("/credits/new")}
-          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg flex items-center gap-2 shadow transition"
-        >
-          <FileText size={16} /> Add Credit
-        </button>
+        {/* Right: Add Credit Button */}
+        <div>
+          <button
+            onClick={() => navigate("/udhaar/new")}
+            className="bg-blue-600 flex gap-2 text-white px-4 py-1 rounded hover:bg-blue-700 transition"
+          >
+            <HandCoins size={23} />
+            Add Credit
+          </button>
+        </div>
       </div>
 
       {/* Loader OR Table */}
