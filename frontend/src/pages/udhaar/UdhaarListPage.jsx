@@ -9,7 +9,7 @@ const UdhaarListPage = () => {
   const [udhaarList, setUdhaarList] = useState([]);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
 
   const getUdhaar = async () => {
     try {
@@ -24,8 +24,7 @@ const UdhaarListPage = () => {
     } catch (err) {
       toast.error("Failed to refresh Credit record");
       console.error(err);
-    }
-    finally {
+    } finally {
       setLoading(false);
     }
   };
@@ -63,31 +62,23 @@ const UdhaarListPage = () => {
   });
 
   return (
-    <div className="p-6 min-h-screen bg-white">
-      <div className="flex justify-between gap-1 mb-4 w-full">
-        <div className="flex flex-wrap w-[calc(100%-8.75rem)] gap-4">
+    <div className="p-6 space-y-4 min-h-screen">
+      {/* Search + Add Credit Button (always visible) */}
+      <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
+        <div className="flex flex-wrap items-center gap-3 flex-1 min-w-[280px]">
           <input
             type="text"
             placeholder="Search by name or contact..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="px-4 py-2 md:w-lg min-w-10 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-2 py-1 border border-blue-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-400"
           />
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-4 py-2 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="all">All Status</option>
-            <option value="pending">Pending</option>
-            <option value="paid">Paid</option>
-          </select>
         </div>
 
-        <div className="mb-2">
+        <div>
           <button
             onClick={() => navigate("/udhaar/new")}
-            className="bg-blue-600 w-35 flex items-center gap-2 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+            className="bg-blue-600 flex gap-2 text-white px-4 py-1 rounded hover:bg-blue-700 transition"
           >
             <HandCoins size={23} />
             Add Credit
@@ -95,28 +86,29 @@ const UdhaarListPage = () => {
         </div>
       </div>
 
-      <div className="bg-white shadow-md rounded-lg border border-blue-200 p-6 space-y-4">
-        <h1 className="text-2xl font-bold text-blue-700">Credit Records</h1>
+      {/* Loader (only visible while loading) */}
+      {loading ? (
+        <div className="flex justify-center items-center py-6">
+          <div className="w-12 h-12 border-4 border-t-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
+        </div>
+      ) : (
+        /* Table (visible only after loading is done) */
+        <div className="bg-white shadow-md rounded-lg border border-blue-200 p-6 space-y-4">
+          <h1 className="text-xl font-semibold text-blue-700 mb-4">
+            Credit Records
+          </h1>
 
-        {loading &&
-          <div className="flex justify-center items-center py-6">
-            <div className="w-12 h-12 border-4 border-t-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
-          </div>
-        }
-
-        {/* Table */}
-        {!loading &&
-          <div className="overflow-x-auto shadow-lg rounded-lg">
-            <table className="min-w-full bg-white border border-blue-200">
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm text-left text-gray-700">
               <thead className="bg-blue-600 text-white uppercase text-xs">
                 <tr>
-                  <th className="px-4 py-3 text-left">Customer Name</th>
-                  <th className="px-4 py-3 text-left">Contact</th>
-                  <th className="px-4 py-3 text-left">Amount</th>
-                  <th className="px-4 py-3 text-left">Reason</th>
-                  <th className="px-4 py-3 text-left">Status</th>
-                  <th className="px-4 py-3 text-left">Created At</th>
-                  <th className="px-4 py-3 text-left"></th>
+                  <th className="px-4 py-3">Customer Name</th>
+                  <th className="px-4 py-3">Contact</th>
+                  <th className="px-4 py-3">Amount</th>
+                  <th className="px-4 py-3">Reason</th>
+                  <th className="px-4 py-3">Status</th>
+                  <th className="px-4 py-3">Created At</th>
+                  <th className="px-4 py-3 text-center">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -124,38 +116,51 @@ const UdhaarListPage = () => {
                   filteredData.map((item) => (
                     <tr
                       key={item._id}
-                      className="border-b border-blue-100 hover:bg-blue-50 transition"
+                      className="border-b hover:bg-blue-50 transition"
                     >
-                      <td className="px-4 py-2">{item.customerName}</td>
-                      <td className="px-4 py-2">{item.contact}</td>
-                      <td className="px-4 py-2 font-semibold text-blue-800">
+                      <td className="px-4 py-3 font-medium text-blue-700">
+                        {item.customerName}
+                      </td>
+                      <td className="px-4 py-3">{item.contact}</td>
+                      <td className="px-4 py-3 text-green-600 font-semibold">
                         Rs {item.amount}
                       </td>
-                      <td className="px-4 py-2">
+                      <td className="px-4 py-3">
                         {item.reason || "No reason provided"}
                       </td>
                       <td
-                        className={`px-4 py-2 font-medium ${item.status === "paid"
-                          ? "text-green-600"
-                          : "text-red-600"
-                          }`}
+                        className={`px-4 py-3 uppercase font-semibold ${
+                          item.status === "paid"
+                            ? "text-green-600"
+                            : "text-red-600"
+                        }`}
                       >
                         {item.status}
                       </td>
-                      <td className="px-4 py-2">
+                      <td className="px-4 py-3 text-blue-700">
                         {new Date(item.createdAt).toLocaleDateString()}
                       </td>
-                      <td className="px-4 py-2 flex justify-between items-center">
-                        <button onClick={() => handleEdit(item)} className="text-blue-600"><Edit2 size={18} /></button>
-                        <button onClick={() => handleDelete(item)} className="text-red-500"><Trash2 size={18} /></button>
+                      <td className="py-2 flex justify-center items-center gap-2">
+                        <button
+                          onClick={() => handleEdit(item)}
+                          className="p-2 text-blue-600 rounded-lg hover:bg-blue-100 hover:shadow-sm transition cursor-pointer"
+                        >
+                          <Edit2 size={18} />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(item)}
+                          className="p-2 text-red-500 rounded-lg hover:bg-red-100 hover:shadow-sm transition cursor-pointer"
+                        >
+                          <Trash2 size={18} />
+                        </button>
                       </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
                     <td
-                      colSpan="6"
-                      className="px-4 py-6 text-center text-gray-500"
+                      colSpan="7"
+                      className="px-4 py-6 text-center text-blue-500"
                     >
                       No Credit records found
                     </td>
@@ -164,8 +169,8 @@ const UdhaarListPage = () => {
               </tbody>
             </table>
           </div>
-        }
-      </div>
+        </div>
+      )}
     </div>
   );
 };
