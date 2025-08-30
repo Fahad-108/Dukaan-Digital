@@ -8,7 +8,7 @@ import {
     ResponsiveContainer,
 } from "recharts";
 import { ShoppingCart, HandCoins, DollarSign, Receipt, MessageCircleWarning, Eye, EyeOff, Sparkles, PartyPopper, CheckCircle2, TrendingUp } from "lucide-react";
-import { getDashboardReport } from "../../services/dashboardService";
+import { getdashboardReport } from "../../services/dashboardService";
 
 const Card = ({ children, className = "" }) => (
     <div className={`rounded-2xl shadow-md ${className}`}>{children}</div>
@@ -27,7 +27,7 @@ const Dashboard = () => {
 
     const fetchData = async () => {
         try {
-            const res = await getDashboardReport();
+            const res = await getdashboardReport();
             setsummary(res.data.summary);
             setsalesData(res.data.salesData);
             setLowStock(res.data.lowStock);
