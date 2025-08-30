@@ -7,7 +7,16 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import {
-  ShoppingCart, HandCoins, DollarSign, AlertTriangle, EyeOff, Eye, PartyPopper, Sparkles, CheckCircle2, TrendingUp
+  ShoppingCart,
+  HandCoins,
+  DollarSign,
+  AlertTriangle,
+  EyeOff,
+  Eye,
+  PartyPopper,
+  Sparkles,
+  CheckCircle2,
+  TrendingUp,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { getdashboardReport } from "../../services/dashboardService";
@@ -26,7 +35,7 @@ const Dashboard = () => {
   const [summary, setSummary] = useState();
   const [salesData, setSalesData] = useState();
   const [lowStock, setLowStock] = useState();
-  const [ishide, setishide] = useState(true)
+  const [ishide, setishide] = useState(true);
 
   const fetchData = async () => {
     try {
@@ -44,24 +53,42 @@ const Dashboard = () => {
     fetchData();
   }, []);
 
-  if (loading) return <div className="p-6">Loading...</div>;
-
-  return (
+  return loading ? (
+    <div className="flex flex-col items-center justify-center bg-gray-50 min-h-screen">
+      <span className="loader"></span>
+      <span className="text-blue-600 font-bold text-xl mt-2">Loading...</span>
+    </div>
+  ) : (
     <div className="p-6 bg-gray-50 min-h-screen space-y-8">
-      {/* Header */}
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold text-gray-800">
           {JSON.parse(sessionStorage.getItem("user")).shopname}
         </h1>
-        <div className={`p-2 rounded-full border-2 border-dashed border-gray-400 flex items-center justify-center  transition-colors ${ishide ? "bg-red-100 border-red-600" : "bg-green-100 border-green-600"}} title={ishide ? "Show Values" : "Hide Values"`}>
+
+        {/* 👇 Fixed div */}
+        <div
+          className={`p-2 rounded-full border-2 border-dashed border-gray-400 flex items-center justify-center transition-colors ${
+            ishide
+              ? "bg-red-100 border-red-600"
+              : "bg-green-100 border-green-600"
+          }`}
+          title={ishide ? "Show Values" : "Hide Values"}
+        >
           {ishide ? (
-            <EyeOff className="text-red-600 cursor-pointer" size={24} onClick={() => setishide(!ishide)} />
+            <EyeOff
+              className="text-red-600 cursor-pointer"
+              size={24}
+              onClick={() => setishide(!ishide)}
+            />
           ) : (
-            <Eye className="text-green-600 cursor-pointer" size={24} onClick={() => setishide(!ishide)} />
+            <Eye
+              className="text-green-600 cursor-pointer"
+              size={24}
+              onClick={() => setishide(!ishide)}
+            />
           )}
         </div>
       </div>
-
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -69,7 +96,9 @@ const Dashboard = () => {
           <CardContent className="flex items-center justify-between">
             <div>
               <p className="text-sm opacity-80">Total Sales</p>
-              <h2 className="text-2xl font-bold">{ishide ? "*****" : `₨ ${summary.sales.toLocaleString()}`}</h2>
+              <h2 className="text-2xl font-bold">
+                {ishide ? "*****" : `₨ ${summary.sales.toLocaleString()}`}
+              </h2>
             </div>
             <ShoppingCart size={40} />
           </CardContent>
@@ -79,7 +108,9 @@ const Dashboard = () => {
           <CardContent className="flex items-center justify-between">
             <div>
               <p className="text-sm opacity-80">Expenses</p>
-              <h2 className="text-2xl font-bold">{ishide ? "*****" : `₨ ${summary.expenses.toLocaleString()}`}</h2>
+              <h2 className="text-2xl font-bold">
+                {ishide ? "*****" : `₨ ${summary.expenses.toLocaleString()}`}
+              </h2>
             </div>
             <DollarSign size={40} />
           </CardContent>
@@ -89,7 +120,9 @@ const Dashboard = () => {
           <CardContent className="flex items-center justify-between">
             <div>
               <p className="text-sm opacity-80">Profit</p>
-              <h2 className="text-2xl font-bold">{ishide ? "*****" : `₨ ${summary.profit.toLocaleString()}`}</h2>
+              <h2 className="text-2xl font-bold">
+                {ishide ? "*****" : `₨ ${summary.profit.toLocaleString()}`}
+              </h2>
             </div>
             <DollarSign size={40} />
           </CardContent>
@@ -99,7 +132,9 @@ const Dashboard = () => {
           <CardContent className="flex items-center justify-between">
             <div>
               <p className="text-sm opacity-80">Credit</p>
-              <h2 className="text-2xl font-bold">{ishide ? "*****" : `₨ ${summary.credit.toLocaleString()}`}</h2>
+              <h2 className="text-2xl font-bold">
+                {ishide ? "*****" : `₨ ${summary.credit.toLocaleString()}`}
+              </h2>
             </div>
             <HandCoins size={40} />
           </CardContent>
@@ -130,8 +165,11 @@ const Dashboard = () => {
             <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
               <AlertTriangle className="text-yellow-500" /> Low Stock Alerts
             </h2>
-            <ul className={`space-y-2 ${lowStock.length > 0 ? "max-h-[300px] overflow-y-auto no-scrollbar" : ""
-              }`}>
+            <ul
+              className={`space-y-2 ${
+                lowStock.length > 0 ? "max-h-[300px] overflow-y-auto no-scrollbar" : ""
+              }`}
+            >
               {lowStock.length > 0 ? (
                 lowStock.map((item, index) => (
                   <li
@@ -150,18 +188,19 @@ const Dashboard = () => {
 
                   <div className="flex items-center justify-center gap-3">
                     <PartyPopper size={28} />
-                    <span className="text-lg font-semibold">All items are fully stocked!</span>
+                    <span className="text-lg font-semibold">
+                      All items are fully stocked!
+                    </span>
                     <CheckCircle2 size={24} />
                   </div>
 
                   <p className="text-sm text-white/90 text-center mt-1">
-                    Your inventory is in perfect shape 
+                    Your inventory is in perfect shape
                     <TrendingUp size={16} className="inline" />
                   </p>
                 </li>
               )}
             </ul>
-
           </CardContent>
         </Card>
       </div>
