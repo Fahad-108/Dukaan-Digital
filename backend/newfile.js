@@ -3,11 +3,11 @@ import Purchase from "./models/Purchase.js";
 import Product from "./models/Product.js";
 
 // MongoDB connection URI
-const uri = "mongodb://localhost:27017/Dukaan_Digital";
+const uri = "mongodb+srv://fahiiraza:aa786786@mycluster.zcbyddi.mongodb.net/?retryWrites=true&w=majority&appName=MyCluster";
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 // Dummy userId (replace with a valid ObjectId from your database)
-const userId = "68aaf664cf3a395123ed66e8";
+const userId = "68b1ea41514f8f58407819f3";
 const today = new Date().toISOString().split("T")[0];
 
 const purchases = [

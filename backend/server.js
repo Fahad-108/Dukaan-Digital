@@ -17,7 +17,7 @@ dotenv.config();
 
 app.use(express.json());
 app.use(cors({
-  origin: 'http://localhost:4173', // Allow requests from your frontend origin
+  origin: 'https://fahad-108.github.io ', // Allow requests from your frontend origin
   credentials: true // Allow sending and receiving cookies/authentication headers
 }));
 
