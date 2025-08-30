@@ -1,165 +1,190 @@
-import { useEffect, useState } from "react";
-import { getUdhaarList, deleteUdhaar } from "../../services/udhaarService";
-import { Trash2, Edit2, HandCoins } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { getCredits, deleteCredit } from "../../services/creditService";
+import { Edit2, Trash2, FileText } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
-const UdhaarListPage = () => {
+const CreditListPage = () => {
   const navigate = useNavigate();
-  const [udhaarList, setUdhaarList] = useState([]);
+  const [creditList, setCreditList] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
-  const [statusFilter, setStatusFilter] = useState("all");
-  const [loading, setLoading] = useState(false)
+  const [filterStatus, setFilterStatus] = useState("all");
 
-  const getUdhaar = async () => {
+  const fetchCredits = async () => {
     try {
       setLoading(true);
-      const res = await getUdhaarList();
+      const res = await getCredits();
       if (res.data && res.data.length > 0) {
-        setUdhaarList(res.data);
-        toast.success("Data Refreshed");
+        setCreditList(res.data.reverse());
+        toast.success("Data refreshed!");
       } else {
-        setUdhaarList([]);
+        setCreditList([]);
       }
     } catch (err) {
-      toast.error("Failed to refresh Credit record");
-      console.error(err);
+      toast.error("Failed to refresh credits");
+      console.error("Error fetching credits", err);
     }
-    finally {
-      setLoading(false);
-    }
+    setLoading(false);
   };
 
   useEffect(() => {
-    getUdhaar();
+    fetchCredits();
   }, []);
 
-  const handleDelete = async (item) => {
+  const handleDelete = async (credit) => {
     try {
-      if (confirm("Are you sure you want to delete this credit record?")) {
-        const res = await deleteUdhaar(item._id);
+      if (confirm("Are you sure you want to delete this?")) {
+        const res = await deleteCredit(credit._id);
         if (res.status === 200 || res.status === 201) {
-          toast.success("Deleted successfully");
+          toast.success("Credit deleted successfully!");
         }
-        getUdhaar();
+        fetchCredits();
       }
     } catch (err) {
-      toast.error("Failed to delete Credit record");
-      console.error(err);
+      toast.error("Failed to delete credit");
+      console.error("Error deleting credit", err);
     }
   };
 
-  const handleEdit = (item) => {
-    navigate(`/udhaar/edit/${item._id}`);
+  const handleEdit = (credit) => {
+    navigate(`/credits/edit/${credit._id}`);
   };
 
-  const filteredData = udhaarList.filter((item) => {
-    const matchSearch =
+  // Filtering
+  const filteredData = creditList.filter((item) => {
+    const matchesSearch =
       item.customerName.toLowerCase().includes(search.toLowerCase()) ||
-      item.contact.includes(search);
-    const matchStatus =
-      statusFilter === "all" ? true : item.status === statusFilter;
-    return matchSearch && matchStatus;
+      item.contact.toLowerCase().includes(search.toLowerCase());
+
+    const matchesStatus =
+      filterStatus === "all" || item.status.toLowerCase() === filterStatus;
+
+    return matchesSearch && matchesStatus;
   });
 
   return (
-    <div className="p-6 space-y-4 min-h-screen">
+    <div className="relative p-6 space-y-6 min-h-screen">
+      {/* Top Bar: Search + Filter + Add Credit */}
+      <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-4">
+        {/* Search Input */}
+        <input
+          type="text"
+          placeholder="Search by customer name or contact..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="px-4 py-2 border rounded-lg shadow-sm w-full md:w-1/3 focus:ring-2 focus:ring-blue-400 outline-none"
+        />
 
-      {/* Filters + Add Credit Button aligned in single row */}
-      <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
-        
-        {/* Left: Search + Status */}
-        <div className="flex flex-wrap items-center gap-3 flex-1 min-w-[280px]">
-          <input
-            type="text"
-            placeholder="Search by name or contact..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="px-2 py-1 border border-blue-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-400"
-          />
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-2 py-1 border border-blue-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-400"
-          >
-            <option value="all">All Status</option>
-            <option value="pending">Pending</option>
-            <option value="paid">Paid</option>
-          </select>
-        </div>
+        {/* Filter */}
+        <select
+          value={filterStatus}
+          onChange={(e) => setFilterStatus(e.target.value)}
+          className="px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-400 outline-none"
+        >
+          <option value="all">All</option>
+          <option value="pending">Pending</option>
+          <option value="paid">Paid</option>
+        </select>
 
-        {/* Right: Add Credit Button */}
-        <div>
-          <button
-            onClick={() => navigate("/udhaar/new")}
-            className="bg-blue-600 flex gap-2 text-white px-4 py-1 rounded hover:bg-blue-700 transition"
-          >
-            <HandCoins size={23} />
-            Add Credit
-          </button>
-        </div>
+        {/* Add Credit Button */}
+        <button
+          onClick={() => navigate("/credits/new")}
+          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg flex items-center gap-2 shadow transition"
+        >
+          <FileText size={16} /> Add Credit
+        </button>
       </div>
 
-      {loading &&
-        <div className="flex justify-center items-center py-6">
+      {/* Loader OR Table */}
+      {loading ? (
+        <div className="flex flex-col items-center justify-center w-full py-10">
           <div className="w-12 h-12 border-4 border-t-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
+          <p className="mt-4 text-blue-600 font-medium">
+            Loading Credit Records...
+          </p>
         </div>
-      }
+      ) : (
+        <div className="bg-white shadow-md rounded-lg border border-blue-200 p-6 space-y-4">
+          <h1 className="text-xl font-semibold text-blue-700 mb-4">
+            Credit Records
+          </h1>
 
-      {/* Card containing heading and table */}
-      <div className="bg-white shadow-md rounded-lg border border-blue-200 p-6 space-y-4">
-        <h1 className="text-xl font-semibold text-blue-700 mb-4">Credit Records</h1>
-
-        {/* Table */}
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm text-left text-gray-700">
-            <thead className="bg-blue-600 text-white uppercase text-xs">
-              <tr>
-                <th className="px-4 py-3">Customer Name</th>
-                <th className="px-4 py-3">Contact</th>
-                <th className="px-4 py-3">Amount</th>
-                <th className="px-4 py-3">Reason</th>
-                <th className="px-4 py-3">Status</th>
-                <th className="px-4 py-3">Created At</th>
-                <th className="px-4 py-3 text-center">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredData.length > 0 ? (
-                filteredData.map((item) => (
-                  <tr key={item._id} className="border-b hover:bg-blue-50 transition">
-                    <td className="px-4 py-3 font-medium text-blue-700">{item.customerName}</td>
-                    <td className="px-4 py-3">{item.contact}</td>
-                    <td className="px-4 py-3 text-green-600 font-semibold">Rs {item.amount}</td>
-                    <td className="px-4 py-3">{item.reason || "No reason provided"}</td>
-                    <td className={`px-4 py-3 uppercase font-semibold ${item.status === "paid" ? "text-green-600" : "text-red-600"}`}>
-                      {item.status}
-                    </td>
-                    <td className="px-4 py-3 text-blue-700">{new Date(item.createdAt).toLocaleDateString()}</td>
-                    <td className="py-2 flex justify-center items-center gap-2">
-                      <button onClick={() => handleEdit(item)} className="p-2 text-blue-600 rounded-lg hover:bg-blue-100 hover:shadow-sm transition cursor-pointer">
-                        <Edit2 size={18} />
-                      </button>
-                      <button onClick={() => handleDelete(item)} className="p-2 text-red-500 rounded-lg hover:bg-red-100 hover:shadow-sm transition cursor-pointer">
-                        <Trash2 size={18} />
-                      </button>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm text-left text-gray-700">
+              <thead className="bg-blue-600 text-white uppercase text-xs">
+                <tr>
+                  <th className="px-4 py-3">Customer Name</th>
+                  <th className="px-4 py-3">Contact</th>
+                  <th className="px-4 py-3">Amount</th>
+                  <th className="px-4 py-3">Reason</th>
+                  <th className="px-4 py-3">Status</th>
+                  <th className="px-4 py-3">Created At</th>
+                  <th className="px-4 py-3 text-center">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredData.length > 0 ? (
+                  filteredData.map((item) => (
+                    <tr
+                      key={item._id}
+                      className="border-b hover:bg-blue-50 transition"
+                    >
+                      <td className="px-4 py-3 font-medium text-blue-700">
+                        {item.customerName}
+                      </td>
+                      <td className="px-4 py-3">{item.contact}</td>
+                      <td className="px-4 py-3 text-green-600 font-semibold">
+                        Rs {item.amount}
+                      </td>
+                      <td className="px-4 py-3">
+                        {item.reason || "No reason provided"}
+                      </td>
+                      <td
+                        className={`px-4 py-3 uppercase font-semibold ${
+                          item.status === "paid"
+                            ? "text-green-600"
+                            : "text-red-600"
+                        }`}
+                      >
+                        {item.status}
+                      </td>
+                      <td className="px-4 py-3 text-blue-700">
+                        {new Date(item.createdAt).toLocaleDateString()}
+                      </td>
+                      <td className="py-2 flex justify-center items-center gap-2">
+                        <button
+                          onClick={() => handleEdit(item)}
+                          className="p-2 text-blue-600 rounded-lg hover:bg-blue-100 hover:shadow-sm transition cursor-pointer"
+                        >
+                          <Edit2 size={18} />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(item)}
+                          className="p-2 text-red-500 rounded-lg hover:bg-red-100 hover:shadow-sm transition cursor-pointer"
+                        >
+                          <Trash2 size={18} />
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      colSpan="7"
+                      className="px-4 py-6 text-center text-blue-500"
+                    >
+                      No Credit records found
                     </td>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="7" className="px-4 py-6 text-center text-blue-500">
-                    No Credit records found
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
-
-      </div>
+      )}
     </div>
   );
 };
 
-export default UdhaarListPage;
+export default CreditListPage;

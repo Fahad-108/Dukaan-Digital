@@ -248,144 +248,155 @@ const ProductListPage = () => {
           </div>
         </div>
       )}
-      <div className="flex items-center gap-4 mb-6">
-        <input
-          type="text"
-          placeholder="Search product..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="flex-1 px-2 py-1 min-w-10 border border-blue-300 rounded focus:outline-none"
-        />
-        {!isSale &&
-          <button
-            className="px-4 py-1 bg-blue-600 hover:bg-blue-700 transition text-white rounded flex items-center gap-2"
-            onClick={() => {
-              navigate("/products/new");
-            }}>
-            <Package size={16} />
-            Add Product
-          </button>
-        }
-        {cart.length > 0 && (
-          <button
-            onClick={ShowCart}
-            className="bg-blue-600 flex items-center gap-2 text-white px-4 py-1 rounded"
-          >
-            <span className="flex items-center gap-2">
-              <ShoppingCart size={20} /> Sale
-            </span>
-          </button>
-        )}
+  {/* ---- Top Bar: Search + Add Product + Cart ---- */}
+  <div className="flex items-center gap-4 mb-6">
+    <input
+      type="text"
+      placeholder="Search product..."
+      value={searchTerm}
+      onChange={(e) => setSearchTerm(e.target.value)}
+      className="flex-1 px-2 py-1 min-w-10 border border-blue-300 rounded focus:outline-none"
+    />
+    {!isSale && (
+      <button
+        className="px-4 py-1 bg-blue-600 hover:bg-blue-700 transition text-white rounded flex items-center gap-2"
+        onClick={() => navigate("/products/new")}
+      >
+        <Package size={16} />
+        Add Product
+      </button>
+    )}
+    {cart.length > 0 && (
+      <button
+        onClick={ShowCart}
+        className="bg-blue-600 flex items-center gap-2 text-white px-4 py-1 rounded"
+      >
+        <span className="flex items-center gap-2">
+          <ShoppingCart size={20} /> Sale
+        </span>
+      </button>
+    )}
+  </div>
+
+  {/* ---- Loader OR Table ---- */}
+  {loading ? (
+    <div className="flex justify-center items-center py-6">
+      <div className="w-12 h-12 border-4 border-t-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
+    </div>
+  ) : (
+    <div className="bg-white shadow-md rounded-lg p-4 border border-blue-200">
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-xl font-semibold text-blue-700">Products</h1>
       </div>
-
-      {loading &&
-        <div className="flex justify-center items-center py-6">
-          <div className="w-12 h-12 border-4 border-t-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
-        </div>
-      }
-
-      <div className="bg-white shadow-md rounded-lg p-4 border border-blue-200">
-        <div className="flex justify-between items-center mb-4">
-
-          <h1 className="text-xl font-semibold text-blue-700">Products</h1>
-          <div className="flex gap-2">
-          </div>
-        </div>
-        <div className="overflow-x-auto shadow-lg rounded-lg">
-          <table className="w-full text-sm text-left text-gray-700">
-            <thead className="sticky top-0 bg-blue-600 text-white uppercase text-xs">
+      <div className="overflow-x-auto shadow-lg rounded-lg">
+        {/* --- Table --- */}
+        <table className="w-full text-sm text-left text-gray-700">
+          <thead className="sticky top-0 bg-blue-600 text-white uppercase text-xs">
+            <tr>
+              {[
+                "Item Name",
+                "Category",
+                "Purchase Price",
+                "Selling Price",
+                "Quantity",
+                "Unit",
+                ...(isSale ? ["Sale"] : []),
+                ...(isSale ? [] : ["Created At"]),
+                ...(isSale ? [] : ["Actions"]),
+              ].map((header, i) => (
+                <th key={i} className="px-4 py-3">
+                  {header.toLowerCase() === "purchase price" ? (
+                    <div className="flex gap-1 items-center">
+                      {header}
+                      <Eye
+                        className="text-white cursor-pointer"
+                        onClick={() => setprprice(!prprice)}
+                        size={16}
+                      />
+                    </div>
+                  ) : (
+                    header
+                  )}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {filteredProduct.length === 0 ? (
               <tr>
-                {[
-                  "Item Name",
-                  "Category",
-                  "Purchase Price",
-                  "Selling Price",
-                  "Quantity",
-                  "Unit",
-                  ...(isSale ? ["Sale"] : []),
-                  ...(isSale ? [] : ["Created At"]),
-                  // "Created At",
-                  ...(isSale ? [] : ["Actions"]),
-                ].map((header, i) => (
-                  <th key={i} className="px-4 py-3">
-                    {header.toLowerCase() === "purchase price" ? (
-                      <div className="flex gap-1 items-center">
-                        {header}
-                        <Eye
-                          className="text-white cursor-pointer"
-                          onClick={() => setprprice(!prprice)}
-                          size={16}
-                        />
-                      </div>
-                    ) : (
-                      header
-                    )}
-                  </th>
-                ))}
+                <td colSpan={9} className="text-center text-blue-500 py-4">
+                  No records found
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {filteredProduct.length === 0 ? (
-                <tr>
-                  <td colSpan={9} className="text-center text-blue-500 py-4">
-                    No records found
+            ) : (
+              filteredProduct.map((p) => (
+                <tr
+                  key={p._id}
+                  className="border-b hover:bg-blue-50 transition"
+                >
+                  <td className="px-4 py-3 font-medium text-blue-800">
+                    {p.itemname}
                   </td>
-                </tr>
-              ) : (
-                filteredProduct.map((p) => (
-                  <tr key={p._id} className="border-b hover:bg-blue-50 transition">
-                    <td className="px-4 py-3 font-medium text-blue-800">{p.itemname}</td>
-                    <td className="px-4 py-3">{p.category}</td>
-                    <td className="px-4 py-3 text-green-600 font-semibold">
-                      {prprice ? `Rs ${p.purchasePrice}` : "•••"}
+                  <td className="px-4 py-3">{p.category}</td>
+                  <td className="px-4 py-3 text-green-600 font-semibold">
+                    {prprice ? `Rs ${p.purchasePrice}` : "•••"}
+                  </td>
+                  <td className="px-4 py-3 text-green-600 font-semibold">
+                    Rs {p.sellingPrice}
+                  </td>
+                  <td className="px-4 py-3 text-gray-700 font-semibold">
+                    {p.quantity}
+                  </td>
+                  <td className="px-4 py-3 text-gray-700 font-semibold">
+                    {p.unit}
+                  </td>
+                  {isSale && (
+                    <td className="px-6 py-4 text-sm flex items-center gap-1">
+                      <input
+                        type="number"
+                        min="1"
+                        value={saleQuantities[p._id] || ""}
+                        onChange={(e) => handleSaleChange(p, e.target.value)}
+                        className="w-16 px-2 py-1 border border-blue-300 rounded focus:ring-2 focus:ring-blue-400 outline-none"
+                      />
+                      <ShoppingCart
+                        onClick={() => handleCartAdd(p)}
+                        className="text-blue-600 cursor-pointer hover:scale-110 transition-transform"
+                        size={18}
+                      />
                     </td>
-                    <td className="px-4 py-3 text-green-600 font-semibold">Rs {p.sellingPrice}</td>
-                    <td className="px-4 py-3 text-gray-700 font-semibold">{p.quantity}</td>
-                    <td className="px-4 py-3 text-gray-700 font-semibold">{p.unit}</td>
-                    {isSale && (
-                      <td className="px-6 py-4 text-sm flex items-center gap-1">
-                        <input
-                          type="number"
-                          min="1"
-                          value={saleQuantities[p._id] || ""}
-                          onChange={(e) => handleSaleChange(p, e.target.value)}
-                          className="w-16 px-2 py-1 border border-blue-300 rounded focus:ring-2 focus:ring-blue-400 outline-none"
-                        />
-                        <ShoppingCart
-                          onClick={() => handleCartAdd(p)}
-                          className="text-blue-600 cursor-pointer hover:scale-110 transition-transform"
-                          size={18}
-                        />
-                      </td>
-                    )}
-                    {!isSale && (
-                      <td className="px-4 py-3 text-blue-700">
-                        {new Date(p.createdAt).toLocaleDateString()}
-                      </td>
-                    )}
-                    {!isSale && (
-                      <td className="py-2 flex justify-center items-center gap-2">
-                        <button
-                          onClick={() => navigate("/products/edit/" + p._id)}
-                          className="p-2 text-blue-600 rounded-lg hover:bg-blue-100"
-                        >
-                          <Edit2 size={16} />
-                        </button>
-                        <button
-                          onClick={() => handleDelete(p)}
-                          className="p-2 text-red-500 rounded-lg hover:bg-red-100"
-                        >
-                          <Trash2 size={16} />
-                        </button>
-                      </td>
-                    )}
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
+                  )}
+                  {!isSale && (
+                    <td className="px-4 py-3 text-blue-700">
+                      {new Date(p.createdAt).toLocaleDateString()}
+                    </td>
+                  )}
+                  {!isSale && (
+                    <td className="py-2 flex justify-center items-center gap-2">
+                      <button
+                        onClick={() => navigate("/products/edit/" + p._id)}
+                        className="p-2 text-blue-600 rounded-lg hover:bg-blue-100"
+                      >
+                        <Edit2 size={16} />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(p)}
+                        className="p-2 text-red-500 rounded-lg hover:bg-red-100"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </td>
+                  )}
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
       </div>
+    </div>
+  )}
+
+
     </div>
   );
 };
