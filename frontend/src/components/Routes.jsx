@@ -1,5 +1,5 @@
 // src/router/AppRouter.jsx
-import { Routes, Route } from "react-router-dom"
+import { Routes, Route, Navigate } from "react-router-dom"
 import ProtectedRoute from "./ProtectedRoute"
 
 // Layouts
@@ -48,6 +48,8 @@ import ContactUs from '../pages/about/ContactUs'
 import PrivacyPolicy from '../pages/about/PrivacyPolicy'
 import TermsAndConditions from '../pages/about/TermsAndConditions'
 import AboutLayout from "./layout/AboutLayout"
+import AdminLayout from "./layout/AdminLayout"
+import AdminPage from "../pages/admin/AdminPage"
 
 export default function AppRouter() {
   return (
@@ -55,6 +57,7 @@ export default function AppRouter() {
 
       {/* Auth Layout Routes */}
       <Route element={<AuthLayout />}>
+      <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
       </Route>
@@ -66,12 +69,20 @@ export default function AppRouter() {
             <Route path="termsandconditions" element={<TermsAndConditions />} />
           </Route>
 
+      
+      <Route element={<ProtectedRoute role="admin" />} >
+        <Route element={<AdminLayout />} >
+          <Route path="/admin" element={<AdminPage />} />
+       </Route> 
+       </Route>
+         
       {/* Protected Routes */}
-      <Route element={<ProtectedRoute />}>
+      <Route element={<ProtectedRoute role="manager" />}>
         <Route element={<DashboardLayout />}>
 
+
           {/* Dashboard */}
-          <Route path="/" element={<DashboardPage />} />
+          <Route path="/manager" element={<DashboardPage />} />
 
           {/* Profile */}
           <Route path="profile">

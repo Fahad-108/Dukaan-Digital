@@ -30,7 +30,7 @@ const LoginPage = () => {
         toast.success('Login successfully!');
         const USER = response.data.user;
         setUser(USER);
-        navigate('/');
+        navigate('/manager');
       } else {
         setError('Invalid login response')
       }

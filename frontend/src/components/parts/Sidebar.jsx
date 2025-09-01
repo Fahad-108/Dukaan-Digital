@@ -17,7 +17,7 @@ const Sidebar = ({ toggleSidebar }) => {
     const menuItems = [
         {
             label: "Dashboard",
-            path: "/",
+            path: "/manager",
             icon: <LayoutDashboard size={20} />,
         },
         {

@@ -33,7 +33,7 @@ const RegisterPage = () => {
       if (response.data) {
         toast.success("Account registered successfully!");
         setTimeout(() => {
-          navigate('/login');
+          navigate('/admin');
         }, 2000);
       }
     } catch (err) {
