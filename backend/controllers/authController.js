@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import User from '../models/User.js';
+import UserStatus from '../models/UserStatus.js';
 
 const register =  async (req,res) => {
     try {
@@ -17,6 +18,11 @@ const register =  async (req,res) => {
         await newUser.save();
 
         const token = jwt.sign({ id: newUser._id}, process.env.JWT_SECRET, { expiresIn: '1h'});
+
+        await UserStatus.create({
+            userId: newUser._id,
+            status: "active"
+        })
 
         res.status(201).json({ message: 'User registered successfully!', token: token});
     }
@@ -39,7 +45,13 @@ const login = async (req,res) => {
             return res.status(401).json({ message: 'Invalid credentials'});
         }
 
+        const userstatus = await UserStatus.findOne({userId : user._id})
+        if(userstatus.status === "suspended"){
+            return res.status(400).json({ message: 'Your Account is suspended' });
+        }
+        
         const token = jwt.sign({ id: user._id}, process.env.JWT_SECRET, { expiresIn: '1d'});
+
 
         res.status(201).json({
             message: 'Login successfull!',

@@ -11,6 +11,7 @@ import reportRoutes from './routes/reportRoutes.js';
 import salesRoutes from './routes/salesRoutes.js'
 import udhaarRoutes from './routes/udhaarRoutes.js';
 import purchaseRoutes from './routes/purchaseRoutes.js'
+import adminRoutes from './routes/adminRoutes.js'
 
 const app = express();
 dotenv.config();
@@ -23,6 +24,7 @@ app.use(cors({
 
 app.use('/api/auth', authRoutes);
 app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/admin', adminRoutes);
 app.use('/api/profile', profileRoutes);
 app.use('/api/product', productRoutes);
 app.use('/api/sales', salesRoutes);

@@ -35,7 +35,11 @@ const ProfilePage = () => {
   }
 
   const handleEdit = async () => {
-    navigate("/profile/edit")
+    if(profile.role === "admin"){
+      navigate('/admin/profile/edit', { state: { data: profile } })
+    } else {
+      navigate('/profile/edit');
+    }
   }
 
   useEffect(() => {
@@ -54,9 +58,10 @@ const ProfilePage = () => {
             onClick={() => handleDelete()}>
             {<Trash2 size={18} />}
           </div>
+          { profile.role === "manager" &&
           <div className="w-fit mx-auto mb-2 p-2 rounded-full bg-white flex items-center justify-center font-bold text-2xl shadow-lg">
             <h1 className='text-black Logo-font'>{profile.shopname}</h1>
-          </div>
+          </div>}
           <h2 className="text-xl font-semibold">{profile.name}</h2>
           <p className="text-sm opacity-80">{profile.role}</p>
         </div>
@@ -64,7 +69,7 @@ const ProfilePage = () => {
         <div className="p-6 space-y-4">
           <ProfileDetail icon={<Mail size={18} />} label="Email" value={profile.email} />
           <ProfileDetail icon={<Phone size={18} />} label="Phone" value={profile.phone} />
-          <ProfileDetail icon={<Store size={18} />} label="Shop Name" value={profile.shopname} />
+          { profile.role === 'manager' && <ProfileDetail icon={<Store size={18} />} label="Shop Name" value={profile.shopname} />}
           <ProfileDetail icon={<Briefcase size={18} />} label="Role" value={profile.role} />
           <ProfileDetail icon={<MapPin size={18} />} label="Address" value={profile.address} />
           <ProfileDetail

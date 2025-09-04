@@ -50,6 +50,7 @@ import TermsAndConditions from '../pages/about/TermsAndConditions'
 import AboutLayout from "./layout/AboutLayout"
 import AdminLayout from "./layout/AdminLayout"
 import AdminPage from "../pages/admin/AdminPage"
+import EditProfile from "../pages/admin/EditProfile"
 
 export default function AppRouter() {
   return (
@@ -59,7 +60,7 @@ export default function AppRouter() {
       <Route element={<AuthLayout />}>
       <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
+          <Route path="/register" element={<RegisterPage />} />
       </Route>
 
       <Route element={<AboutLayout />} >
@@ -73,6 +74,9 @@ export default function AppRouter() {
       <Route element={<ProtectedRoute role="admin" />} >
         <Route element={<AdminLayout />} >
           <Route path="/admin" element={<AdminPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/adminprofile" element={<ProfilePage />} />
+          <Route path="/admin/profile/edit" element={<EditProfile />} />
        </Route> 
        </Route>
          

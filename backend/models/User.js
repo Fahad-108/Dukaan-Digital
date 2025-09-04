@@ -24,7 +24,9 @@ const userSchema = new mongoose.Schema(
         },
         shopname: {
             type: String,
-            required: true
+            required: function () {
+                return this.role === "manager"; // only required for manager
+            }
         },
         address: {
             type: String,
