@@ -54,7 +54,7 @@ import EditProfile from "../pages/admin/EditProfile"
 
 export default function AppRouter() {
   return (
-    <Routes>
+    <Routes path="/">
 
       {/* Auth Layout Routes */}
       <Route element={<AuthLayout />}>

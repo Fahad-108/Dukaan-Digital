@@ -47,7 +47,7 @@ const RegisterPage = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-linear-60 from-blue-400 via-blue-100 to-blue-400 px-4 py-12">
-            <div className="bg-white shadow-2xl rounded-3xl p-10 w-full max-w-4xl">
+            <div className="bg-white shadow-2xl rounded-xl p-10 w-full max-w-4xl">
                 <div className="flex justify-center mb-6">
                     <img className='h-16' src={DukaanDigital} alt="DukaanDigital" />
                 </div>
@@ -59,7 +59,7 @@ const RegisterPage = () => {
                 </p>
 
                 {error && (
-                    <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-600 rounded-xl text-center font-medium">
+                    <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-600 rounded-lg text-center font-medium">
                         {error}
                     </div>
                 )}
@@ -78,7 +78,7 @@ const RegisterPage = () => {
                                     name="name"
                                     id="name"
                                     required
-                                    className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-blue-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300 placeholder:text-gray-400"
+                                    className="w-full pl-11 pr-4 py-2 bg-gray-50 border border-blue-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300 placeholder:text-gray-400"
                                     onChange={handleChange}
                                     placeholder="Enter your full name"
                                     disabled={loading}
@@ -98,7 +98,7 @@ const RegisterPage = () => {
                                     name="email"
                                     id="email"
                                     required
-                                    className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-blue-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300 placeholder:text-gray-400"
+                                    className="w-full pl-11 pr-4 py-2 bg-gray-50 border border-blue-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300 placeholder:text-gray-400"
                                     onChange={handleChange}
                                     placeholder="Enter your email"
                                     disabled={loading}
@@ -118,7 +118,7 @@ const RegisterPage = () => {
                                     name="password"
                                     id="password"
                                     required
-                                    className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-blue-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300 placeholder:text-gray-400"
+                                    className="w-full pl-11 pr-4 py-2 bg-gray-50 border border-blue-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300 placeholder:text-gray-400"
                                     onChange={handleChange}
                                     placeholder="Create a password"
                                     disabled={loading}
@@ -138,7 +138,7 @@ const RegisterPage = () => {
                                     name="phone"
                                     id="phone"
                                     required
-                                    className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-blue-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300 placeholder:text-gray-400"
+                                    className="w-full pl-11 pr-4 py-2 bg-gray-50 border border-blue-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300 placeholder:text-gray-400"
                                     onChange={handleChange}
                                     placeholder="Enter your phone number"
                                     disabled={loading}
@@ -158,7 +158,7 @@ const RegisterPage = () => {
                                         type="text"
                                         name="shopname"
                                         id="shopname"
-                                        className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-blue-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300 placeholder:text-gray-400"
+                                        className="w-full pl-11 pr-4 py-2 bg-gray-50 border border-blue-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300 placeholder:text-gray-400"
                                         onChange={handleChange}
                                         placeholder="Enter your shop's name"
                                         disabled={loading}
@@ -179,7 +179,7 @@ const RegisterPage = () => {
                                     name="address"
                                     id="address"
                                     required
-                                    className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-blue-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300 placeholder:text-gray-400"
+                                    className="w-full pl-11 pr-4 py-2 bg-gray-50 border border-blue-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300 placeholder:text-gray-400"
                                     onChange={handleChange}
                                     placeholder="Enter your full address"
                                     disabled={loading}
@@ -197,7 +197,7 @@ const RegisterPage = () => {
                                 <select
                                     name="role"
                                     id="role"
-                                    className="w-full pl-12 pr-10 py-3 bg-gray-50 border border-blue-200 rounded-xl appearance-none focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300 text-gray-900"
+                                    className="w-full pl-11 pr-10 py-2 bg-gray-50 border border-blue-200 rounded-lg appearance-none focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300 text-gray-900"
                                     onChange={handleChange}
                                     defaultValue="manager"
                                     disabled={loading}
@@ -215,7 +215,7 @@ const RegisterPage = () => {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full py-3 px-8 rounded-xl font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-lg hover:shadow-xl transition-all duration-300 transform active:scale-95 disabled:bg-blue-400 disabled:shadow-none disabled:transform-none disabled:cursor-not-allowed"
+                            className="w-full py-3 px-8 rounded-lg font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-lg hover:shadow-xl transition-all duration-300 transform active:scale-95 disabled:bg-blue-400 disabled:shadow-none disabled:transform-none disabled:cursor-not-allowed"
                         >
                             {loading ? 'Registering...' : 'Register'}
                         </button>

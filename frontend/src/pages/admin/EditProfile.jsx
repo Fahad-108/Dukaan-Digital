@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
 import { editUserProfile } from '../../services/adminService';
+import { FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaStore, FaLock } from 'react-icons/fa';
 
 const EditProfile = () => {
     const location = useLocation();
@@ -43,92 +44,132 @@ const EditProfile = () => {
     }
 
     return (
-        <div className="flex justify-center items-center p-6 bg-blue-50">
-            <div className="bg-white shadow-lg rounded-xl p-6 w-full max-w-md border border-blue-300">
-                <h2 className="text-2xl font-bold text-blue-700 mb-4 text-center">Edit Profile</h2>
-                {loading &&
-                    <div className="flex justify-center items-center py-6">
-                        <div className="w-12 h-12 border-4 border-t-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
-                    </div>
-                }
-                {!loading && (
-                    <form onSubmit={handleSubmit} className="space-y-6">
-                        <div>
-                            <label className="block text-blue-700 font-medium mb-1">Name</label>
-                            <input
-                                type="text"
-                                name="name"
-                                value={form.name}
-                                onChange={handleChange}
-                                className="w-full border border-blue-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                placeholder="Enter name"
-                            />
+        <div className="flex justify-center items-center p-6">
+            <div className="w-full max-w-md mx-auto border border-blue-300 bg-white rounded-xl shadow-2xl overflow-hidden transform transition-all duration-300  hover:scale-[1.01] hover:shadow-blue-500/20">
+                <div className="p-8">
+                    <h1 className="text-center text-3xl font-extrabold text-blue-700 mb-2">Edit Profile</h1>
+                    <p className="text-center text-gray-500 text-sm mb-8">Update personal and business information.</p>
+
+                    {loading ? (
+                        <div className="flex justify-center items-center py-12">
+                            <div className="w-16 h-16 border-4 border-t-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
                         </div>
-                        <div>
-                            <label className="block text-blue-700 font-medium mb-1">email</label>
-                            <input
-                                type="text"
-                                name="email"
-                                value={form.email}
-                                onChange={handleChange}
-                                className="w-full border border-blue-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                placeholder="Enter email"
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-blue-700 font-medium mb-1">Phone</label>
-                            <input
-                                type="text"
-                                name="phone"
-                                value={form.phone}
-                                onChange={handleChange}
-                                className="w-full border border-blue-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                placeholder="Enter phone number"
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-blue-700 font-medium mb-1">Address</label>
-                            <input
-                                type="text"
-                                name="address"
-                                value={form.address}
-                                onChange={handleChange}
-                                className="w-full border border-blue-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                placeholder="Enter address"
-                            />
-                        </div>
-                        {data?.role === "manager" && 
-                        <div>
-                            <label className="block text-blue-700 font-medium mb-1">shopname</label>
-                            <input
-                                type="text"
-                                name="shopname"
-                                value={form.shopname}
-                                onChange={handleChange}
-                                className="w-full border border-blue-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                placeholder="Enter Shopname"
-                            />
-                        </div>}
-                        <div>
-                            <label className="block text-blue-700 font-medium mb-1">New Password</label>
-                            <input
-                                type="password"
-                                name="password"
-                                value={form.password}
-                                onChange={handleChange}
-                                className="w-full border border-blue-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                placeholder="Leave blank to keep current password"
-                            />
-                        </div>
-                        <button
-                            type="submit"
-                            disabled={loading}
-                            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-200 disabled:opacity-50"
-                        >
-                            {loading ? "Saving..." : "Save Changes"}
-                        </button>
-                    </form>
-                )}
+                    ) : (
+                        <form onSubmit={handleSubmit} className="space-y-6">
+                            <div className="relative">
+                                <label htmlFor="name" className="block text-blue-800 font-semibold mb-2">Name</label>
+                                <div className="relative flex items-center">
+                                    <FaUser className="absolute left-4 text-blue-400 z-10" />
+                                    <input
+                                        type="text"
+                                        id="name"
+                                        name="name"
+                                        value={form.name}
+                                        onChange={handleChange}
+                                        className="w-full pl-11 pr-4 py-2 bg-gray-50 border border-blue-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300 text-gray-900 placeholder:text-gray-400"
+                                        placeholder="Enter your full name"
+                                        disabled={loading}
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="relative">
+                                <label htmlFor="email" className="block text-blue-800 font-semibold mb-2">Email</label>
+                                <div className="relative flex items-center">
+                                    <FaEnvelope className="absolute left-4 text-blue-400 z-10" />
+                                    <input
+                                        type="email"
+                                        id="email"
+                                        name="email"
+                                        value={form.email}
+                                        onChange={handleChange}
+                                        className="w-full pl-11 pr-4 py-2 bg-gray-50 border border-blue-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300 text-gray-900 placeholder:text-gray-400"
+                                        placeholder="Enter your email address"
+                                        disabled={loading}
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="relative">
+                                <label htmlFor="phone" className="block text-blue-800 font-semibold mb-2">Phone</label>
+                                <div className="relative flex items-center">
+                                    <FaPhone className="absolute left-4 text-blue-400 z-10" />
+                                    <input
+                                        type="tel"
+                                        id="phone"
+                                        name="phone"
+                                        value={form.phone}
+                                        onChange={handleChange}
+                                        className="w-full pl-11 pr-4 py-2 bg-gray-50 border border-blue-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300 text-gray-900 placeholder:text-gray-400"
+                                        placeholder="Enter your phone number"
+                                        disabled={loading}
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="relative">
+                                <label htmlFor="address" className="block text-blue-800 font-semibold mb-2">Address</label>
+                                <div className="relative flex items-center">
+                                    <FaMapMarkerAlt className="absolute left-4 text-blue-400 z-10" />
+                                    <input
+                                        type="text"
+                                        id="address"
+                                        name="address"
+                                        value={form.address}
+                                        onChange={handleChange}
+                                        className="w-full pl-11 pr-4 py-2 bg-gray-50 border border-blue-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300 text-gray-900 placeholder:text-gray-400"
+                                        placeholder="Enter your full address"
+                                        disabled={loading}
+                                    />
+                                </div>
+                            </div>
+
+                            {data.role !== "admin" && (
+                                <div className="relative">
+                                    <label htmlFor="shopname" className="block text-blue-800 font-semibold mb-2">Shop Name</label>
+                                    <div className="relative flex items-center">
+                                        <FaStore className="absolute left-4 text-blue-400 z-10" />
+                                        <input
+                                            type="text"
+                                            id="shopname"
+                                            name="shopname"
+                                            value={form.shopname}
+                                            onChange={handleChange}
+                                            className="w-full pl-11 pr-4 py-2 bg-gray-50 border border-blue-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300 text-gray-900 placeholder:text-gray-400"
+                                            placeholder="Enter your shop's name"
+                                            disabled={loading}
+                                        />
+                                    </div>
+                                </div>
+                            )}
+
+                            <div className="relative">
+                                <label htmlFor="password" className="block text-blue-800 font-semibold mb-2">New Password</label>
+                                <div className="relative flex items-center">
+                                    <FaLock className="absolute left-4 text-blue-400 z-10" />
+                                    <input
+                                        type="password"
+                                        id="password"
+                                        name="password"
+                                        value={form.password}
+                                        onChange={handleChange}
+                                        className="w-full pl-11 pr-4 py-2 bg-gray-50 border border-blue-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300 text-gray-900 placeholder:text-gray-400"
+                                        placeholder="Leave blank to keep current password"
+                                        disabled={loading}
+                                    />
+                                </div>
+                            </div>
+
+                            <button
+                                type="submit"
+                                disabled={loading}
+                                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 mt-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform active:scale-95 disabled:bg-blue-400 disabled:shadow-none disabled:cursor-not-allowed disabled:transform-none"
+                            >
+                                {loading ? "Saving..." : "Save Changes"}
+                            </button>
+                        </form>
+                    )}
+                </div>
             </div>
         </div>
     );

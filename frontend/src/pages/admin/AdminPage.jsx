@@ -20,7 +20,7 @@ const AdminPage = () => {
   const [error, setError] = useState("");
   const [query, setQuery] = useState("");
 
-  const [totalshops, setTotalshops] = useState({});
+  const [totalshops, setTotalshops] = useState(0);
   const [shops, setShops] = useState([]);
 
   const fetchData = async () => {

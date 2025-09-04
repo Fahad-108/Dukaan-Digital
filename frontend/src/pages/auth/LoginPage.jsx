@@ -48,7 +48,7 @@ const LoginPage = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-linear-60 from-blue-400 via-blue-100 to-blue-400 px-4 font-sans">
-      <div className="bg-white shadow-2xl rounded-3xl p-10 w-full max-w-lg">
+      <div className="bg-white shadow-2xl rounded-xl p-10 w-full max-w-lg">
 
         <div className="flex justify-center mb-6">
           <img src={DukaanDigital} alt="Dukaan Digital" className="h-16" />
@@ -73,7 +73,7 @@ const LoginPage = () => {
                 value={form.email}
                 onChange={handleChange}
                 required
-                className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-blue-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300 text-gray-900 placeholder:text-gray-400"
+                className="w-full pl-11 pr-4 py-2 bg-gray-50 border border-blue-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300 text-gray-900 placeholder:text-gray-400"
                 placeholder="you@example.com"
                 disabled={loading}
               />
@@ -90,18 +90,18 @@ const LoginPage = () => {
                 value={form.password}
                 onChange={handleChange}
                 required
-                className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-blue-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300 text-gray-900 placeholder:text-gray-400"
+                className="w-full pl-11 pr-4 py-2 bg-gray-50 border border-blue-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300 text-gray-900 placeholder:text-gray-400"
                 placeholder="••••••••"
                 disabled={loading}
               />
             </div>
           </div>
-          {error && <div className="text-red-600 text-sm text-center py-3 rounded-xl bg-red-50 border border-red-200 transition-all duration-300 transform animate-pulse-once">{error}</div>}
+          {error && <div className="text-red-600 text-sm text-center py-3 rounded-lg bg-red-50 border border-red-200 transition-all duration-300 transform animate-pulse-once">{error}</div>}
           <div className='flex justify-center pt-2'>
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-blue-600 text-white py-3 rounded-xl font-bold shadow-lg hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 active:scale-95 disabled:bg-blue-400 disabled:shadow-none disabled:transform-none disabled:cursor-not-allowed"
+              className="w-full bg-blue-600 text-white py-3 rounded-lg font-bold shadow-lg hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 active:scale-95 disabled:bg-blue-400 disabled:shadow-none disabled:transform-none disabled:cursor-not-allowed"
             >
               {loading ? 'Logging in...' : 'Login'}
             </button>

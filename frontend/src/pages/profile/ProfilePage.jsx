@@ -1,8 +1,18 @@
-import { useEffect, useState } from 'react';
-import { getProfile, deleteProfile } from '../../services/profileService';
-import { User, Mail, Phone, Briefcase, Store, Calendar, Edit2, Trash2, MapPin } from "lucide-react";
-import { useNavigate } from 'react-router-dom';
-import toast from 'react-hot-toast';
+import { useEffect, useState } from "react";
+import { getProfile, deleteProfile } from "../../services/profileService";
+import {
+  User,
+  Mail,
+  Phone,
+  Briefcase,
+  Store,
+  Calendar,
+  Edit2,
+  Trash2,
+  MapPin,
+} from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const ProfilePage = () => {
   const navigate = useNavigate();
@@ -11,73 +21,104 @@ const ProfilePage = () => {
   const fetchProfile = async () => {
     try {
       const response = await getProfile();
-      console.log(response.data.user);
       setProfile(response.data.user);
     } catch (error) {
-      console.error('Error fetching profile:', error);
+      console.error("Error fetching profile:", error);
+      toast.error("Failed to fetch profile");
     }
   };
 
   const handleDelete = async () => {
     try {
-      if(confirm("Are you sure you want to delete your account? This will remove all your data.")){
+      if (
+        confirm(
+          "Are you sure you want to delete your account? This will remove all your data."
+        )
+      ) {
         const deleted = await deleteProfile();
         if (deleted) {
-          console.log("Profile deleted seccessfully")
           sessionStorage.clear();
-          navigate('/login')
+          navigate("/login");
         }
       }
     } catch (err) {
-      toast.error('Failed to fetch profile!')
-      console.error('Error fetching profile:', err);
+      toast.error("Failed to delete profile!");
+      console.error(err);
     }
-  }
+  };
 
-  const handleEdit = async () => {
-    if(profile.role === "admin"){
-      navigate('/admin/profile/edit', { state: { data: profile } })
+  const handleEdit = () => {
+    if (profile.role === "admin") {
+      navigate("/admin/profile/edit", { state: { data: profile } });
     } else {
-      navigate('/profile/edit');
+      navigate("/profile/edit");
     }
-  }
+  };
 
   useEffect(() => {
     fetchProfile();
   }, []);
 
   return (
-    <div className="p-6 min-h-screen font-sans bg-gray-50">
-      <div className="max-w-lg mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
-        <div className="relative bg-blue-600 p-6 text-center text-white">
-          <div className='absolute z-50 top-25 right-4 cursor-pointer text-indigo-600 bg-indigo-100 p-2 rounded-full'
-            onClick={() => handleEdit()}>
-            {<Edit2 size={18} />}
+    <div className="min-h-screen bg-gray-100 p-6 flex justify-center items-start font-sans">
+      <div className="w-full max-w-xl bg-white rounded-2xl shadow-xl overflow-hidden">
+        {/* Header */}
+        <div className="relative bg-gradient-to-r from-blue-600 to-blue-500 p-8 text-white">
+          {/* Avatar circle */}
+          <div className="w-20 h-20 mx-auto mb-4 flex items-center justify-center rounded-full bg-white shadow-lg">
+            <User className="text-blue-600" size={36} />
           </div>
-          <div className='absolute top-4 right-4 cursor-pointer text-indigo-600 bg-indigo-100 p-2 rounded-full'
-            onClick={() => handleDelete()}>
-            {<Trash2 size={18} />}
-          </div>
-          { profile.role === "manager" &&
-          <div className="w-fit mx-auto mb-2 p-2 rounded-full bg-white flex items-center justify-center font-bold text-2xl shadow-lg">
-            <h1 className='text-black Logo-font'>{profile.shopname}</h1>
-          </div>}
-          <h2 className="text-xl font-semibold">{profile.name}</h2>
-          <p className="text-sm opacity-80">{profile.role}</p>
+
+          <h2 className="text-2xl font-bold text-center">{profile.name}</h2>
+          <p className="text-center text-blue-100 capitalize">{profile.role}</p>
+
+          {profile.role === "manager" && (
+            <div className="mt-3 text-center">
+              <span className="px-3 py-1 bg-white text-blue-600 rounded-full text-sm font-medium shadow">
+                {profile.shopname}
+              </span>
+            </div>
+          )}
+
+          {/* Header Actions - Below avatar & name */}
+          
         </div>
 
-        <div className="p-6 space-y-4">
+        {/* Details */}
+        <div className="p-6 grid grid-cols-1 sm:grid-cols-2 gap-5">
           <ProfileDetail icon={<Mail size={18} />} label="Email" value={profile.email} />
           <ProfileDetail icon={<Phone size={18} />} label="Phone" value={profile.phone} />
-          { profile.role === 'manager' && <ProfileDetail icon={<Store size={18} />} label="Shop Name" value={profile.shopname} />}
+          {profile.role === "manager" && (
+            <ProfileDetail
+              icon={<Store size={18} />}
+              label="Shop Name"
+              value={profile.shopname}
+            />
+          )}
           <ProfileDetail icon={<Briefcase size={18} />} label="Role" value={profile.role} />
           <ProfileDetail icon={<MapPin size={18} />} label="Address" value={profile.address} />
           <ProfileDetail
             icon={<Calendar size={18} />}
             label="Joined On"
-            value={new Date(profile.createdAt).toLocaleDateString()}
+            value={profile.createdAt ? new Date(profile.createdAt).toLocaleDateString() : ""}
           />
         </div>
+        <div className="flex justify-center gap-4 mb-6">
+            <button
+              onClick={handleEdit}
+              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition"
+            >
+              <Edit2 size={18} />
+              Edit Profile
+            </button>
+            <button
+              onClick={handleDelete}
+              className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-lg shadow hover:bg-red-700 transition"
+            >
+              <Trash2 size={18} />
+              Delete Profile
+            </button>
+          </div>
       </div>
     </div>
   );
@@ -85,10 +126,8 @@ const ProfilePage = () => {
 
 function ProfileDetail({ icon, label, value }) {
   return (
-    <div className="flex items-center gap-3">
-      <div className="text-indigo-600 bg-indigo-100 p-2 rounded-full">
-        {icon}
-      </div>
+    <div className="flex items-start gap-3 bg-gray-50 p-4 rounded-xl border border-gray-200 hover:shadow-md transition">
+      <div className="text-blue-600 bg-blue-100 p-2 rounded-full">{icon}</div>
       <div>
         <p className="text-xs text-gray-500">{label}</p>
         <p className="text-gray-800 font-medium">{value || "Not Provided"}</p>
