@@ -115,7 +115,6 @@ const ProductListPage = () => {
       setLoading(true);
       const res = await getProducts();
       setProducts(res.data);
-      toast.success("Products refreshed!")
     } catch (err) {
       toast.error("Failed to refresh products")
       console.error("Error fetching products:", err);

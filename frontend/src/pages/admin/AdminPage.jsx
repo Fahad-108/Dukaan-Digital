@@ -12,6 +12,7 @@ import {
   Search,
   AlertTriangle,
 } from "lucide-react";
+import toast from "react-hot-toast";
 import { getadminDashboard, deleteShop, changeStatus } from "../../services/adminService";
 
 const AdminPage = () => {
@@ -32,6 +33,7 @@ const AdminPage = () => {
       setTotalshops(res.data.totalShops); // <-- stats
     } catch (err) {
       console.error(err);
+      toast.error("Failed to refresh data!")
       setError("Failed to fetch dashboard data!");
     } finally {
       setLoading(false);
@@ -116,7 +118,7 @@ const AdminPage = () => {
               Admin Dashboard
             </div>
             <span className="text-xs text-slate-500 hidden sm:inline">
-              (Manage shops & system)
+              (Manage users & shops)
             </span>
           </div>
           <div className="flex items-center gap-2 text-blue-600">
@@ -131,7 +133,7 @@ const AdminPage = () => {
               onClick={() => navigate("/register")}
               className="inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 text-white px-3 py-2 text-sm hover:bg-blue-700"
             >
-              <PlusCircle className="w-4 h-4" /> Add Shop
+              <PlusCircle className="w-4 h-4" /> Add User
             </button>
           </div>
         </div>

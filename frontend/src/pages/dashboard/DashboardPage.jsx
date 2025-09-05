@@ -9,6 +9,7 @@ import {
 } from "recharts";
 import { ShoppingCart, HandCoins, DollarSign, Receipt, MessageCircleWarning, Eye, EyeOff, Sparkles, PartyPopper, CheckCircle2, TrendingUp } from "lucide-react";
 import { getdashboardReport } from "../../services/dashboardService";
+import toast from "react-hot-toast";
 import Loader from "../../components/parts/Loader";
 
 const Card = ({ children, className = "" }) => (
@@ -35,6 +36,7 @@ const Dashboard = () => {
             setloading(false);
         } catch (err) {
             console.log(err);
+            toast.error("Failed to refresh data!")
         }
     }
 

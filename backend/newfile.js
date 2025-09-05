@@ -3,56 +3,59 @@ import Purchase from "./models/Purchase.js";
 import Product from "./models/Product.js";
 
 // MongoDB connection URI
-const uri = "mongodb://127.0.0.1:27017/Dukaan_Digital";
+const uri = "mongodb+srv://fahiiraza:aa786786@mycluster.zcbyddi.mongodb.net/?retryWrites=true&w=majority&appName=MyCluster";
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 // Dummy userId (replace with a valid ObjectId from your database)
-const userId = "68b9bc2658ec852ea5a7e945";
+const userId = "68bb0c26f9cbdc26ab78fa92";
 const today = new Date().toISOString().split("T")[0];
 
 const purchases = [
   {
     userId,
-    suppliername: "Fresh Grocery Supplies",
-    category: "Grocery",
+    suppliername: "Bakery Supplies Hub",
+    category: "Bakery",
     date: today,
     items: [
-      { itemname: "Rice 5kg", purchasePrice: 600, quantity: 20, unit: "bag" },
-      { itemname: "Wheat Flour 10kg", purchasePrice: 1200, quantity: 15, unit: "bag" },
-      { itemname: "Cooking Oil 1L", purchasePrice: 350, quantity: 50, unit: "bottle" },
-      { itemname: "Sugar 5kg", purchasePrice: 500, quantity: 25, unit: "bag" },
-      { itemname: "Salt 1kg", purchasePrice: 60, quantity: 100, unit: "pack" },
-      { itemname: "Lentils 1kg", purchasePrice: 150, quantity: 60, unit: "pack" },
-      { itemname: "Chili Powder 500g", purchasePrice: 200, quantity: 40, unit: "pack" },
-      { itemname: "Turmeric Powder 500g", purchasePrice: 180, quantity: 30, unit: "pack" }
+      { itemname: "White Bread Loaf", purchasePrice: 120, quantity: 50, unit: "loaf" },
+      { itemname: "Brown Bread Loaf", purchasePrice: 140, quantity: 40, unit: "loaf" },
+      { itemname: "Whole Wheat Bread", purchasePrice: 150, quantity: 30, unit: "loaf" },
+      { itemname: "Croissant", purchasePrice: 60, quantity: 100, unit: "piece" },
+      { itemname: "Doughnut", purchasePrice: 50, quantity: 120, unit: "piece" },
+      { itemname: "Plain Cake Rusk", purchasePrice: 200, quantity: 25, unit: "pack" },
+      { itemname: "Chocolate Chip Cookies", purchasePrice: 180, quantity: 30, unit: "pack" },
+      { itemname: "Cream Roll", purchasePrice: 40, quantity: 80, unit: "piece" },
+      { itemname: "Pound Cake", purchasePrice: 250, quantity: 20, unit: "loaf" },
+      { itemname: "Pastry", purchasePrice: 80, quantity: 60, unit: "piece" }
     ]
   },
   {
     userId,
-    suppliername: "Daily Essentials Co.",
-    category: "Grocery",
+    suppliername: "Flour & Sugar Wholesalers",
+    category: "Bakery Ingredients",
     date: today,
     items: [
-      { itemname: "Tea Leaves 250g", purchasePrice: 220, quantity: 50, unit: "pack" },
-      { itemname: "Coffee 250g", purchasePrice: 300, quantity: 40, unit: "pack" },
-      { itemname: "Instant Noodles", purchasePrice: 50, quantity: 100, unit: "pack" },
-      { itemname: "Jam 500g", purchasePrice: 400, quantity: 25, unit: "jar" },
-      { itemname: "Peanut Butter 400g", purchasePrice: 500, quantity: 20, unit: "jar" },
-      { itemname: "Biscuits Pack", purchasePrice: 120, quantity: 60, unit: "pack" },
-      { itemname: "Corn Flakes 500g", purchasePrice: 350, quantity: 30, unit: "box" }
+      { itemname: "All-Purpose Flour (Maida)", purchasePrice: 150, quantity: 50, unit: "kg" },
+      { itemname: "Baking Powder", purchasePrice: 80, quantity: 10, unit: "pack" },
+      { itemname: "Active Dry Yeast", purchasePrice: 120, quantity: 15, unit: "pack" },
+      { itemname: "White Sugar", purchasePrice: 135, quantity: 40, unit: "kg" },
+      { itemname: "Baking Chocolate (Slab)", purchasePrice: 450, quantity: 20, unit: "kg" },
+      { itemname: "Vanilla Essence (100ml)", purchasePrice: 220, quantity: 10, unit: "bottle" },
+      { itemname: "Icing Sugar", purchasePrice: 160, quantity: 15, unit: "kg" },
+      { itemname: "Baking Soda", purchasePrice: 60, quantity: 10, unit: "pack" }
     ]
   },
   {
     userId,
-    suppliername: "Organic Grocery Ltd.",
-    category: "Grocery",
+    suppliername: "Specialty Baked Goods Co.",
+    category: "Bakery",
     date: today,
     items: [
-      { itemname: "Olive Oil 500ml", purchasePrice: 900, quantity: 15, unit: "bottle" },
-      { itemname: "Honey 250g", purchasePrice: 600, quantity: 20, unit: "jar" },
-      { itemname: "Almonds 500g", purchasePrice: 1200, quantity: 10, unit: "pack" },
-      { itemname: "Walnuts 500g", purchasePrice: 1500, quantity: 10, unit: "pack" },
-      { itemname: "Cashews 500g", purchasePrice: 1300, quantity: 10, unit: "pack" }
+      { itemname: "Sourdough Bread", purchasePrice: 350, quantity: 10, unit: "loaf" },
+      { itemname: "Multigrain Bread", purchasePrice: 200, quantity: 20, unit: "loaf" },
+      { itemname: "Red Velvet Cupcake", purchasePrice: 90, quantity: 50, unit: "piece" },
+      { itemname: "Chocolate Fudge Brownie", purchasePrice: 110, quantity: 40, unit: "piece" },
+      { itemname: "Walnut Brownie", purchasePrice: 130, quantity: 30, unit: "piece" }
     ]
   }
 ];
@@ -66,6 +69,7 @@ const insertData = async () => {
 
       // 2. Loop through items and insert/update Product collection
       for (const item of p.items) {
+        // Check if product already exists
         const exists = await Product.findOne({ userId, itemname: item.itemname });
         if (!exists) {
           await Product.create({
@@ -73,17 +77,17 @@ const insertData = async () => {
             itemname: item.itemname,
             category: p.category,
             purchasePrice: item.purchasePrice,
-            sellingPrice: Math.round(item.purchasePrice * 1.2), // 20% markup
+            sellingPrice: Math.round(item.purchasePrice * 1.2), // 20% markup for bakery items
             quantity: item.quantity,
             unit: item.unit
           });
         }
       }
     }
-    console.log("✅ Grocery purchases and products added successfully!");
+    console.log("✅ Bakery purchases and products added successfully!");
     process.exit(0);
   } catch (err) {
-    console.error("❌ Error adding grocery data:", err);
+    console.error("❌ Error adding bakery data:", err);
     process.exit(1);
   }
 };

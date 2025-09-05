@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { addProduct, getProductById, updateProduct } from '../../services/productService';
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from 'react-hot-toast';
-import { FaTag, FaBoxes, FaDollarSign, FaWeightHanging } from 'react-icons/fa';
+import { FaTag, FaBoxes, FaDollarSign, FaWeightHanging, FaCube } from 'react-icons/fa';
 
 const ProductFormPage = () => {
   const { id } = useParams();
@@ -166,7 +166,7 @@ const ProductFormPage = () => {
           <div>
             <label className="block text-blue-800 font-semibold mb-2">Unit</label>
             <div className="relative flex items-center">
-              <FaWeightHanging className="absolute left-4 text-blue-400 z-10" />
+              <FaCube className="absolute left-4 text-blue-400 z-10" />
               <input
                 name="unit"
                 value={product.unit}

@@ -31,7 +31,7 @@ const getExpenses = async (req, res) => {
         const userId = req.user;
         const expenses = await Expense.find({userId});
         if (expenses.length === 0) {
-            return res.status(404).json({msg: 'No record found'});
+            return res.status(200).json([]);
         }
 
         res.status(200).json(expenses);

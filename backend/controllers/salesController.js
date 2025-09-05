@@ -58,7 +58,7 @@ const getSales = async (req, res) => {
         }
         const sales = await Sale.find(filter);
         if (!sales || sales.length === 0) {
-            return res.status(404).json({ msg: "No record found" });
+            return res.status(200).json([]);
         }
 
         res.status(200).json(sales);

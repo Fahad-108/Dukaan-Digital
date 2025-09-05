@@ -36,7 +36,6 @@ const SalesListPage = () => {
       }
       console.log("Sales data : ", res.data)
       setSales(res.data.reverse());
-      toast.success("Data refreshed")
     } catch (err) {
       if (err.response?.status === 404) {
         setSales([]);
@@ -62,7 +61,6 @@ const SalesListPage = () => {
         return;
       }
       setPurchases(res.data.reverse());
-      toast.success("Data refreshed")
     } catch (err) {
       if (err.response?.status === 404) {
         setSales([]);
@@ -76,14 +74,22 @@ const SalesListPage = () => {
   };
 
   useEffect(() => {
-    if (location.pathname === "/sales") {
-      setType("sale");
-      fetchSales();
-    } else if (location.pathname === "/purchase") {
-      setType("purchase");
-      fetchPurchase();
-    }
-  }, [location]);
+  const today = new Date();
+  const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+
+  if (location.pathname === "/sales") {
+    setType("sale");
+    setStartDate(formatDate(firstDayOfMonth));
+    setEndDate(formatDate(today));
+    fetchSales();
+  } else if (location.pathname === "/purchase") {
+    setType("purchase");
+    setStartDate(formatDate(firstDayOfMonth));
+    setEndDate(formatDate(today));
+    fetchPurchase();
+  }
+}, [location]);
+
 
   useEffect(() => {
     if (type == "sale") {
@@ -91,7 +97,7 @@ const SalesListPage = () => {
     } else if (type == "purchase") {
       fetchPurchase();
     }
-  }, []);
+  }, [startDate, endDate]);
 
   const handleViewDetails = (sale) => {
     setSelectedSale(sale);

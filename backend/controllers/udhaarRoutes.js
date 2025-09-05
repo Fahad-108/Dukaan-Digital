@@ -30,7 +30,7 @@ const getUdhaarList = async (req, res) => {
         const udhaarList = await Udhaar.find({ userId });
 
         if (!udhaarList || udhaarList.length === 0) {
-            return res.status(404).json({msg: 'No udhaar record found'});
+            return res.status(200).json([]);
         }
 
         res.status(200).json(udhaarList);

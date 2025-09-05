@@ -45,7 +45,7 @@ const getProducts = async (req, res) => {
         const userId = req.user;
         const items = await Product.find({userId})
         if(!items || items.length == 0){
-            return res.status(404).json({msg: "Not item found in your store"})
+            return res.status(200).json([])
         }
         res.status(200).json(items)
     } catch (err) {
