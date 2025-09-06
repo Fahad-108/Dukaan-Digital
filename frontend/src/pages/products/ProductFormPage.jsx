@@ -99,7 +99,7 @@ const ProductFormPage = () => {
         <div className="mb-6">
           <label className="block text-blue-800 font-semibold mb-2">Category</label>
           <div className="relative flex items-center">
-            <FaBoxes className="absolute left-4 text-blue-400 z-10" />
+            <FaWeightHanging className="absolute left-4 text-blue-400 z-10" />
             <input
               name="category"
               value={product.category}
@@ -150,7 +150,7 @@ const ProductFormPage = () => {
           <div>
             <label className="block text-blue-800 font-semibold mb-2">Quantity</label>
             <div className="relative flex items-center">
-              <FaWeightHanging className="absolute left-4 text-blue-400 z-10" />
+              <FaBoxes className="absolute left-4 text-blue-400 z-10" />
               <input
                 name="quantity"
                 value={product.quantity}
