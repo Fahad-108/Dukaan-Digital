@@ -178,7 +178,7 @@ const AdminPage = () => {
         {/* Table */}
         <div className="bg-white shadow-md rounded-lg border border-blue-200 p-6 space-y-4">
           <div className="overflow-x-auto shadow-lg">
-            <table className="w-full text-sm text-left text-gray-700">
+            <table className="min-w-[800px] w-full text-sm text-left text-gray-700">
               <thead className="sticky top-0 bg-blue-600 text-white uppercase text-xs">
                 <tr>
                   <Th>Name</Th>
@@ -200,6 +200,8 @@ const AdminPage = () => {
                       <div className="font-medium text-blue-800">
                         {m.name}
                       </div>
+                      </Td>
+                      <Td>
                       <div className="text-xs text-blue-500 md:hidden">
                         {m.email}
                       </div>
