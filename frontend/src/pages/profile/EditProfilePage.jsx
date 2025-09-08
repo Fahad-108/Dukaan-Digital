@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { updateProfile } from "../../services/profileService.js";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { FaUser, FaPhone, FaLock } from 'react-icons/fa';
+import { FaUser, FaPhone, FaLock, FaArrowLeft } from 'react-icons/fa';
 import Loader from "../../components/parts/Loader.jsx";
 
 const EditProfilePage = () => {
@@ -64,6 +64,14 @@ const EditProfilePage = () => {
     <div className="flex justify-center items-center p-6">
       <div className="w-full max-w-md mx-auto border border-blue-300 bg-white rounded-xl shadow-2xl overflow-hidden transform transition-all duration-300  hover:scale-[1.01] hover:shadow-blue-500/20">
         <div className="p-8">
+          <button
+          onClick={() => navigate(-1)}
+          type="button"
+          className="flex items-center gap-2 px-4 py-2 mb-4 bg-gray-100 text-gray-700 rounded-full shadow-sm hover:bg-gray-200 hover:shadow-md transition-all duration-300"
+        >
+          <FaArrowLeft className="text-blue-600" />
+          <span className="font-medium">Back</span>
+        </button>
           <h1 className="text-center text-3xl font-extrabold text-blue-700 mb-2">Edit Profile</h1>
           <p className="text-center text-gray-500 text-[14px] mb-8">Update your personal information.</p>
 
@@ -71,6 +79,7 @@ const EditProfilePage = () => {
             <Loader />
           ) : (
             <form onSubmit={handleSubmit} className="space-y-6">
+              
               <div className="relative">
                 <label htmlFor="name" className="block text-blue-800 font-semibold mb-2">Name</label>
                 <div className="relative flex items-center">

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { addUdhaar, getUdhaarById, updateUdhaar } from "../../services/udhaarService";
 import { useNavigate, useParams } from "react-router-dom";
-import { FaUser, FaPhone, FaDollarSign, FaCommentAlt, FaCheckCircle, FaPlusCircle, FaCreditCard } from 'react-icons/fa';
+import { FaUser, FaPhone, FaDollarSign, FaCommentAlt, FaCheckCircle, FaArrowLeft } from 'react-icons/fa';
 import toast from "react-hot-toast";
 
 
@@ -73,6 +73,14 @@ const UdhaarFormPage = () => {
   return (
     <div className="flex justify-center items-center p-6">
       <div className="bg-white border border-blue-300 shadow-lg rounded-xl w-full max-w-md p-6 transition-all duration-300 hover:scale-[1.01]">
+        <button
+          onClick={() => navigate(-1)}
+          type="button"
+          className="flex items-center gap-2 px-4 py-2 mb-4 bg-gray-100 text-gray-700 rounded-full shadow-sm hover:bg-gray-200 hover:shadow-md transition-all duration-300"
+        >
+          <FaArrowLeft className="text-blue-600" />
+          <span className="font-medium">Back</span>
+        </button>
         <div className="flex flex-col items-center mb-6">
           <h2 className="text-3xl font-extrabold text-blue-700 text-center">
             {isEdit ? "Edit Credit" : "Add Credit"}
@@ -117,7 +125,7 @@ const UdhaarFormPage = () => {
           <div>
             <label className="block text-blue-800 font-semibold mb-2">Amount</label>
             <div className="relative flex items-center">
-              <FaDollarSign className="absolute left-4 text-blue-400 z-10" />
+              <span className="absolute left-4 text-blue-400 z-10 font-bold">₨</span>
               <input
                 type="number"
                 name="amount"

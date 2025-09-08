@@ -11,6 +11,7 @@ import {
   Trash2,
   MapPin,
 } from "lucide-react";
+import {FaArrowLeft} from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
@@ -63,7 +64,15 @@ const ProfilePage = () => {
     <div className="min-h-screen bg-gray-100 p-6 flex justify-center items-start font-sans">
       <div className="w-full max-w-xl bg-white rounded-2xl shadow-xl overflow-hidden">
         {/* Header */}
-        <div className="relative bg-gradient-to-r from-blue-600 to-blue-500 p-8 text-white">
+        <div className="relative bg-gradient-to-r from-blue-600 to-blue-500 p-4 text-white">
+          <button
+          onClick={() => navigate(-1)}
+          type="button"
+          className="flex items-center gap-2 px-4 py-2 mb-4 bg-gray-100 text-gray-700 rounded-full shadow-sm hover:bg-gray-200 hover:shadow-md transition-all duration-300"
+        >
+          <FaArrowLeft className="text-blue-600" />
+          <span className="font-medium">Back</span>
+        </button>
           {/* Avatar circle */}
           <div className="w-20 h-20 mx-auto mb-4 flex items-center justify-center rounded-full bg-white shadow-lg">
             <User className="text-blue-600" size={36} />

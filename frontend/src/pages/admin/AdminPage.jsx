@@ -196,15 +196,11 @@ const AdminPage = () => {
                     key={m._id}
                     className="border-b hover:bg-blue-50 transition"
                   >
-                    <Td>
-                      <div className="font-medium text-blue-800">
+                    <Td className="font-medium text-blue-800">
                         {m.name}
-                      </div>
                       </Td>
-                      <Td>
-                      <div className="text-xs text-blue-500 md:hidden">
+                      <Td className="text-xs text-blue-500 md:hidden">
                         {m.email}
-                      </div>
                     </Td>
                     <Td className="hidden md:table-cell">{m.email}</Td>
                     <Td className="hidden md:table-cell">{m.phone}</Td>

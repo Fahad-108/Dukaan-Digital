@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { addExpense } from '../../services/expenseService';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
-import { FaDollarSign, FaFileAlt, FaTag } from 'react-icons/fa';
+import { FaDollarSign, FaFileAlt, FaTag, FaArrowLeft } from 'react-icons/fa';
 
 const ExpenseFormPage = () => {
   const navigate = useNavigate();
@@ -54,6 +54,14 @@ const ExpenseFormPage = () => {
         onSubmit={handleSubmit}
         className="shadow-lg rounded-xl p-6 w-full max-w-md border border-blue-300 transform transition-all duration-300 hover:scale-[1.01]"
       > 
+      <button
+          onClick={() => navigate(-1)}
+          type="button"
+          className="flex items-center gap-2 px-4 py-2 mb-2 bg-gray-100 text-gray-700 rounded-full shadow-sm hover:bg-gray-200 hover:shadow-md transition-all duration-300"
+        >
+          <FaArrowLeft className="text-blue-600" />
+          <span className="font-medium">Back</span>
+        </button>
         <h2 className="text-3xl font-bold text-blue-700 mb-2 text-center">
           Add New Expense
         </h2>
@@ -84,7 +92,7 @@ const ExpenseFormPage = () => {
             Amount
           </label>
           <div className="relative flex items-center">
-            <FaDollarSign className="absolute left-4 text-blue-400 z-10" />
+            <span className="absolute left-4 text-blue-400 z-10 font-bold">₨</span>
             <input
               type="number"
               name="amount"

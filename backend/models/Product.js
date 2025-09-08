@@ -38,9 +38,9 @@ const productSchema = new mongoose.Schema(
     }
 );
 
-productSchema.index({ userId: 1 });
-productSchema.index({ itemname: 1 });
-productSchema.index({ category: 1 });
+// productSchema.index({ userId: 1 });
+// productSchema.index({ itemname: 1 });
+// productSchema.index({ category: 1 });
 
 
 const Product = mongoose.model('product', productSchema);

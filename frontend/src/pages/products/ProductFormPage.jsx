@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { addProduct, getProductById, updateProduct } from '../../services/productService';
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from 'react-hot-toast';
-import { FaTag, FaBoxes, FaDollarSign, FaWeightHanging, FaCube } from 'react-icons/fa';
+import { FaTag, FaBoxes, FaWeightHanging, FaCube, FaArrowLeft } from 'react-icons/fa';
 
 const ProductFormPage = () => {
   const { id } = useParams();
@@ -74,6 +74,14 @@ const ProductFormPage = () => {
         onSubmit={handleSubmit}
         className="shadow-lg rounded-xl p-6 w-full max-w-md border border-blue-300 transform transition-all duration-300 hover:scale-[1.01]"
       >
+        <button
+          onClick={() => navigate(-1)}
+          type="button"
+          className="flex items-center gap-2 px-4 py-2 mb-2 bg-gray-100 text-gray-700 rounded-full shadow-sm hover:bg-gray-200 hover:shadow-md transition-all duration-300"
+        >
+          <FaArrowLeft className="text-blue-600" />
+          <span className="font-medium">Back</span>
+        </button>
         <div className="flex flex-col items-center mb-6">
           <h2 className="text-3xl font-bold text-blue-700 mb-2 text-center">
             {id ? "Edit Product" : "Add New Product"}
@@ -116,7 +124,7 @@ const ProductFormPage = () => {
           <div>
             <label className="block text-blue-800 font-semibold mb-2">Purchase Price</label>
             <div className="relative flex items-center">
-              <FaDollarSign className="absolute left-4 text-blue-400 z-10" />
+              <span className="absolute left-4 text-blue-400 z-10 font-bold">₨</span>
               <input
                 name="purchasePrice"
                 value={product.purchasePrice}
@@ -132,7 +140,7 @@ const ProductFormPage = () => {
           <div>
             <label className="block text-blue-800 font-semibold mb-2">Selling Price</label>
             <div className="relative flex items-center">
-              <FaDollarSign className="absolute left-4 text-blue-400 z-10" />
+              <span className="absolute left-4 text-blue-400 z-10 font-bold">₨</span>
               <input
                 name="sellingPrice"
                 value={product.sellingPrice}
