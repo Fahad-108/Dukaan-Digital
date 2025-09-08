@@ -13,23 +13,14 @@ import udhaarRoutes from './routes/udhaarRoutes.js';
 import purchaseRoutes from './routes/purchaseRoutes.js'
 import adminRoutes from './routes/adminRoutes.js'
 
-dotenv.config();
 const app = express();
+dotenv.config();
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
 app.use(cors({
-  origin: ['https://fahad-108.github.io', 'http://localhost:5173'],
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true
+  origin: 'https://fahad-108.github.io', // Allow requests from your frontend origin
+  credentials: true // Allow sending and receiving cookies/authentication headers
 }));
-
-app.get('/', (req, res) => {
-    res.send('Welcome to Server');
-});
-
 
 app.use('/api/auth', authRoutes);
 app.use('/api/dashboard', dashboardRoutes);
@@ -42,11 +33,10 @@ app.use('/api/udhaar', udhaarRoutes);
 app.use('/api/expenses', expenseRoutes);
 app.use('/api/report', reportRoutes);
 
-app.get("/test-env", (req, res) => {
-  res.json({
-    mongo: process.env.MONGO_URL ? "found" : "missing",
-    jwt: process.env.JWT_SECRET ? "found" : "missing",
-  });
+
+
+app.get('/', (req, res) => {
+    res.send('Welcome to Server');
 });
 
 mongoose.connect(process.env.MONGO_URL)
@@ -56,5 +46,3 @@ mongoose.connect(process.env.MONGO_URL)
     })
 })
 .catch(err => console.error('MongoDB connection error: ',err))
-
-export default app;
