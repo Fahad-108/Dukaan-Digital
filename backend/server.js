@@ -20,7 +20,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(cors({
-  origin: ['https://Fahad-108.github.io', 'http://localhost:5173'],
+  origin: ['https://fahad-108.github.io', 'http://localhost:5173'],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true
@@ -44,8 +44,8 @@ app.use('/api/report', reportRoutes);
 
 app.get("/test-env", (req, res) => {
   res.json({
-    mongo: process.env.MONGODB_URL ? "found" : "missing",
-    jwt: process.env.SECRET_KEY ? "found" : "missing"
+    mongo: process.env.MONGO_URL ? "found" : "missing",
+    jwt: process.env.JWT_SECRET ? "found" : "missing",
   });
 });
 
