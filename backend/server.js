@@ -19,10 +19,27 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+const allowedOrigins = [
+  "https://fahad-108.github.io",
+  "http://localhost:5173"
+];
+
 app.use(cors({
-  origin: ['https://fahad-108.github.io', 'http://localhost:5173'],
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
+}));
+
+// ✅ Explicitly handle preflight requests
+app.options("*", cors({
+  origin: allowedOrigins,
   credentials: true
 }));
 
