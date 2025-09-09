@@ -39,9 +39,9 @@ const purchaseSchema = new mongoose.Schema(
     }
 );
 
-// purchaseSchema.index({ createdAt: -1 });
-// purchaseSchema.index({ userId: 1 });
-// purchaseSchema.index({ suppliername: 1 });
+purchaseSchema.index({ createdAt: -1 });
+purchaseSchema.index({ userId: 1 });
+purchaseSchema.index({ suppliername: 1 });
 
 
 const Purchase = mongoose.model('purchase', purchaseSchema);

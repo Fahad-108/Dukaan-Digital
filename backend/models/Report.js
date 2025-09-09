@@ -66,8 +66,8 @@ const reportSchema = new mongoose.Schema({
     timestamps: true
 });
 
-// reportSchema.index({ userId: 1, type: 1, period: -1 });
-// reportSchema.index({ userId: 1, createdAt: -1 });
+reportSchema.index({ userId: 1, type: 1, period: -1 });
+reportSchema.index({ userId: 1, createdAt: -1 });
 
 
 
