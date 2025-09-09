@@ -9,7 +9,7 @@ import bcrypt from 'bcrypt';
 
 const getAdminDashboard = async (req, res) => {
   try {
-    const shops = await User.find({ role: "manager" }, "-password");
+    const shops = await User.find({},"-password");
     if (!shops || shops.length === 0) {
       return res.status(404).json({ msg: "Not found" });
     }
@@ -25,7 +25,6 @@ const getAdminDashboard = async (req, res) => {
     );
 
     res.status(200).json({
-      totalShops: shopsWithStatus.length,
       shops: shopsWithStatus,
     });
   } catch (err) {

@@ -21,8 +21,9 @@ const AdminPage = () => {
   const [error, setError] = useState("");
   const [query, setQuery] = useState("");
 
-  const [totalshops, setTotalshops] = useState(0);
   const [shops, setShops] = useState([]);
+  const [managers, setManagers] = useState([]);
+  const [admins, setAdmins] = useState([]);
 
   const fetchData = async () => {
     try {
@@ -30,7 +31,8 @@ const AdminPage = () => {
       const res = await getadminDashboard();
 
       setShops(res.data.shops); // <-- API se shops ka array
-      setTotalshops(res.data.totalShops); // <-- stats
+      setManagers(res.data.shops.filter((shop) => shop.role === "manager"));
+      setAdmins(res.data.shops.filter((shop) => shop.role === "admin"));
     } catch (err) {
       console.error(err);
       toast.error("Failed to refresh data!")
@@ -59,6 +61,10 @@ const AdminPage = () => {
     }
   }
 
+  const totalShops = shops.length;
+  const totalAdmins = admins.length;
+
+
   const handleStatus = async (id) => {
     try {
         const status = await changeStatus(id);
@@ -74,15 +80,25 @@ const AdminPage = () => {
   
 
   // Search filter
-  const filteredShops = useMemo(() => {
+  const filteredManagers = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return shops;
-    return shops.filter((m) =>
+    if (!q) return managers;
+    return managers.filter((m) =>
       [m.name, m.email, m.phone, m.shop, m.status, m.userStatus]
         .filter(Boolean)
         .some((f) => String(f).toLowerCase().includes(q))
     );
-  }, [query, shops]);
+  }, [query, managers]);
+
+  const filteredAdmins = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return admins;
+    return admins.filter((m) =>
+      [m.name, m.email, m.phone]
+        .filter(Boolean)
+        .some((f) => String(f).toLowerCase().includes(q))
+    );
+  }, [admins]);
 
   // Status badge helper
   const statusBadge = (status) => {
@@ -153,16 +169,27 @@ const AdminPage = () => {
         )}
 
         {/* Stats */}
-        <div className="w-100 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
           <StatCard
             icon={Store}
             label="Total Shops"
-            value={totalshops}
+            value={totalShops}
+            loading={loading}
+          />
+          <StatCard
+            icon={Shield}
+            label="Total Admins"
+            value={totalAdmins}
             loading={loading}
           />
         </div>
 
-        {/* Search */}
+        {/* Table */}
+          <div className="mb-10">
+  <h2 className="text-xl md:text-2xl font-semibold text-blue-700 flex items-center gap-2 mb-3">
+    <Store className="w-5 h-5" /> Managers
+  </h2>
+  {/* Search */}
         <div className="mb-4 flex items-center gap-2">
           <div className="relative w-full md:w-80">
             <Search className="absolute left-3 top-2.5 h-4 w-4 text-blue-600" />
@@ -174,8 +201,6 @@ const AdminPage = () => {
             />
           </div>
         </div>
-
-        {/* Table */}
         <div className="bg-white shadow-md rounded-lg border border-blue-200 p-6 space-y-4">
           <div className="overflow-x-auto shadow-lg">
             <table className="min-w-[800px] w-full text-sm text-left text-gray-700">
@@ -191,7 +216,7 @@ const AdminPage = () => {
                 </tr>
               </thead>
               <tbody>
-                {filteredShops.map((m) => (
+                {filteredManagers.map((m) => (
                   <tr
                     key={m._id}
                     className="border-b hover:bg-blue-50 transition"
@@ -236,7 +261,57 @@ const AdminPage = () => {
                     </Td>
                   </tr>
                 ))}
-                {filteredShops.length === 0 && (
+                {filteredManagers.length === 0 && (
+                  <tr>
+                    <td
+                      colSpan={8}
+                      className="px-4 py-10 text-center text-blue-500"
+                    >
+                      No results.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+          </div>
+        </div>
+        <div>
+  <h2 className="text-xl md:text-2xl font-semibold text-blue-700 flex items-center gap-2 mb-3">
+    <Shield className="w-5 h-5" /> Admins
+  </h2>
+        <div className=" bg-white shadow-md rounded-lg border border-blue-200 p-6 space-y-4">
+              
+          <div className="overflow-x-auto shadow-lg">
+            <table className="min-w-[800px] w-full text-sm text-left text-gray-700">
+              <thead className="sticky top-0 bg-blue-600 text-white uppercase text-xs">
+                <tr>
+                  <Th>Name</Th>
+                  <Th>Email</Th>
+                  <Th className="hidden md:table-cell">Phone</Th>
+                  <Th>ADDRESS</Th>
+                  <Th>Created</Th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredAdmins.map((m) => (
+                  <tr
+                    key={m._id}
+                    className="border-b hover:bg-blue-50 transition"
+                  >
+                    <Td className="font-medium text-blue-800">
+                        {m.name}
+                      </Td>
+                      <Td>
+                        {m.email}
+                    </Td>
+                    <Td className="hidden md:table-cell">{m.phone}</Td>
+                    <Td>{m.address}</Td>
+                    <Td>{new Date(m.createdAt).toLocaleDateString()}</Td>
+                    
+                  </tr>
+                ))}
+                {filteredAdmins.length === 0 && (
                   <tr>
                     <td
                       colSpan={8}
@@ -250,7 +325,9 @@ const AdminPage = () => {
             </table>
           </div>
         </div>
+
       </div>
+    </div>
     </div>
   );
 };
