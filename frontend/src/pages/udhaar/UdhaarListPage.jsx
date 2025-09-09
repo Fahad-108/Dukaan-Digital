@@ -60,8 +60,8 @@ const UdhaarListPage = () => {
   return (
     <div className="p-6 space-y-4 min-h-screen">
       {/* Search + Add Credit Button (always visible) */}
-      <div className="flex items-center justify-between gap-4 mb-4">
-        <div className="flex flex-wrap items-center gap-3 flex-1 min-w-[280px]">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 mb-4">
+        <div className="flex flex-col sm:flex-row gap-3 flex-1">
           <input
             type="text"
             placeholder="Search by name or contact..."
