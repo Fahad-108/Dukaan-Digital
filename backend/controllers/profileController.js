@@ -67,7 +67,7 @@ const updateProfile = async (req, res) => {
             return res.status(404).json({ msg: "User not found" })
         }
         const updateData = { name, phone };
-        if (password) {
+        if (password && password.trim() !== "") {
             const hashed = await bcrypt.hash(password, 10);
             updateData.password = hashed;
         }

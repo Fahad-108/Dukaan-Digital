@@ -43,8 +43,12 @@ const editUserProfile = async (req, res) => {
         if (!shop) {
             return res.status(404).json({ msg: "Shop not found" })
         }
-        const hashed = await bcrypt.hash(password, 10);
-        const updateData = { name, email, shopname, phone, password : hashed };
+        const updateData = { name, email, shopname, phone };
+
+        if (password && password.trim() !== "") {
+          const hashed = await bcrypt.hash(password, 10);
+          updateData.password = hashed;
+        }
 
         await User.findByIdAndUpdate(userId, updateData,
             { new: true }
