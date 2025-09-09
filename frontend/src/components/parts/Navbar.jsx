@@ -4,11 +4,13 @@ import { LogOut } from 'lucide-react';
 
 const Navbar = ({ toggleSidebar }) => {
     const navigate = useNavigate();
+    const user = JSON.parse(sessionStorage.getItem('user'));
+    const role = user?.role;
     return (
         <nav className="bg-blue-600 text-white w-full z-50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-16">
-                    <div className="md:hidden">
+                    <div className={`md:hidden ${role === 'admin' ? 'hidden' : 'block'}`}>
                         <button
                             onClick={toggleSidebar}
                             className="text-gray-300 hover:text-white focus:outline-none"
