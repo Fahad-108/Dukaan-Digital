@@ -1,12 +1,8 @@
 import axios from "axios";
 
-const baseURL =
-  window.location.hostname === "localhost"
-    ? "http://localhost:5000/api"
-    : "https://dukaan-digital-zeta.vercel.app/api";
-
 const api = axios.create({
-  baseURL,
+  // baseURL: "https://dukaan-digital-zeta.vercel.app/api",
+  baseURL: "http://localhost:5000/api",
   headers: { "Content-Type": "application/json" },
 });
 
