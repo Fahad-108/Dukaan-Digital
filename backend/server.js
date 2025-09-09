@@ -23,7 +23,7 @@ app.use(cors({
   origin: ['https://fahad-108.github.io', 'http://localhost:5173'],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true
+  credentials: true     
 }));
 
 app.get('/', (req, res) => {
