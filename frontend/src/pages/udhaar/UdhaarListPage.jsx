@@ -58,10 +58,10 @@ const UdhaarListPage = () => {
   });
 
   return (
-    <div className="p-6 min-h-screen bg-white">
+    <div className="p-6 space-y-4 min-h-screen">
       {/* Search + Add Credit Button (always visible) */}
-      <div className="flex justify-between gap-1 mb-4 w-full">
-        <div className="flex flex-wrap w-[calc(100%-8.75rem)] gap-4">
+      <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
+        <div className="flex flex-wrap items-center gap-3 flex-1 min-w-[280px]">
           <input
             type="text"
             placeholder="Search by name or contact..."
@@ -72,7 +72,7 @@ const UdhaarListPage = () => {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-4 py-2 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-2 py-1 border border-blue-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-400"
           >
             <option value="all">All Status</option>
             <option value="pending">Pending</option>
@@ -80,7 +80,7 @@ const UdhaarListPage = () => {
           </select>
         </div>
 
-        <div className="mb-2">
+        <div>
           <button
             onClick={() => navigate("/udhaar/new")}
             className="bg-blue-600 flex gap-2 text-white px-4 py-1 rounded hover:bg-blue-700 transition"
