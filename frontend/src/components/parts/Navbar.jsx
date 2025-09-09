@@ -13,9 +13,9 @@ const Navbar = ({ toggleSidebar }) => {
                     <div className={`md:hidden ${role === 'admin' ? 'hidden' : 'block'}`}>
                         <button
                             onClick={toggleSidebar}
-                            className="text-gray-300 hover:text-white focus:outline-none"
+                            className="text-gray-400 hover:text-white focus:outline-none"
                         >
-                            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="white">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                             </svg>
                         </button>

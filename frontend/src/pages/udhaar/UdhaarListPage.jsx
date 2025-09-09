@@ -16,7 +16,7 @@ const UdhaarListPage = () => {
     try {
       setLoading(true);
       const res = await getUdhaarList();
-      setUdhaarList(res.data);
+        setUdhaarList(res.data);
     } catch (err) {
       toast.error("Failed to refresh Credit record");
       console.error(err);
@@ -58,22 +58,20 @@ const UdhaarListPage = () => {
   });
 
   return (
-    <div className="p-6 space-y-4 min-h-screen">
-      {/* Search + Add Credit Button (always visible) */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
-        {/* Search + Filter */}
-        <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 w-full sm:w-auto">
+    <div className="p-6 min-h-screen bg-white">
+      <div className="flex justify-between gap-1 mb-4 w-full flex-wrap">
+        <div className="flex flex-wrap w-[calc(100%-8.75rem)] items-center gap-4">
           <input
             type="text"
             placeholder="Search by name or contact..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full sm:w-64 px-2 py-1 border border-blue-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-400 text-sm"
+            className="px-2 py-1 md:w-lg min-w-10 border border-blue-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="w-full sm:w-40 px-2 py-1 border border-blue-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-400 text-sm"
+            className="px-2 py-1 border border-blue-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="all">All Status</option>
             <option value="pending">Pending</option>
@@ -81,25 +79,25 @@ const UdhaarListPage = () => {
           </select>
         </div>
 
-        {/* Add Credit Button */}
-        <button
-          onClick={() => navigate("/udhaar/new")}
-          className="bg-blue-600 flex items-center justify-center gap-2 text-white px-4 py-1 rounded hover:bg-blue-700 transition w-full sm:w-auto"
-        >
-          <HandCoins size={20} />
-          Add Credit
-        </button>
+        <div className="mb-2">
+          <button
+            onClick={() => navigate("/udhaar/new")}
+            className="px-4 py-1 bg-blue-600 hover:bg-blue-700 transition text-white rounded flex items-center gap-1"
+          >
+            <HandCoins size={23} />
+            Add Credit
+          </button>
+        </div>
       </div>
 
-
       {/* Loader (only visible while loading) */}
-      <div className="bg-white shadow-md rounded-lg border border-blue-200 p-6 space-y-4">
-        <h1 className="text-xl font-semibold text-blue-700 mb-4">
-          Credit Records
-        </h1>
-        {loading ? (
-          <Loader />
-        ) : (
+        <div className="bg-white shadow-md rounded-lg border border-blue-200 p-6 space-y-4">
+          <h1 className="text-xl font-semibold text-blue-700 mb-4">
+            Credit Records
+          </h1>
+          {loading ? (
+        <Loader />
+      ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm text-left text-gray-700">
               <thead className="bg-blue-600 text-white uppercase text-xs">
@@ -131,10 +129,11 @@ const UdhaarListPage = () => {
                         {item.reason || "No reason provided"}
                       </td>
                       <td
-                        className={`px-4 py-3 uppercase font-semibold ${item.status === "paid"
+                        className={`px-4 py-3 uppercase font-semibold ${
+                          item.status === "paid"
                             ? "text-green-600"
                             : "text-red-600"
-                          }`}
+                        }`}
                       >
                         {item.status}
                       </td>
@@ -170,7 +169,7 @@ const UdhaarListPage = () => {
               </tbody>
             </table>
           </div>
-        )}
+      )}
       </div>
     </div>
   );
