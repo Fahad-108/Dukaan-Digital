@@ -25,7 +25,7 @@ app.use(cors({
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true     
 }));
-
+    
 app.get('/', (req, res) => {   
     res.send('Welcome to Server');
 });
