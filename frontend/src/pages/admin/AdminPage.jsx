@@ -169,7 +169,7 @@ const AdminPage = () => {
         )}
 
         {/* Stats */}
-        <div className="flex sm:flex-wrap gap-4 mb-6">
+        <div className="flex flex-wrap gap-4 mb-6">
           <StatCard
             icon={Store}
             label="Total Shops"
