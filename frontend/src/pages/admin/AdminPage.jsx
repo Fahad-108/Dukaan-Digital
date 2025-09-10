@@ -61,7 +61,7 @@ const AdminPage = () => {
     }
   }
 
-  const totalShops = shops.length;
+  const totalShops = managers.length;
   const totalAdmins = admins.length;
 
 
@@ -129,7 +129,7 @@ const AdminPage = () => {
       <div className="sticky top-0 z-10 bg-white border-b border-slate-200">
         <div className="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <Shield onClick={() => navigate('/adminprofile')} className="text-blue-600 w-6 h-6" />
+            <Shield onClick={() => navigate('/adminprofile')} className="text-blue-600 w-6 h-6 cursor-pointer" />
             <div className="font-semibold text-blue-600">
               Admin Dashboard
             </div>
@@ -142,14 +142,14 @@ const AdminPage = () => {
               onClick={() => window.location.reload()}
               className="inline-flex items-center gap-2 rounded-lg border border-blue-300 bg-white px-3 py-2 text-sm hover:bg-slate-50"
             >
-              <RefreshCw className="w-4 h-4" /> Refresh
+              <RefreshCw className="w-4 h-4" /><span className="hidden sm:inline">Refresh</span>
             </button>
 
             <button
               onClick={() => navigate("/register")}
               className="inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 text-white px-3 py-2 text-sm hover:bg-blue-700"
             >
-              <PlusCircle className="w-4 h-4" /> Add User
+              <PlusCircle className="w-4 h-4" /><span className="hidden sm:inline">Add User</span>
             </button>
           </div>
         </div>
@@ -169,7 +169,7 @@ const AdminPage = () => {
         )}
 
         {/* Stats */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+        <div className="flex sm:flex-wrap gap-4 mb-6">
           <StatCard
             icon={Store}
             label="Total Shops"
@@ -211,7 +211,7 @@ const AdminPage = () => {
                   <Th className="hidden md:table-cell">Phone</Th>
                   <Th>Shop</Th>
                   <Th>Status</Th>
-                  <Th>Created</Th>
+                  <Th>Joined On</Th>
                   <Th className="text-right">Actions</Th>
                 </tr>
               </thead>
@@ -290,7 +290,7 @@ const AdminPage = () => {
                   <Th>Email</Th>
                   <Th className="hidden md:table-cell">Phone</Th>
                   <Th>ADDRESS</Th>
-                  <Th>Created</Th>
+                  <Th>Joined On</Th>
                 </tr>
               </thead>
               <tbody>

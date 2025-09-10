@@ -17,7 +17,7 @@ const SalesListPage = () => {
   const [selectedSale, setSelectedSale] = useState(null);
 
   const formatDate = (date) => date.toISOString().split('T')[0];
-  const [startDate, setStartDate] = useState(formatDate(new Date(new Date().setMonth(new Date().getMonth(), 1))));
+  const [startDate, setStartDate] = useState(formatDate(new Date(today.getFullYear(), today.getMonth(), 1)));
   const [endDate, setEndDate] = useState(formatDate(new Date()));
 
   const [type, setType] = useState();

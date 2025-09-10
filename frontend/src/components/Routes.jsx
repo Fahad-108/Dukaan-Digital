@@ -23,8 +23,6 @@ import ProductFormPage from "../pages/products/ProductFormPage"
 
 // Sales
 import SalesListPage from "../pages/sales/SalesListPage"
-import AddSalePage from "../pages/sales/AddSalePage"
-import SaleDetailPage from "../pages/sales/SaleDetailPage"
 
 // Udhaar
 import UdhaarListPage from "../pages/udhaar/UdhaarListPage"
@@ -37,9 +35,6 @@ import ExpenseListPage from "../pages/expenses/ExpenseListPage"
 import ExpenseFormPage from "../pages/expenses/ExpenseFormPage"
 
 // Reports
-import DailyReportPage from "../pages/reports/DailyReportPage"
-import MonthlyReportPage from "../pages/reports/MonthlyReportPage"
-import CustomReportPage from "../pages/reports/CustomReportPage"
 import ReportHomePage from "../pages/reports/ReportHomePage"
 
 // About
@@ -131,8 +126,6 @@ export default function AppRouter() {
           {/* Reports */}
           <Route path="reports">
             <Route index element={<ReportHomePage />} />
-            <Route path="monthly" element={<MonthlyReportPage />} />
-            <Route path="custom" element={<CustomReportPage />} />
           </Route>
 
         </Route>

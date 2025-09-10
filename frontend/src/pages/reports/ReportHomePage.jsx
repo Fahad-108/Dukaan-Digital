@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { getReport } from "../../services/reportService.js";
-import { DollarSign, TrendingUp, CreditCard, FileText, Scale, Package, ShoppingCart, ShoppingBag, Receipt, ClipboardList, HandCoins } from "lucide-react";
 import ReportReceipt from "./ReportReceipt.jsx";
 import toast from "react-hot-toast";
+import { BarChart3 } from "lucide-react";
 
 const Reporthomepage = () => {
   const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
@@ -13,11 +13,9 @@ const Reporthomepage = () => {
   const [selectedType, setSelectedType] = useState("date");
   const [loading, setLoading] = useState(false);
   const [report, setReport] = useState(null);
-  const [message, setMessage] = useState("");
 
   const handleSubmit = async () => {
     setLoading(true);
-    setMessage("");
     setReport(null);
 
     try {
@@ -47,78 +45,80 @@ const Reporthomepage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col items-center p-6">
-      <div className="bg-white shadow-lg rounded-2xl p-6 w-full max-w-lg border border-blue-200">
-        <h2 className="text-2xl font-bold text-blue-700 mb-4 text-center">
-          Reports
-        </h2>
-
-        {/* Type Selection */}
-        <div className="flex justify-center gap-4 mb-4">
-          <button
-            onClick={() => setSelectedType("date")}
-            className={`px-4 py-2 rounded-lg font-medium ${selectedType === "date"
-              ? "bg-blue-600 text-white"
-              : "bg-blue-100 text-blue-700"
-              }`}
-          >
-            By Date
-          </button>
-          <button
-            onClick={() => setSelectedType("month")}
-            className={`px-4 py-2 rounded-lg font-medium ${selectedType === "month"
-              ? "bg-blue-600 text-white"
-              : "bg-blue-100 text-blue-700"
-              }`}
-          >
-            By Month
-          </button>
+    <div className="min-h-screen bg-blue-50 flex flex-col items-center p-6">
+      <div className="relative bg-white shadow-2xl rounded-tr-[5rem] rounded-bl-3xl p-0 w-full max-w-lg overflow-hidden flex transform transition-all duration-500 hover:shadow-3xl">
+        <div className="w-1/3 bg-blue-600 rounded-bl-3xl flex items-center justify-center p-4">
+          <BarChart3      className="h-20 w-20 text-white" />
         </div>
 
-        {/* Date/Month Picker */}
-        {selectedType === "date" ? (
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-blue-600 mb-1">
-              Select Date
-            </label>
-            <input
-              type="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-              className="w-full px-3 py-2 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+        <div className="w-2/3 p-8 flex flex-col justify-center">
+          <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
+            Generate Report
+          </h2>
+          <div className="flex justify-center gap-4 mb-6">
+            <button
+              onClick={() => { setSelectedType("date"); setReport() }}
+              className={`flex-1 py-2 px-4 rounded-full text-sm font-semibold transition-all duration-300 transform hover:scale-105 ${selectedType === "date"
+                ? "bg-blue-600 text-white shadow-md"
+                : "text-gray-600 border border-gray-300 hover:bg-gray-100"
+                }`}
+            >
+              By Date
+            </button>
+            <button
+              onClick={() => { setSelectedType("month"); setReport() }}
+              className={`flex-1 py-2 px-4 rounded-full text-sm font-semibold transition-all duration-300 transform hover:scale-105 ${selectedType === "month"
+                ? "bg-blue-600 text-white shadow-md"
+                : "text-gray-600 border border-gray-300 hover:bg-gray-100"
+                }`}
+            >
+              By Month
+            </button>
           </div>
-        ) : (
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-blue-600 mb-1">
-              Select Month
-            </label>
-            <input
-              type="month"
-              value={month}
-              onChange={(e) => setMonth(e.target.value)}
-              className="w-full px-3 py-2 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-        )}
-
-        {/* Submit Button */}
-        <button
-          onClick={handleSubmit}
-          disabled={loading}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors"
-        >
-          {loading ? "Loading..." : "Get Report"}
-        </button>
-
-        {message && (
-          <p className="text-center mt-3 text-red-500 font-medium">
-            {message}
-          </p>
-        )}
+          {selectedType === "date" ? (
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Select Date
+              </label>
+              <input
+                type="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                className="w-full px-4 py-2 border-b-2 border-gray-300 rounded-t-lg focus:outline-none focus:border-blue-500 transition duration-300"
+              />
+            </div>
+          ) : (
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Select Month
+              </label>
+              <input
+                type="month"
+                value={month}
+                onChange={(e) => setMonth(e.target.value)}
+                className="w-full px-4 py-2 border-b-2 border-gray-300 rounded-t-lg focus:outline-none focus:border-blue-500 transition duration-300"
+              />
+            </div>
+          )}
+          <button
+            onClick={handleSubmit}
+            disabled={loading}
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {loading ? (
+              <span className="flex items-center justify-center">
+                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Generating Report...
+              </span>
+            ) : (
+              "Get Report"
+            )}
+          </button>
+        </div>
       </div>
-
-      {/* Report Display */}
       {report && (
         <ReportReceipt
           report={report}

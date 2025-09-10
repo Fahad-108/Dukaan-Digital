@@ -3,7 +3,7 @@ import {
     User,
     Package,
     ShoppingCart,
-    BarChart2,
+    BarChart3,
     HandCoins,
     ReceiptIcon,
     LayoutDashboard,
@@ -48,7 +48,7 @@ const Sidebar = ({ toggleSidebar }) => {
         {
             label: "Reports",
             path: "/reports",
-            icon: <BarChart2 size={20} />,
+            icon: <BarChart3 size={20} />,
         },
     ];
 

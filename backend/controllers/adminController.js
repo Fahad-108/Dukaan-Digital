@@ -35,14 +35,14 @@ const getAdminDashboard = async (req, res) => {
 
 const editUserProfile = async (req, res) => {
     try {
-        const { name, email, shopname, phone, password } = req.body;
+        const { name, email, shopname, phone, password, address } = req.body;
         const userId = req.params.id;
 
         const shop = await User.findById(userId);
         if (!shop) {
             return res.status(404).json({ msg: "Shop not found" })
         }
-        const updateData = { name, email, shopname, phone };
+        const updateData = { name, email, shopname, phone, address };
 
         if (password && password.trim() !== "") {
           const hashed = await bcrypt.hash(password, 10);
@@ -58,7 +58,6 @@ const editUserProfile = async (req, res) => {
         res.status(500).json({ message: 'Server error', error: err.message });
         console.log(err)
     }
-
 }
 
 const changeStatus = async (req, res) => {
