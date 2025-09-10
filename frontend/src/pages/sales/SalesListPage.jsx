@@ -16,6 +16,7 @@ const SalesListPage = () => {
   const [showDetails, setShowDetails] = useState(false);
   const [selectedSale, setSelectedSale] = useState(null);
 
+  const today = new Date();
   const formatDate = (date) => date.toISOString().split('T')[0];
   const [startDate, setStartDate] = useState(formatDate(new Date(today.getFullYear(), today.getMonth(), 1)));
   const [endDate, setEndDate] = useState(formatDate(new Date()));
@@ -74,21 +75,21 @@ const SalesListPage = () => {
   };
 
   useEffect(() => {
-  const today = new Date();
-  const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+    const today = new Date();
+    const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
 
-  if (location.pathname === "/sales") {
-    setType("sale");
-    setStartDate(formatDate(firstDayOfMonth));
-    setEndDate(formatDate(today));
-    fetchSales();
-  } else if (location.pathname === "/purchase") {
-    setType("purchase");
-    setStartDate(formatDate(firstDayOfMonth));
-    setEndDate(formatDate(today));
-    fetchPurchase();
-  }
-}, [location]);
+    if (location.pathname === "/sales") {
+      setType("sale");
+      setStartDate(formatDate(firstDayOfMonth));
+      setEndDate(formatDate(today));
+      fetchSales();
+    } else if (location.pathname === "/purchase") {
+      setType("purchase");
+      setStartDate(formatDate(firstDayOfMonth));
+      setEndDate(formatDate(today));
+      fetchPurchase();
+    }
+  }, [location]);
 
 
   useEffect(() => {
@@ -244,7 +245,7 @@ const SalesListPage = () => {
         </button>
       </div>
 
-      
+
 
       <div className="relative bg-white shadow-md rounded-lg p-4 border border-blue-200">
         <h2 className="text-xl font-semibold text-blue-700 mb-4">{type === "sale" ? "Sales Record" : "Purchase Record"}</h2>
@@ -333,7 +334,7 @@ const SalesListPage = () => {
                 className="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition"
               >
                 Delete
-              </button> 
+              </button>
               <button
                 onClick={handleClose}
                 className="bg-gray-200 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-300 transition"
