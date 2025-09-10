@@ -48,13 +48,13 @@ const AdminPage = () => {
 
   const handleDelete = async (id) => {
     try {
-        if(confirm("Are you sure you want to delete your manager? This action cannot be undone")){
-            const deleted = await deleteShop(id);
-            if (deleted) {
-                console.log("Profile deleted seccessfully!")
-            }
-            fetchData();
+      if (confirm("Are you sure you want to delete your manager? This action cannot be undone")) {
+        const deleted = await deleteShop(id);
+        if (deleted) {
+          console.log("Profile deleted seccessfully!")
         }
+        fetchData();
+      }
     } catch (err) {
       console.error(err);
       setError("Failed to delete shop!");
@@ -67,17 +67,17 @@ const AdminPage = () => {
 
   const handleStatus = async (id) => {
     try {
-        const status = await changeStatus(id);
-        if (status) {
-            console.log("Status changed successfully!")
-        }
-        fetchData();
+      const status = await changeStatus(id);
+      if (status) {
+        console.log("Status changed successfully!")
+      }
+      fetchData();
     } catch (err) {
       console.error(err);
       setError("Failed to Change status!");
+    }
   }
-}
-  
+
 
   // Search filter
   const filteredManagers = useMemo(() => {
@@ -170,164 +170,170 @@ const AdminPage = () => {
 
         {/* Stats */}
         <div className="flex flex-wrap gap-4 mb-6">
-          <StatCard
-            icon={Store}
-            label="Total Shops"
-            value={totalShops}
-            loading={loading}
-          />
-          <StatCard
-            icon={Shield}
-            label="Total Admins"
-            value={totalAdmins}
-            loading={loading}
-          />
-        </div>
-
-        {/* Table */}
-          <div className="mb-10">
-  <h2 className="text-xl md:text-2xl font-semibold text-blue-700 flex items-center gap-2 mb-3">
-    <Store className="w-5 h-5" /> Managers
-  </h2>
-  {/* Search */}
-        <div className="mb-4 flex items-center gap-2">
-          <div className="relative w-full md:w-80">
-            <Search className="absolute left-3 top-2.5 h-4 w-4 text-blue-600" />
-            <input
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search managers, shops, phone..."
-              className="w-full rounded-xl border border-slate-200 bg-white py-2 pl-9 pr-3 text-sm outline-none placeholder:text-slate-400 focus:border-blue-600"
+          <div className="flex-1 basis-1/3 max-w-1/3 min-w-[250px]">
+            <StatCard
+              icon={Store}
+              label="Total Shops"
+              value={totalShops}
+              loading={loading}
             />
           </div>
+          <div className="flex-1 basis-1/3 max-w-1/3 min-w-[250px]">
+            <StatCard
+              icon={Shield}
+              label="Total Admins"
+              value={totalAdmins}
+              loading={loading}
+            />
+          </div>
+          
         </div>
-        <div className="bg-white shadow-md rounded-lg border border-blue-200 p-6 space-y-4">
-          <div className="overflow-x-auto shadow-lg">
-            <table className="min-w-[800px] w-full text-sm text-left text-gray-700">
-              <thead className="sticky top-0 bg-blue-600 text-white uppercase text-xs">
-                <tr>
-                  <Th>Name</Th>
-                  <Th>Email</Th>
-                  <Th className="hidden md:table-cell">Phone</Th>
-                  <Th>Shop</Th>
-                  <Th>Status</Th>
-                  <Th>Joined On</Th>
-                  <Th className="text-right">Actions</Th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredManagers.map((m) => (
-                  <tr
-                    key={m._id}
-                    className="border-b hover:bg-blue-50 transition"
-                  >
-                    <Td className="font-medium text-blue-800">
+
+
+        {/* Table */}
+        <div className="mb-10">
+          <h2 className="text-xl md:text-2xl font-semibold text-blue-700 flex items-center gap-2 mb-3">
+            <Store className="w-5 h-5" /> Managers
+          </h2>
+          {/* Search */}
+          <div className="mb-4 flex items-center gap-2">
+            <div className="relative w-full md:w-80">
+              <Search className="absolute left-3 top-2.5 h-4 w-4 text-blue-600" />
+              <input
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search managers, shops, phone..."
+                className="w-full rounded-xl border border-slate-200 bg-white py-2 pl-9 pr-3 text-sm outline-none placeholder:text-slate-400 focus:border-blue-600"
+              />
+            </div>
+          </div>
+          <div className="bg-white shadow-md rounded-lg border border-blue-200 p-6 space-y-4">
+            <div className="overflow-x-auto shadow-lg">
+              <table className="min-w-[800px] w-full text-sm text-left text-gray-700">
+                <thead className="sticky top-0 bg-blue-600 text-white uppercase text-xs">
+                  <tr>
+                    <Th>Name</Th>
+                    <Th>Email</Th>
+                    <Th className="hidden md:table-cell">Phone</Th>
+                    <Th>Shop</Th>
+                    <Th>Status</Th>
+                    <Th>Joined On</Th>
+                    <Th className="text-right">Actions</Th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredManagers.map((m) => (
+                    <tr
+                      key={m._id}
+                      className="border-b hover:bg-blue-50 transition"
+                    >
+                      <Td className="font-medium text-blue-800">
                         {m.name}
                       </Td>
                       <Td className="text-xs text-blue-500 md:hidden">
                         {m.email}
-                    </Td>
-                    <Td className="hidden md:table-cell">{m.email}</Td>
-                    <Td className="hidden md:table-cell">{m.phone}</Td>
-                    <Td>{m.shopname}</Td>
-                    <Td>{statusBadge(m.status)}</Td>
-                    <Td>{new Date(m.createdAt).toLocaleDateString()}</Td>
-                    <Td>
-                      <div className="flex items-center justify-end gap-2">
-                        
-                        {m.status !== "active" ? (
-                          <button onClick={ () => { handleStatus(m._id)}}
-                            className="p-2 text-emerald-600 rounded-lg hover:bg-emerald-100"
-                            title="Activate"
-                          >
-                            <CheckCircle size={16} />
-                          </button>
-                        ) : (
-                          <button onClick={ () => { handleStatus(m._id)}}
-                            className="p-2 text-rose-600 rounded-lg hover:bg-rose-100"
-                            title="Suspend"
-                          >
-                            <Ban size={16} />
-                          </button>
-                        )}
-                        <button onClick={()=> navigate('/admin/profile/edit', { state: { data: m } })}  className="p-2 text-blue-600 rounded-lg hover:bg-blue-100">
-                          <Edit2 size={16} />
-                        </button>
+                      </Td>
+                      <Td className="hidden md:table-cell">{m.email}</Td>
+                      <Td className="hidden md:table-cell">{m.phone}</Td>
+                      <Td>{m.shopname}</Td>
+                      <Td>{statusBadge(m.status)}</Td>
+                      <Td>{new Date(m.createdAt).toLocaleDateString()}</Td>
+                      <Td>
+                        <div className="flex items-center justify-end gap-2">
 
-                        <button onClick={ () => { handleDelete(m._id)}} className="p-2 text-red-500 rounded-lg hover:bg-red-100">
-                          <Trash2 size={16} />
-                        </button>
-                      </div>
-                    </Td>
-                  </tr>
-                ))}
-                {filteredManagers.length === 0 && (
-                  <tr>
-                    <td
-                      colSpan={8}
-                      className="px-4 py-10 text-center text-blue-500"
-                    >
-                      No results.
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
+                          {m.status !== "active" ? (
+                            <button onClick={() => { handleStatus(m._id) }}
+                              className="p-2 text-emerald-600 rounded-lg hover:bg-emerald-100"
+                              title="Activate"
+                            >
+                              <CheckCircle size={16} />
+                            </button>
+                          ) : (
+                            <button onClick={() => { handleStatus(m._id) }}
+                              className="p-2 text-rose-600 rounded-lg hover:bg-rose-100"
+                              title="Suspend"
+                            >
+                              <Ban size={16} />
+                            </button>
+                          )}
+                          <button onClick={() => navigate('/admin/profile/edit', { state: { data: m } })} className="p-2 text-blue-600 rounded-lg hover:bg-blue-100">
+                            <Edit2 size={16} />
+                          </button>
+
+                          <button onClick={() => { handleDelete(m._id) }} className="p-2 text-red-500 rounded-lg hover:bg-red-100">
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
+                      </Td>
+                    </tr>
+                  ))}
+                  {filteredManagers.length === 0 && (
+                    <tr>
+                      <td
+                        colSpan={8}
+                        className="px-4 py-10 text-center text-blue-500"
+                      >
+                        No results.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
         <div>
-  <h2 className="text-xl md:text-2xl font-semibold text-blue-700 flex items-center gap-2 mb-3">
-    <Shield className="w-5 h-5" /> Admins
-  </h2>
-        <div className=" bg-white shadow-md rounded-lg border border-blue-200 p-6 space-y-4">
-              
-          <div className="overflow-x-auto shadow-lg">
-            <table className="min-w-[800px] w-full text-sm text-left text-gray-700">
-              <thead className="sticky top-0 bg-blue-600 text-white uppercase text-xs">
-                <tr>
-                  <Th>Name</Th>
-                  <Th>Email</Th>
-                  <Th className="hidden md:table-cell">Phone</Th>
-                  <Th>ADDRESS</Th>
-                  <Th>Joined On</Th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredAdmins.map((m) => (
-                  <tr
-                    key={m._id}
-                    className="border-b hover:bg-blue-50 transition"
-                  >
-                    <Td className="font-medium text-blue-800">
+          <h2 className="text-xl md:text-2xl font-semibold text-blue-700 flex items-center gap-2 mb-3">
+            <Shield className="w-5 h-5" /> Admins
+          </h2>
+          <div className=" bg-white shadow-md rounded-lg border border-blue-200 p-6 space-y-4">
+
+            <div className="overflow-x-auto shadow-lg">
+              <table className="min-w-[800px] w-full text-sm text-left text-gray-700">
+                <thead className="sticky top-0 bg-blue-600 text-white uppercase text-xs">
+                  <tr>
+                    <Th>Name</Th>
+                    <Th>Email</Th>
+                    <Th className="hidden md:table-cell">Phone</Th>
+                    <Th>ADDRESS</Th>
+                    <Th>Joined On</Th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredAdmins.map((m) => (
+                    <tr
+                      key={m._id}
+                      className="border-b hover:bg-blue-50 transition"
+                    >
+                      <Td className="font-medium text-blue-800">
                         {m.name}
                       </Td>
                       <Td>
                         {m.email}
-                    </Td>
-                    <Td className="hidden md:table-cell">{m.phone}</Td>
-                    <Td>{m.address}</Td>
-                    <Td>{new Date(m.createdAt).toLocaleDateString()}</Td>
-                    
-                  </tr>
-                ))}
-                {filteredAdmins.length === 0 && (
-                  <tr>
-                    <td
-                      colSpan={8}
-                      className="px-4 py-10 text-center text-blue-500"
-                    >
-                      No results.
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
-        </div>
+                      </Td>
+                      <Td className="hidden md:table-cell">{m.phone}</Td>
+                      <Td>{m.address}</Td>
+                      <Td>{new Date(m.createdAt).toLocaleDateString()}</Td>
 
+                    </tr>
+                  ))}
+                  {filteredAdmins.length === 0 && (
+                    <tr>
+                      <td
+                        colSpan={8}
+                        className="px-4 py-10 text-center text-blue-500"
+                      >
+                        No results.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
       </div>
-    </div>
     </div>
   );
 };
