@@ -95,6 +95,7 @@ const ProductListPage = () => {
     };
 
     try {
+      setLoading(true);
       const res = await createSale(payload);
       console.log("Sale Created:", res.data);
       toast.success("Sale Created")
@@ -107,6 +108,8 @@ const ProductListPage = () => {
     } catch (err) {
       toast.error("Failed to create Sale")
       console.error("Error creating record:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -243,7 +246,7 @@ const ProductListPage = () => {
                 disabled={loading}
                 className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
-                Confirm Sale
+                {loading ? "Processing..." : "Confirm Sale"}
               </button>
             </div>
           </div>

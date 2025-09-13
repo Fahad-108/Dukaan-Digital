@@ -172,6 +172,7 @@ const PurchaseFormPage = () => {
     }
 
     try {
+      setLoading(true);
       const res = await addPurchase(purchaseDetails);
       toast.success(res.data.message);
       setPurchaseDetails({
@@ -181,6 +182,9 @@ const PurchaseFormPage = () => {
     } catch (err) {
       toast.error('Failed to record purchase');
       console.error('Error adding purchase:', err);
+    }
+    finally {
+      setLoading(false);
     }
   };
 
@@ -420,7 +424,7 @@ const PurchaseFormPage = () => {
             className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform active:scale-95 disabled:bg-blue-400 disabled:shadow-none disabled:transform-none disabled:cursor-not-allowed"
             disabled={!purchaseDetails.suppliername || purchaseDetails.items.length === 0 || loading}
           >
-            Purchase
+            {loading ? "Processing..." : "Purchase"}
           </button>
         </div>
       </form>
