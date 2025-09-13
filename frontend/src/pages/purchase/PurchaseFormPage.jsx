@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Trash2 } from 'lucide-react';
-import { toast } from 'react-hot-toast'; // Assuming you have react-hot-toast installed
+import toast from 'react-hot-toast'; // Assuming you have react-hot-toast installed
 import { addPurchase } from '../../services/purchaseService.js';
 import { getProducts } from '../../services/productService.js';
 import Dukaan_Digital from '../../assets/Dukaan_Digital.svg';
+import { useNavigate } from "react-router-dom";
 import { FaBoxes, FaDollarSign, FaTag, FaCheckCircle, FaTrashAlt,  FaStore, FaWeightHanging, FaArrowLeft } from 'react-icons/fa';
 
 const PurchaseFormPage = () => {
@@ -22,7 +23,8 @@ const PurchaseFormPage = () => {
   });
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [isNewProduct, setIsNewProduct] = useState(false);
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const loadProducts = async () => {
     try {
