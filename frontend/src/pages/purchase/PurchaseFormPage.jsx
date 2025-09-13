@@ -22,14 +22,18 @@ const PurchaseFormPage = () => {
   });
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [isNewProduct, setIsNewProduct] = useState(false);
+  const [loading, setLoading] = useState(false)
 
   const loadProducts = async () => {
     try {
+      setLoading(true);
       const res = await getProducts();
       setProducts(res.data);
     } catch (err) {
       toast.error('Failed to load existing products');
       console.error('Error fetching products:', err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -414,7 +418,7 @@ const PurchaseFormPage = () => {
           <button
             type="submit"
             className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform active:scale-95 disabled:bg-blue-400 disabled:shadow-none disabled:transform-none disabled:cursor-not-allowed"
-            disabled={!purchaseDetails.suppliername || purchaseDetails.items.length === 0}
+            disabled={!purchaseDetails.suppliername || purchaseDetails.items.length === 0 || loading}
           >
             Purchase
           </button>
