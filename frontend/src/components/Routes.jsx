@@ -46,14 +46,16 @@ import AboutLayout from "./layout/AboutLayout"
 import AdminLayout from "./layout/AdminLayout"
 import AdminPage from "../pages/admin/AdminPage"
 import EditProfile from "../pages/admin/EditProfile"
+import LandingPage from "../pages/LandingPage"
 
 export default function AppRouter() {
   return (
     <Routes path="/">
+      {/* Landing Page */}
+      <Route path="/" element={<LandingPage />} />
 
       {/* Auth Layout Routes */}
       <Route element={<AuthLayout />}>
-      <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<LoginPage />} />
       </Route>
 
