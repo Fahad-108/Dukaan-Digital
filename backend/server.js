@@ -20,7 +20,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
       
 app.use(cors({    
-  origin: ['https://fahad-108.github.io', 'http://localhost:5173'],
+  origin: [
+    "http://localhost:5173",
+    "https://your-frontend-name.vercel.app"
+  ],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true          
@@ -49,10 +52,12 @@ app.get("/test-env", (req, res) => {
   });
 });
 
+const PORT = process.env.PORT || 5000
+
 mongoose.connect(process.env.MONGO_URL)
 .then(()=> {
-    app.listen(process.env.PORT, ()=> {
-        console.log(`Server running on port ${process.env.PORT}`);
+    app.listen(PORT, ()=> {
+        console.log(`Server running on port ${PORT}`);
     })
 })
 .catch(err => console.error('MongoDB connection error: ',err))
