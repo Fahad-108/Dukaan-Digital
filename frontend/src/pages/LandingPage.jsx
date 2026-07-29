@@ -71,20 +71,14 @@ const LandingPage = () => {
           </div>
         </div>
 
-        {/* Dashboard Preview / Search Bar Mockup */}
+        {/* Dashboard Preview Image */}
         <div className="max-w-5xl mx-auto mt-20 px-6">
           <div className="rounded-2xl border border-white/10 bg-black/40 backdrop-blur-xl p-4 shadow-2xl">
-            <div className="flex items-center gap-4 border border-white/5 bg-white/5 rounded-xl p-3">
-              <div className="flex-1 flex items-center gap-3 px-3">
-                <BarChart3 className="w-5 h-5 text-gray-400" />
-                <div className="h-5 w-full bg-white/5 rounded animate-pulse"></div>
-              </div>
-              <div className="hidden sm:flex gap-2">
-                <div className="px-4 py-2 rounded-lg bg-indigo-500/20 text-indigo-300 text-sm font-medium">Sales</div>
-                <div className="px-4 py-2 rounded-lg bg-emerald-500/20 text-emerald-300 text-sm font-medium">Analytics</div>
-                <div className="px-4 py-2 rounded-lg bg-amber-500/20 text-amber-300 text-sm font-medium">Udhaar</div>
-              </div>
-            </div>
+            <img
+              src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop"
+              alt="Dashboard Preview"
+              className="w-full h-auto rounded-xl border border-white/5 object-cover shadow-[0_0_40px_rgba(79,70,229,0.15)]"
+            />
           </div>
         </div>
       </main>
