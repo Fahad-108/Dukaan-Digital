@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, BarChart3, Box, CreditCard, PieChart, ShieldCheck, Zap } from 'lucide-react';
+import { ArrowRight, BarChart3, Box, CreditCard, PieChart, ShieldCheck, Zap, LayoutDashboard, ShoppingCart, Users, Package, FileText, User } from 'lucide-react';
 
 const LandingPage = () => {
   return (
@@ -71,14 +71,96 @@ const LandingPage = () => {
           </div>
         </div>
 
-        {/* Dashboard Preview Image */}
-        <div className="max-w-5xl mx-auto mt-20 px-6">
-          <div className="rounded-2xl border border-white/10 bg-black/40 backdrop-blur-xl p-4 shadow-2xl">
-            <img
-              src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop"
-              alt="Dashboard Preview"
-              className="w-full h-auto rounded-xl border border-white/5 object-cover shadow-[0_0_40px_rgba(79,70,229,0.15)]"
-            />
+        {/* Custom Dashboard UI Mockup */}
+        <div className="max-w-5xl mx-auto mt-20 px-4 sm:px-6">
+          <div className="rounded-2xl border border-white/10 bg-[#f8fafc] backdrop-blur-xl shadow-2xl overflow-hidden flex flex-col md:flex-row h-[600px] text-slate-800 relative z-20">
+
+            {/* Sidebar Mockup */}
+            <div className="w-full md:w-64 bg-white border-r border-slate-200 hidden md:flex flex-col p-4">
+              <div className="flex items-center gap-2 px-2 py-4 mb-4">
+                <Box className="w-6 h-6 text-indigo-600" />
+                <span className="font-bold text-lg text-slate-900">Dukaan Digital</span>
+              </div>
+              <div className="flex flex-col gap-1">
+                {[
+                  { name: 'Dashboard', icon: LayoutDashboard, active: true },
+                  { name: 'Sales', icon: ShoppingCart },
+                  { name: 'Purchases', icon: Package },
+                  { name: 'Credits', icon: CreditCard },
+                  { name: 'Products', icon: Box },
+                  { name: 'Expenses', icon: PieChart },
+                  { name: 'Reports', icon: FileText },
+                  { name: 'Profile', icon: User },
+                ].map((item) => (
+                  <div key={item.name} className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium ${item.active ? 'bg-indigo-600 text-white shadow-md shadow-indigo-200' : 'text-slate-600 hover:bg-slate-50'}`}>
+                    <item.icon className={`w-4 h-4 ${item.active ? 'text-white' : 'text-slate-400'}`} />
+                    {item.name}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Main Content Mockup */}
+            <div className="flex-1 flex flex-col overflow-hidden bg-slate-50/50">
+              {/* Header */}
+              <div className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6">
+                <div className="text-sm font-medium text-slate-500">Overview</div>
+                <div className="flex items-center gap-4">
+                  <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center border border-indigo-200">
+                    <User className="w-4 h-4 text-indigo-600" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Main Canvas */}
+              <div className="p-6 overflow-y-auto">
+                {/* Banner */}
+                <div className="relative overflow-hidden rounded-2xl bg-slate-900 p-8 mb-6 border border-slate-800 shadow-xl">
+                  <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
+                  <div className="absolute bottom-0 left-0 w-64 h-64 bg-emerald-500/20 rounded-full blur-3xl translate-y-1/2 -translate-x-1/3"></div>
+
+                  <div className="relative z-10">
+                    <h2 className="text-2xl font-bold text-white mb-2 flex items-center gap-2">
+                      Good Morning, M. Fahad Raza <span className="animate-bounce inline-block">👋</span>
+                    </h2>
+                    <p className="text-slate-400 text-sm">Here's what's happening with your shop today.</p>
+                  </div>
+                </div>
+
+                {/* Stats Grid */}
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                  {[
+                    { label: 'Total Sales', value: '****', icon: ShoppingCart, color: 'text-purple-600', bg: 'bg-purple-100' },
+                    { label: 'Net Profit', value: '****', icon: BarChart3, color: 'text-emerald-600', bg: 'bg-emerald-100' },
+                    { label: 'Expenses', value: '****', icon: PieChart, color: 'text-red-600', bg: 'bg-red-100' },
+                    { label: 'Inventory', value: '****', icon: Box, color: 'text-amber-600', bg: 'bg-amber-100' },
+                  ].map((stat, i) => (
+                    <div key={i} className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex flex-col items-center justify-center text-center">
+                      <div className={`w-10 h-10 rounded-full ${stat.bg} flex items-center justify-center mb-3`}>
+                        <stat.icon className={`w-5 h-5 ${stat.color}`} />
+                      </div>
+                      <div className="text-lg font-bold text-slate-800">{stat.value}</div>
+                      <div className="text-xs font-medium text-slate-500 mt-1">{stat.label}</div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Chart Mockup Area */}
+                <div className="bg-white rounded-xl p-6 border border-slate-200 shadow-sm">
+                   <div className="flex items-center gap-2 mb-6">
+                     <BarChart3 className="w-5 h-5 text-indigo-500" />
+                     <h3 className="font-bold text-slate-800">Daily Sales Trend</h3>
+                   </div>
+                   <div className="w-full h-40 relative flex items-end justify-between px-2 gap-2">
+                      {[40, 70, 45, 90, 65, 85, 100].map((h, i) => (
+                        <div key={i} className="w-full bg-indigo-100 rounded-t-md relative group">
+                           <div className="absolute bottom-0 w-full bg-indigo-500 rounded-t-md transition-all duration-1000" style={{ height: `${h}%` }}></div>
+                        </div>
+                      ))}
+                   </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </main>
