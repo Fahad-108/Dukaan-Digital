@@ -1,9 +1,3 @@
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
-import { VitePWA } from "vite-plugin-pwa";
-import tailwindcss from '@tailwindcss/vite';
-import manifest from './public/manifest.json';
-
 export default defineConfig({
   plugins: [
     react(),
@@ -15,19 +9,17 @@ export default defineConfig({
       workbox: {
         runtimeCaching: [
           {
-            // frontend assets
             urlPattern: ({ url }) => url.origin === self.location.origin,
             handler: "CacheFirst"
           },
           {
-            // API caching
-            urlPattern: /^http:\/\/localhost:5000\/api\/product/,
-            handler: "NetworkFirst", // pehle network, fallback cache
+            urlPattern: /^https:\/\/dukaan-digital-backend\.onrender\.com\/api\/product/,
+            handler: "NetworkFirst",
             options: {
               cacheName: "products-api-cache",
               expiration: {
                 maxEntries: 50,
-                maxAgeSeconds: 24 * 60 * 60 // 1 din
+                maxAgeSeconds: 24 * 60 * 60
               },
               cacheableResponse: {
                 statuses: [0, 200]
@@ -38,5 +30,6 @@ export default defineConfig({
       }
     })
   ],
-  base: "/Dukaan-Digital/",
+
+  base: "/"
 });
