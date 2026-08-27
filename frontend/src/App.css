@@ -3,32 +3,59 @@
 }
 
 .loader {
-    position: relative;
-    width: 64px;
-    height: 64px;
-    background: #fff;
-    border-radius: 50%;
-    overflow: hidden;
-  }
-  .loader:after{
-    content: '';
-    position: absolute;
-    inset: 8px;
-    margin: auto;
-    background: #fff;
-     border-radius: 50%;
-  }
-  .loader:before{
-    content: '';
-    position: absolute;
-    inset: 0px;
-    margin: auto;
-    background: #155dfc;
-    animation: crlMugLoader 2s linear infinite alternate;
-  }
-  @keyframes crlMugLoader {
-    0%  ,10% { transform: translateY(64px) }
-    90% , 100% { transform: translateY(0px) }
+  position: relative;
+  width: 64px;
+  height: 64px;
+  background: #fff;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.loader:after {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  margin: auto;
+  background: #fff;
+  border-radius: 50%;
+}
+
+.loader:before {
+  content: '';
+  position: absolute;
+  inset: 0px;
+  margin: auto;
+  background: #155dfc;
+  animation: crlMugLoader 2s linear infinite alternate;
+}
+
+@keyframes crlMugLoader {
+  0%, 10% { transform: translateY(64px) }
+  90%, 100% { transform: translateY(0px) }
+}
+
+@media print {
+  body {
+    background: #ffffff !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 
-@import 'tailwindcss'
+  .no-print,
+  nav,
+  footer,
+  aside {
+    display: none !important;
+  }
+
+  .printable-receipt {
+    box-shadow: none !important;
+    margin: 0 auto !important;
+    max-width: 100% !important;
+    page-break-inside: avoid !important;
+  }
+}
+
+@import 'tailwindcss';
