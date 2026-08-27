@@ -46,14 +46,76 @@ const ReportReceipt = ({ report, period }) => {
         { key: "numberOfUdhaar", label: "Number of Credits", color: "text-gray-700" },
     ];
 
-    // Helper to capture the receipt element as a Canvas
+    // Helper to capture the receipt element as a Canvas with oklch compatibility
     const getReceiptCanvas = async () => {
         if (!receiptRef.current) return null;
+
+        const canvasCtx = document.createElement("canvas").getContext("2d");
+
+        // Helper to convert any modern CSS color (including oklch) to standard RGB/HEX
+        const parseToRgb = (colorVal) => {
+            if (!colorVal || typeof colorVal !== "string") return colorVal;
+            if (!colorVal.includes("oklch")) return colorVal;
+            try {
+                canvasCtx.fillStyle = "#000000";
+                canvasCtx.fillStyle = colorVal;
+                return canvasCtx.fillStyle;
+            } catch {
+                return colorVal;
+            }
+        };
+
+        // Copy computed styles and convert oklch colors on the cloned DOM tree
+        const copyComputedStyles = (source, target) => {
+            const computed = window.getComputedStyle(source);
+            const propsToCopy = [
+                "display", "flexDirection", "justifyContent", "alignItems", "gap",
+                "width", "minWidth", "maxWidth", "height", "minHeight", "maxHeight",
+                "margin", "marginTop", "marginBottom", "marginLeft", "marginRight",
+                "padding", "paddingTop", "paddingBottom", "paddingLeft", "paddingRight",
+                "fontFamily", "fontSize", "fontWeight", "lineHeight", "letterSpacing", "textAlign", "textDecoration",
+                "borderTopWidth", "borderBottomWidth", "borderLeftWidth", "borderRightWidth",
+                "borderTopStyle", "borderBottomStyle", "borderLeftStyle", "borderRightStyle",
+                "borderRadius", "borderTopLeftRadius", "borderTopRightRadius", "borderBottomLeftRadius", "borderBottomRightRadius",
+                "boxShadow", "opacity", "verticalAlign", "whiteSpace", "wordBreak"
+            ];
+
+            for (const prop of propsToCopy) {
+                const val = computed[prop];
+                if (val) target.style[prop] = val;
+            }
+
+            const colorProps = [
+                "color", "backgroundColor",
+                "borderTopColor", "borderBottomColor", "borderLeftColor", "borderRightColor",
+                "outlineColor", "textDecorationColor"
+            ];
+
+            for (const prop of colorProps) {
+                const val = computed[prop];
+                if (val) target.style[prop] = parseToRgb(val);
+            }
+        };
+
         return await html2canvas(receiptRef.current, {
             scale: 2,
             backgroundColor: "#ffffff",
             useCORS: true,
             logging: false,
+            onclone: (clonedDoc, clonedElement) => {
+                const sourceElements = [receiptRef.current, ...receiptRef.current.querySelectorAll("*")];
+                const targetElements = [clonedElement, ...clonedElement.querySelectorAll("*")];
+
+                for (let i = 0; i < sourceElements.length; i++) {
+                    if (targetElements[i]) {
+                        copyComputedStyles(sourceElements[i], targetElements[i]);
+                    }
+                }
+
+                // Remove external stylesheets in the cloned document so html2canvas doesn't fail on Tailwind v4 oklch rules
+                const stylesheets = clonedDoc.querySelectorAll("style, link[rel='stylesheet']");
+                stylesheets.forEach((sheet) => sheet.remove());
+            }
         });
     };
 
