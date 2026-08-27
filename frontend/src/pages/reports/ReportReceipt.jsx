@@ -1,13 +1,13 @@
 import React, { useRef, useState } from "react";
 import Dukaan_Digital from "../../assets/Dukaan_Digital.svg";
-import { FaWhatsapp, FaPrint, FaDownload, FaCopy, FaCheck } from "react-icons/fa";
+import { FaWhatsapp, FaPrint, FaDownload } from "react-icons/fa";
+import * as htmlToImage from "html-to-image";
 import html2canvas from "html2canvas";
 import toast from "react-hot-toast";
 
 const ReportReceipt = ({ report, period }) => {
     const receiptRef = useRef(null);
-    const [savingImage, setSavingImage] = useState(false);
-    const [copied, setCopied] = useState(false);
+    const [loadingAction, setLoadingAction] = useState(null);
 
     if (!report) {
         return null;
@@ -47,146 +47,202 @@ const ReportReceipt = ({ report, period }) => {
         { key: "numberOfUdhaar", label: "Number of Credits", color: "text-gray-700" },
     ];
 
-    // Generate formatted WhatsApp text
-    const generateWhatsAppMessage = () => {
-        const isMonthly = period?.length === 7;
-        const reportTitle = isMonthly ? "Monthly Report" : "Daily Report";
-        const shopName = user.shopname || "Dukaan Digital";
+    // Helper to capture the receipt element as a Blob
+    const captureReceiptBlob = async () => {
+        if (!receiptRef.current) return null;
+        try {
+            const blob = await htmlToImage.toBlob(receiptRef.current, {
+                pixelRatio: 2,
+                backgroundColor: "#ffffff",
+                cacheBust: true,
+            });
+            if (blob) return blob;
+        } catch (err) {
+            console.warn("htmlToImage.toBlob fallback triggered:", err);
+        }
 
-        const lines = [
-            `🏪 *${shopName.toUpperCase()}*`,
-            `📊 *${reportTitle}* - ${period}`,
-            `───────────────────────`,
-            `🛒 *Total Purchase:* Rs. ${formatNumber(report.totalPurchase)}`,
-            `💰 *Total Sales:* Rs. ${formatNumber(report.totalSale)}`,
-            `📈 *Total Profit:* Rs. ${formatNumber(report.totalProfit)}`,
-            `💸 *Total Expenses:* Rs. ${formatNumber(report.totalExpense)}`,
-            `🤝 *Total Credit (Udhaar):* Rs. ${formatNumber(report.totalUdhaar)}`,
-            `💳 *Paid Credit:* Rs. ${formatNumber(report.totalPaidUdhaar)}`,
-            `───────────────────────`,
-            `📦 *Total Quantity Sold:* ${formatNumber(report.totalQuantitySold)}`,
-            `🧾 *Number of Sales:* ${formatNumber(report.numberOfSales)}`,
-            `🛍️ *Number of Purchases:* ${formatNumber(report.numberOfPurchase)}`,
-            `📑 *Number of Expenses:* ${formatNumber(report.numberOfExpenses)}`,
-            `───────────────────────`,
-            `💵 *NET AMOUNT:* Rs. ${formatNumber(report.netAmount)} (${report.netAmount >= 0 ? "Profit / منافع" : "Loss / نقصان"})`,
-            `───────────────────────`
-        ];
-
-        if (user.phone) lines.push(`📞 Contact: ${user.phone}`);
-        if (user.address) lines.push(`📍 Address: ${user.address}`);
-        lines.push(`🕒 Generated on: ${new Date().toLocaleDateString()}`);
-        lines.push(`_Generated via Dukaan Digital_`);
-
-        return lines.join("\n");
+        const canvas = await html2canvas(receiptRef.current, {
+            scale: 2,
+            backgroundColor: "#ffffff",
+            useCORS: true,
+            allowTaint: true,
+            logging: false,
+        });
+        return new Promise((resolve) => {
+            canvas.toBlob((b) => resolve(b), "image/png");
+        });
     };
 
-    // Share via WhatsApp
-    const handleShareWhatsApp = () => {
-        const message = generateWhatsAppMessage();
-        const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
-        window.open(whatsappUrl, "_blank");
-        toast.success("Opening WhatsApp...");
+    // Helper to capture the receipt element as a PNG Data URL
+    const captureReceiptDataUrl = async () => {
+        if (!receiptRef.current) return null;
+        try {
+            const dataUrl = await htmlToImage.toPng(receiptRef.current, {
+                pixelRatio: 2,
+                backgroundColor: "#ffffff",
+                cacheBust: true,
+            });
+            if (dataUrl) return dataUrl;
+        } catch (err) {
+            console.warn("htmlToImage.toPng fallback triggered:", err);
+        }
+
+        const canvas = await html2canvas(receiptRef.current, {
+            scale: 2,
+            backgroundColor: "#ffffff",
+            useCORS: true,
+            allowTaint: true,
+            logging: false,
+        });
+        return canvas.toDataURL("image/png");
     };
 
-    // Save as PDF / Print
+    // 1. Save Image (Download exact receipt as PNG image)
+    const handleSaveImage = async () => {
+        if (!receiptRef.current) return;
+        setLoadingAction("save");
+        const toastId = toast.loading("Generating report image...");
+        try {
+            const dataUrl = await captureReceiptDataUrl();
+            if (!dataUrl) throw new Error("Could not generate image");
+
+            const cleanPeriod = (period || "report").replace(/[^a-zA-Z0-9-_]/g, "_");
+            const cleanShopName = (user.shopname || "Dukaan").replace(/[^a-zA-Z0-9-_]/g, "_");
+            const filename = `Report_${cleanPeriod}_${cleanShopName}.png`;
+
+            const link = document.createElement("a");
+            link.download = filename;
+            link.href = dataUrl;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            toast.success("Report image saved successfully!", { id: toastId });
+        } catch (error) {
+            console.error("Save image failed:", error);
+            toast.error("Failed to save image. Please try again.", { id: toastId });
+        } finally {
+            setLoadingAction(null);
+        }
+    };
+
+    // 2. Share on WhatsApp (Share exact report image)
+    const handleShareWhatsApp = async () => {
+        if (!receiptRef.current) return;
+        setLoadingAction("whatsapp");
+        const toastId = toast.loading("Preparing report image for WhatsApp...");
+        try {
+            const blob = await captureReceiptBlob();
+            if (!blob) throw new Error("Could not generate image");
+
+            const cleanPeriod = (period || "report").replace(/[^a-zA-Z0-9-_]/g, "_");
+            const filename = `Report_${cleanPeriod}.png`;
+            const file = new File([blob], filename, { type: "image/png" });
+
+            // Mobile & Supported Browsers: Native Share with image file directly to WhatsApp
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                toast.dismiss(toastId);
+                await navigator.share({
+                    files: [file],
+                    title: `${user.shopname || "Dukaan"} Report`,
+                });
+                return;
+            }
+
+            // Desktop Fallback: Copy image to clipboard, download file, and open WhatsApp Web
+            let copied = false;
+            try {
+                if (navigator.clipboard && window.ClipboardItem) {
+                    await navigator.clipboard.write([
+                        new ClipboardItem({ "image/png": blob })
+                    ]);
+                    copied = true;
+                }
+            } catch (clipErr) {
+                console.warn("Clipboard write failed:", clipErr);
+            }
+
+            // Trigger image download
+            const dataUrl = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.download = filename;
+            link.href = dataUrl;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            setTimeout(() => URL.revokeObjectURL(dataUrl), 2000);
+
+            // Open WhatsApp Web
+            window.open("https://web.whatsapp.com/", "_blank");
+
+            if (copied) {
+                toast.success("Report image copied to clipboard & downloaded! Paste (Ctrl+V) in WhatsApp.", { id: toastId, duration: 6000 });
+            } else {
+                toast.success("Report image downloaded! Attach it in WhatsApp.", { id: toastId, duration: 5000 });
+            }
+        } catch (error) {
+            if (error.name !== "AbortError") {
+                console.error("WhatsApp share failed:", error);
+                toast.error("Could not share image directly. Saved to downloads instead.", { id: toastId });
+            } else {
+                toast.dismiss(toastId);
+            }
+        } finally {
+            setLoadingAction(null);
+        }
+    };
+
+    // 3. Print (Print exact report bill)
     const handlePrint = () => {
         window.print();
     };
 
-    // Save as Image (PNG)
-    const handleSaveImage = async () => {
-        if (!receiptRef.current) return;
-        setSavingImage(true);
-        const toastId = toast.loading("Saving receipt as image...");
-        try {
-            const canvas = await html2canvas(receiptRef.current, {
-                scale: 2,
-                useCORS: true,
-                backgroundColor: "#ffffff",
-                logging: false,
-            });
-            const imgData = canvas.toDataURL("image/png");
-            const link = document.createElement("a");
-            const cleanPeriod = (period || "report").replace(/[^a-zA-Z0-9-_]/g, "_");
-            link.download = `Report_${cleanPeriod}.png`;
-            link.href = imgData;
-            link.click();
-            toast.success("Receipt saved successfully!", { id: toastId });
-        } catch (error) {
-            console.error("Error saving image:", error);
-            toast.error("Failed to save image", { id: toastId });
-        } finally {
-            setSavingImage(false);
-        }
-    };
-
-    // Copy formatted report text
-    const handleCopyText = () => {
-        const message = generateWhatsAppMessage();
-        navigator.clipboard.writeText(message).then(() => {
-            setCopied(true);
-            toast.success("Report copied to clipboard!");
-            setTimeout(() => setCopied(false), 2500);
-        }).catch(() => {
-            toast.error("Failed to copy report");
-        });
-    };
-
     return (
         <div className="flex flex-col items-center my-8 w-full print:my-0">
-            {/* Action Bar (Share & Save Options) - Hidden on Print */}
+            {/* 3 Buttons: Save Image, Share on WhatsApp, Print */}
             <div className="no-print print:hidden flex flex-wrap items-center justify-center gap-3 mb-6 w-full max-w-md px-2">
-                {/* Share on WhatsApp */}
-                <button
-                    type="button"
-                    onClick={handleShareWhatsApp}
-                    className="flex-1 min-w-[140px] flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-sm font-semibold py-2.5 px-4 rounded-xl shadow-md transition-all duration-200 cursor-pointer"
-                    title="Share report summary via WhatsApp"
-                >
-                    <FaWhatsapp className="text-lg" />
-                    <span>Share WhatsApp</span>
-                </button>
-
-                {/* Save / Print (PDF) */}
-                <button
-                    type="button"
-                    onClick={handlePrint}
-                    className="flex-1 min-w-[140px] flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 active:scale-95 text-white text-sm font-semibold py-2.5 px-4 rounded-xl shadow-md transition-all duration-200 cursor-pointer"
-                    title="Print or save as PDF"
-                >
-                    <FaPrint className="text-sm" />
-                    <span>Save / Print PDF</span>
-                </button>
-
-                {/* Save as Image (PNG) */}
+                {/* 1. Save Image */}
                 <button
                     type="button"
                     onClick={handleSaveImage}
-                    disabled={savingImage}
-                    className="flex-1 min-w-[140px] flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 active:scale-95 disabled:opacity-60 text-white text-sm font-semibold py-2.5 px-4 rounded-xl shadow-md transition-all duration-200 cursor-pointer"
-                    title="Download receipt as PNG image"
+                    disabled={loadingAction !== null}
+                    className="flex-1 min-w-[130px] flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 active:scale-95 disabled:opacity-60 text-white text-sm font-semibold py-2.5 px-4 rounded-xl shadow-md transition-all duration-200 cursor-pointer"
+                    title="Save complete report as image"
                 >
                     <FaDownload className="text-sm" />
-                    <span>{savingImage ? "Saving..." : "Save Image"}</span>
+                    <span>{loadingAction === "save" ? "Saving..." : "Save Image"}</span>
                 </button>
 
-                {/* Copy Text Summary */}
+                {/* 2. Share on WhatsApp */}
                 <button
                     type="button"
-                    onClick={handleCopyText}
-                    className="flex-1 min-w-[140px] flex items-center justify-center gap-2 bg-gray-100 hover:bg-gray-200 active:scale-95 text-gray-700 text-sm font-semibold py-2.5 px-4 rounded-xl border border-gray-300 shadow-sm transition-all duration-200 cursor-pointer"
-                    title="Copy report text to clipboard"
+                    onClick={handleShareWhatsApp}
+                    disabled={loadingAction !== null}
+                    className="flex-1 min-w-[160px] flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 active:scale-95 disabled:opacity-60 text-white text-sm font-semibold py-2.5 px-4 rounded-xl shadow-md transition-all duration-200 cursor-pointer"
+                    title="Share report image on WhatsApp"
                 >
-                    {copied ? <FaCheck className="text-sm text-green-600" /> : <FaCopy className="text-sm" />}
-                    <span>{copied ? "Copied!" : "Copy Text"}</span>
+                    <FaWhatsapp className="text-lg" />
+                    <span>{loadingAction === "whatsapp" ? "Preparing..." : "Share on WhatsApp"}</span>
+                </button>
+
+                {/* 3. Print */}
+                <button
+                    type="button"
+                    onClick={handlePrint}
+                    disabled={loadingAction !== null}
+                    className="flex-1 min-w-[110px] flex items-center justify-center gap-2 bg-gray-800 hover:bg-gray-900 active:scale-95 disabled:opacity-60 text-white text-sm font-semibold py-2.5 px-4 rounded-xl shadow-md transition-all duration-200 cursor-pointer"
+                    title="Print report bill"
+                >
+                    <FaPrint className="text-sm" />
+                    <span>Print</span>
                 </button>
             </div>
 
-            {/* Receipt Card */}
+            {/* Receipt Card (Captured exactly as displayed) */}
             <div
                 ref={receiptRef}
                 className="w-full max-w-sm font-mono bg-white border border-gray-300 rounded-lg shadow-lg p-6 print:border-0 print:shadow-none print:p-0 print:w-auto printable-receipt"
+                style={{ backgroundColor: "#ffffff" }}
             >
                 {/* Header */}
                 <div className="text-center flex flex-col justify-center pb-4 border-b border-dashed border-gray-400 mb-4 print:border-solid">
