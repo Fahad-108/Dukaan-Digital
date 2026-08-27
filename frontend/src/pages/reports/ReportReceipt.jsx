@@ -1,7 +1,6 @@
 import React, { useRef, useState } from "react";
 import Dukaan_Digital from "../../assets/Dukaan_Digital.svg";
 import { FaWhatsapp, FaPrint, FaDownload } from "react-icons/fa";
-import * as htmlToImage from "html-to-image";
 import html2canvas from "html2canvas";
 import toast from "react-hot-toast";
 
@@ -47,53 +46,30 @@ const ReportReceipt = ({ report, period }) => {
         { key: "numberOfUdhaar", label: "Number of Credits", color: "text-gray-700" },
     ];
 
-    // Helper to capture the receipt element as a Blob
-    const captureReceiptBlob = async () => {
+    // Helper to capture the receipt element as a Canvas
+    const getReceiptCanvas = async () => {
         if (!receiptRef.current) return null;
-        try {
-            const blob = await htmlToImage.toBlob(receiptRef.current, {
-                pixelRatio: 2,
-                backgroundColor: "#ffffff",
-                cacheBust: true,
-            });
-            if (blob) return blob;
-        } catch (err) {
-            console.warn("htmlToImage.toBlob fallback triggered:", err);
-        }
-
-        const canvas = await html2canvas(receiptRef.current, {
+        return await html2canvas(receiptRef.current, {
             scale: 2,
             backgroundColor: "#ffffff",
             useCORS: true,
-            allowTaint: true,
             logging: false,
-        });
-        return new Promise((resolve) => {
-            canvas.toBlob((b) => resolve(b), "image/png");
         });
     };
 
-    // Helper to capture the receipt element as a PNG Data URL
-    const captureReceiptDataUrl = async () => {
-        if (!receiptRef.current) return null;
-        try {
-            const dataUrl = await htmlToImage.toPng(receiptRef.current, {
-                pixelRatio: 2,
-                backgroundColor: "#ffffff",
-                cacheBust: true,
-            });
-            if (dataUrl) return dataUrl;
-        } catch (err) {
-            console.warn("htmlToImage.toPng fallback triggered:", err);
-        }
-
-        const canvas = await html2canvas(receiptRef.current, {
-            scale: 2,
-            backgroundColor: "#ffffff",
-            useCORS: true,
-            allowTaint: true,
-            logging: false,
+    // Helper to capture receipt as Blob
+    const captureReceiptBlob = async () => {
+        const canvas = await getReceiptCanvas();
+        if (!canvas) return null;
+        return new Promise((resolve) => {
+            canvas.toBlob((blob) => resolve(blob), "image/png");
         });
+    };
+
+    // Helper to capture receipt as Data URL
+    const captureReceiptDataUrl = async () => {
+        const canvas = await getReceiptCanvas();
+        if (!canvas) return null;
         return canvas.toDataURL("image/png");
     };
 
@@ -158,8 +134,8 @@ const ReportReceipt = ({ report, period }) => {
                     ]);
                     copied = true;
                 }
-            } catch (clipErr) {
-                console.warn("Clipboard write failed:", clipErr);
+            } catch {
+                // Clipboard write optional if browser restricts it
             }
 
             // Trigger image download
@@ -181,8 +157,7 @@ const ReportReceipt = ({ report, period }) => {
                 toast.success("Report image downloaded! Attach it in WhatsApp.", { id: toastId, duration: 5000 });
             }
         } catch (error) {
-            if (error.name !== "AbortError") {
-                console.error("WhatsApp share failed:", error);
+            if (error?.name !== "AbortError") {
                 toast.error("Could not share image directly. Saved to downloads instead.", { id: toastId });
             } else {
                 toast.dismiss(toastId);
