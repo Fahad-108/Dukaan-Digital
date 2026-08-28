@@ -143,35 +143,64 @@ const SalesListPage = () => {
     }
   };
 
-  // Helper to capture the bill element as a PNG Data URL
-  const captureBillDataUrl = async () => {
+  // Helper to capture the full bill (including all scrollable items) as Data URL or Blob
+  const captureFullBill = async (format = "png") => {
     if (!billRef.current) return null;
-    return await htmlToImage.toPng(billRef.current, {
-      pixelRatio: 2,
-      backgroundColor: "#ffffff",
-      fontEmbedCSS: "",
-      cacheBust: false,
+
+    // Expand all scrollable containers inside the bill so ALL items are rendered
+    const scrollContainers = billRef.current.querySelectorAll(
+      ".overflow-y-auto, .overflow-auto, .overflow-scroll, [class*='max-h-']"
+    );
+    const savedStyles = [];
+
+    scrollContainers.forEach((el) => {
+      savedStyles.push({
+        el,
+        maxHeight: el.style.maxHeight,
+        overflow: el.style.overflow,
+        overflowY: el.style.overflowY,
+        height: el.style.height,
+      });
+      el.style.maxHeight = "none";
+      el.style.overflow = "visible";
+      el.style.overflowY = "visible";
+      el.style.height = "auto";
     });
+
+    try {
+      if (format === "blob") {
+        return await htmlToImage.toBlob(billRef.current, {
+          pixelRatio: 2,
+          backgroundColor: "#ffffff",
+          fontEmbedCSS: "",
+          cacheBust: false,
+        });
+      } else {
+        return await htmlToImage.toPng(billRef.current, {
+          pixelRatio: 2,
+          backgroundColor: "#ffffff",
+          fontEmbedCSS: "",
+          cacheBust: false,
+        });
+      }
+    } finally {
+      // Immediately restore original scroll and height styles
+      savedStyles.forEach(({ el, maxHeight, overflow, overflowY, height }) => {
+        el.style.maxHeight = maxHeight;
+        el.style.overflow = overflow;
+        el.style.overflowY = overflowY;
+        el.style.height = height;
+      });
+    }
   };
 
-  // Helper to capture the bill element as a Blob
-  const captureBillBlob = async () => {
-    if (!billRef.current) return null;
-    return await htmlToImage.toBlob(billRef.current, {
-      pixelRatio: 2,
-      backgroundColor: "#ffffff",
-      fontEmbedCSS: "",
-      cacheBust: false,
-    });
-  };
-
-  // 1. Save Image
+  // 1. Save Image (Downloads the FULL bill image from top to bottom)
   const handleSaveImage = async () => {
     if (!billRef.current || !selectedSale) return;
     setLoadingAction("save");
-    const toastId = toast.loading("Generating bill image...");
+    const toastId = toast.loading("Generating full bill image...");
     try {
-      const dataUrl = await captureBillDataUrl();
+      const dataUrl = await captureFullBill("png");
       if (!dataUrl) throw new Error("Could not generate image");
 
       const customerName = (selectedSale.customerName || selectedSale.suppliername || "Bill").replace(/[^a-zA-Z0-9-_]/g, "_");
@@ -185,7 +214,7 @@ const SalesListPage = () => {
       link.click();
       document.body.removeChild(link);
 
-      toast.success("Bill image saved successfully!", { id: toastId });
+      toast.success("Full bill image saved successfully!", { id: toastId });
     } catch (error) {
       console.error("Save image failed:", error);
       toast.error("Failed to save image. Please try again.", { id: toastId });
@@ -194,13 +223,13 @@ const SalesListPage = () => {
     }
   };
 
-  // 2. Share on WhatsApp (Share exact bill image)
+  // 2. Share on WhatsApp (Shares the exact FULL bill image)
   const handleShareWhatsApp = async () => {
     if (!billRef.current || !selectedSale) return;
     setLoadingAction("whatsapp");
-    const toastId = toast.loading("Preparing bill image for WhatsApp...");
+    const toastId = toast.loading("Preparing full bill image for WhatsApp...");
     try {
-      const blob = await captureBillBlob();
+      const blob = await captureFullBill("blob");
       if (!blob) throw new Error("Could not generate image");
 
       const customerName = (selectedSale.customerName || selectedSale.suppliername || "Bill").replace(/[^a-zA-Z0-9-_]/g, "_");
@@ -245,9 +274,9 @@ const SalesListPage = () => {
       window.open("https://web.whatsapp.com/", "_blank");
 
       if (copied) {
-        toast.success("Bill image copied to clipboard & downloaded! Paste (Ctrl+V) in WhatsApp.", { id: toastId, duration: 6000 });
+        toast.success("Full bill image copied to clipboard & downloaded! Paste (Ctrl+V) in WhatsApp.", { id: toastId, duration: 6000 });
       } else {
-        toast.success("Bill image downloaded! Attach it in WhatsApp.", { id: toastId, duration: 5000 });
+        toast.success("Full bill image downloaded! Attach it in WhatsApp.", { id: toastId, duration: 5000 });
       }
     } catch (error) {
       if (error?.name !== "AbortError") {
@@ -260,7 +289,7 @@ const SalesListPage = () => {
     }
   };
 
-  // 3. Print
+  // 3. Print (Prints the complete bill)
   const handlePrint = () => {
     window.print();
   };
@@ -437,7 +466,7 @@ const SalesListPage = () => {
                   onClick={handleSaveImage}
                   disabled={loadingAction !== null}
                   className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 active:scale-95 disabled:opacity-60 text-white text-sm font-semibold py-2 px-3.5 rounded-lg shadow transition cursor-pointer"
-                  title="Save bill as image"
+                  title="Save full bill as image"
                 >
                   <FaDownload className="text-sm" />
                   <span>{loadingAction === "save" ? "Saving..." : "Save Image"}</span>
@@ -447,7 +476,7 @@ const SalesListPage = () => {
                   onClick={handleShareWhatsApp}
                   disabled={loadingAction !== null}
                   className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 active:scale-95 disabled:opacity-60 text-white text-sm font-semibold py-2 px-3.5 rounded-lg shadow transition cursor-pointer"
-                  title="Share bill image on WhatsApp"
+                  title="Share full bill image on WhatsApp"
                 >
                   <FaWhatsapp className="text-base" />
                   <span>{loadingAction === "whatsapp" ? "Preparing..." : "Share on WhatsApp"}</span>
@@ -457,7 +486,7 @@ const SalesListPage = () => {
                   onClick={handlePrint}
                   disabled={loadingAction !== null}
                   className="flex items-center gap-2 bg-gray-800 hover:bg-gray-900 active:scale-95 disabled:opacity-60 text-white text-sm font-semibold py-2 px-3.5 rounded-lg shadow transition cursor-pointer"
-                  title="Print bill"
+                  title="Print full bill"
                 >
                   <FaPrint className="text-sm" />
                   <span>Print</span>
